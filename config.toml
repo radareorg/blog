@@ -1,3 +1,13 @@
 baseurl = "http://beta.radare.today"
 languageCode = "en-us"
 title = "The Official Radare Blog"
+
+[params]
+  name = "The radare team"
+  description = "The blog of radare2"
+  twitter = "radareorg"
+  copyright = "The radare team"
+  enableRSS = true
+
+  about = "http://radare.org"
+  tweet = "https://twitter.com/radareorg""
