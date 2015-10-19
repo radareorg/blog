@@ -1,6 +1,7 @@
 baseurl = "http://beta.radare.today"
 languageCode = "en-us"
 title = "The Official Radare Blog"
+paginate = 1024
 
 [params]
   name = "The radare team"
@@ -11,5 +12,3 @@ title = "The Official Radare Blog"
 
   about = "http://radare.org"
   tweet = "https://twitter.com/radareorg"
-
-  paginate = 1024
