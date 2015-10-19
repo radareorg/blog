@@ -1,7 +1,7 @@
 +++
 date = "2014-10-25T15:23:58+02:00"
 draft = false
-title = "Solving "At gunpoint" from hack.lu 2014 with radare2"
+title = "Solving 'At gunpoint' from hack.lu 2014 with radare2"
 slug = "solving-at-gunpoint-from-hack-lu-2014-with-radare2"
 aliases = [
 	"solving-at-gunpoint-from-hack-lu-2014-with-radare2"
