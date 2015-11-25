@@ -27,6 +27,8 @@ People that is used to IDA or Hopper, they just load the binary, go out to make 
 
 Radare2 can also load the binary information in background, and perform there's some initial work to do code analysis in async and threaded mode, but this is just not an excuse for running a heavy operation by default on start.
 
+If speed really matters for your task, and you have already a script that puts all the information you need on top of the binary you can just run `r2 -n` to avoid parsing the file headers and strings, loading the binary as a plain raw dump, without virtual mappings or flags at all.
+
 Perfection
 ----------
 
@@ -73,6 +75,17 @@ Running the analysis in radare2, is not just a single step or action. We have ma
 
 radare2 is not a click-and-run program, it's a set of orthogonal tools and commands that allows you to understand, analyze, manipulate and play with a large list of binary types. And, as long as every single point in the above list will take some time, you will probably not want to run them all in a shot, also, the execution order will also alter the results. Only experience and understanding will give you control on what you are doing.
 
+Delegated Analysis
+------------------
+
+Another good point towards this model relays on the fact that r2 can be easily sandboxed or run in many different environments. This permits to distribute the analysis into different environments, which are in a clean state and cannot leak any information from your system or other binaries analyzed in case of loading a binary that exploits some kind of vulnerability.
+
+As said in other points. The entire analysis information can be serialized in textual form, which can be passed between different machines or centralized in a database like [bjoern](https://github.com/fabsx00/bjoern-radare) does for deeper understanding of the program.
+
+Anyway, if you are using r2 from git, you can always build with ASAN, and other compiler protections that are not viable options on precompiled closed source alternatives that will not be able to protect in those situations.
+
+Crash reports in r2land take very little time to be fixed, and including fuzzing in the development process, as well as using clang-analyzer, coverity and run the entire testsuite with valgrind and ASAN gives you some more reliability in the code you are going to run. (yes, I don't even trust system libmagic, libc's regex library or so, that's why r2 comes with our own specific versions of them).
+
 
 Use Cases
 ---------
@@ -94,7 +107,7 @@ Final Words
 
 If you are used to this old-fashioned, lazy workflow, you will probably not going to switch to radare2 as your main tool.
 
-But you can just load r2 with the `-A` flag to get some default analysis done at start time. But again, this will be probably a loss of time if you are an experienced reverse engineer.
+But you can just load r2 with the `-A` flag to get some default analysis done at start time, or just `echo aa > ~/.config/radare2/radare2rc`. But again, this will be probably a loss of time if you are an experienced reverse engineer.
 
 We are not closing the door to perform a full analysis of the binary, but I just think that it's something that shouldn't be done by default and at start.
 
