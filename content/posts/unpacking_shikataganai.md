@@ -98,13 +98,15 @@ r = r2pipe.open('-')
 
 for op in opcodes:
     family = r.cmdj('abj %s' % op)[0]['family']
-        if family != 'fpu':
-            print 'NOT FPU: %s' % op
-print 'End of the loop'
+    if family != 'fpu':
+        print 'NOT FPU: %s' % op
+        sys.exit(0)
+print 'End of the loop, every opcode was detected as FPU.'
 ```
 
 If you launch this script with the latest version of radare2 installed on your
 machine, you'll see that radare2 detects every opcode as FPU ; so far so good.
+Feel free to add some dummy opcodes to see the detection fail by the way ;)
 
 So now it's time to actually unpack shikata-ga-nai, for real. The plan is to:
 
