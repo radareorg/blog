@@ -25,6 +25,7 @@ Since radare2 has some useful features for the exploit hunter/developer, it was 
 
 - The well known [IO wargame]( http://io.smashthestack.org/ ).
 - Every [overthewire]( http://overthewire.org/wargames/ ) wargames.
+- [Root-me](http://www.root-me.org/en/Challenges/App-System/) App-System challenges.
 
 ## IT security companies and researchers
 Since radare2 is open and scriptable, it is slowly being adopted as a malware reversing and classification tool.
