@@ -1,10 +1,10 @@
 +++
 date = "2015-12-08T01:00:00+02:00"
 draft = false
-title = "Unpacking shikata-gai-nai by scripting radare2"
-slug = "unpacking-shikata-gai-nai-by-scripting-radare2"
+title = "Unpacking shikata-ga-nai by scripting radare2"
+slug = "unpacking-shikata-ga-nai-by-scripting-radare2"
 aliases = [
-    "unpacking-shikata-gai-nai-by-scripting-radare2"
+    "unpacking-shikata-ga-nai-by-scripting-radare2"
 ]
 +++
 
