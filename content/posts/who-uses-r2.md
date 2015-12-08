@@ -35,6 +35,7 @@ Since radare2 is open and scriptable, it is slowly being adopted as a malware re
 - [Craig Heffner]( http://www.devttys0.com/ ) from [Tactical Network Solution]( http://www.tacnetsol.com/ ) mentionned it during its [Blackhat talk]( http://www.devttys0.com/wp-content/uploads/2014/04/FindingAndReversingBackdoors.pdf ).
 - [nitr0usmx]( https://twitter.com/nitr0usmx ) from [IOActive]( http://ioactive.com/ ) wrote a binary diffing [article]( http://chatsubo-labs.blogspot.fr/2013/10/binary-diffing-visual-en-linux-con.html ) about radiff2 and they  discuss radare2 during their [Blackhat 2012]( https://media.blackhat.com/bh-us-12/Briefings/Santamarta/BH_US_12_Santamarta_Backdoors_Slides.pdf ) talk.
 - [Pau Oliva]( http://pof.eslack.org/ ) from [viaForensics]( https://viaforensics.com/ ) wrote an [article]( http://pof.eslack.org/2014/04/08/hacking-super-street-fighter-ii-turbo-part-2/ ) about how to hack MAME with radare2.
+- [Maijin](http://www.maijin.fr) from [Malware.lu](http://www.malware.lu)
 
 ## Talks
 A lot of talks about radare2 were given in various places: [rootedcon]( http://rootedcon.es/ ), lacon, [blackhat]( https://www.blackhat.com/ ),  [phdays]( http://www.phdays.com/ ), nopcon, [owasp]( https://www.owasp.org/index.php/Main_Page ), ncn, campus party, summercamp, [fiberparty]( https://twitter.com/fiberparty ), ...
