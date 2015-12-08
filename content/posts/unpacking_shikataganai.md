@@ -112,13 +112,13 @@ So now it's time to actually unpack shikata-ga-nai, for real. The plan is to:
 
 1. Initialize the ESIL vm
 2. If the instruction `invalid`:
-    1. We're at the end of the shellcode!
-    2. Dump from the last encountered `loop` instruction to the end
-    3. Exit
+  1. We're at the end of the shellcode!
+  2. Dump from the last encountered `loop` instruction to the end
+  3. Exit
 3. Else, if the instruction is a `fpu` one:
-    1. If it's `fnstenv`, write the previously stored `eip` at `esp`.
-    2. Else, store `eip`
-    3. Goto 1
+  1. If it's `fnstenv`, write the previously stored `eip` at `esp`.
+  2. Else, store `eip`
+  3. Goto 1
 4. Else, if the instruction is `loop`, store its location
 5. Emulate the current instruction
 6. Goto 1
@@ -194,3 +194,6 @@ r.cmd('e asm.flags=false');
 initESIL()
 decode(r)
 ```
+
+By the way, if you like this kind of writeup, feel free to take a look at
+[jvoisin]( https://dustri.org/b/ )'s blog for more.
