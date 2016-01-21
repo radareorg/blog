@@ -1,0 +1,156 @@
++++
+date = "2015-01-21T23:30:07+01:00"
+draft = true
+title = "Radare 0.10.0"
+slug = "radare-0-10-0"
+aliases = [
+	"radare-0-10-0"
+]
++++
+
+Today, we’re releasing a new version of radare2, the *0.10.0*, codename
+*NOLAN*. Since you might be a but too lazy to read [every single commit](
+https://github.com/radare/radare2/commits/master ), we’re going to highlight some cool new features together!
+
+# Numbers
+Thanks to more than 100 contributors who issued more than 2000 commits, here is what changed:
+
+```
+$ git checkout 0.10.0 && git diff 0.9.9 --shortstat
+ 1095 files changed, 80695 insertions(+), 40792 deletions(-)
+```
+
+We would like to thanks all contributors, especially the newcomers, that made
+this release possible. You can find a (hopefully) complete list of them in the
+[AUTHORS]( https://github.com/radare/radare2/blob/master/AUTHORS.md ) file.
+
+# Stability
+We spent a lot of time fuzzing radare2, collecting binaries and writing tests to improve radare2’s reliability. We even harvested similar projects bugtracker to see how well radare2 would deal with binary that broke them. Currently, we have something like 2000 tests dedicated to commands, and most of disassemblers have a 100% coverage.
+
+About the testsuite, you may notice that it’s much more quick to run it now. We managed, on [travis-ci]( https://travis-ci.org/radare/radare2 ), to go from 1h30 for only gcc on linux, to 20 minutes for clang on OSX, and gcc+clang on linux. No more excuses for not running the testsuite before a commit.
+
+You might  also be happy to know that radare2 now successfully compiles on [tcc]( http://repo.or.cz/tinycc.git ), the *tiny C compiler*. This might be useful if you’re compiling radare2 on weird platforms. Please be sure to use tcc from git too :) Moreover, radare2 tries as hard as it can to run on your-super-weird-platform-that-no-ones-has-ever-head-off, we implemented the `cp` and `mv` commands, since you might not find those everywhere.
+
+# Memory usage
+It seems that no one ever took care of radare2 memory consumption before, because it was still lower than its competitors/alternatives. But for this release, radare2 went on a diet : it now consumes 3 to 5 times less memory !
+
+# Pretty graphs
+Our beloved *ret2libc* spent a lot of time rewriting graphs engine from scratch, with overlaps handling and better colours ! See how cool this is:
+
+# New architectures support
+We know a lot of people are using radare2 because it supports a lot of funky/exotic/awful/funny/scary architectures.
+
+Remember when we added support for the famous [6502 cpu]( https://en.wikipedia.org/wiki/MOS_Technology_6502 ) in the last release? This time, we added analysis support and opcode description (with `?d`), because not everyone is fluent in 6502 assembly code. And even more, since we know some of you just care about the meaning of the code and not the beauty of the assembly listing, we added pseudo-decompiler support. Yes, we have a pseudo-decompiler for 6502.
+
+Did you know that we have a contributor named [condret]( https://github.com/condret ) that really likes the *pokemon* game on gameboy? This is why he’s pushing ESIL, implemented a fancy gameboy disassembler, and for this latest release, he wrote a gameboy assembler! You can now craft your own shellcodes, or, if you’re crazy, games, for gameboy, with radare2.
+
+We also improved AVR support, with analysis (radare2 analysis is generic, so it’s pretty easy to add its support for an architecture), an assembler, ESIL so you can emulate it easily, and description. This led two people (namely [Alexander Bolshev]( http://2015.zeronights.org/speakers#bolshev and [Boris Ryutin]( http://2015.zeronights.org/speakers#ryutin )) to do [a workshop]( http://2015.zeronights.org/workshops.html ) at the Zeronight conference and [S4x16](https://www.digitalbond.com/s4/), about reversing and exploiting this architecture with radare2!
+
+Also, we added support for assembling ARM and ARM64, ADN decoding (yes. It’s the `BCL` plugin in `r2pm`. You don’t know about `r2pm`? Keep reading then.), demangling for Rust binaries, Wii/Gamecube binaries, disassemblers for [LM32]( http://www.latticesemi.com/en/Products/DesignSoftwareAndIP/IntellectualProperty/IPCore/IPCores02/LatticeMico32.aspx ), [MCS96]( https://en.wikipedia.org/wiki/Intel_MCS-96 ), analysis and ESIL for PPC, V810 and RISC-V, ...
+
+And since we have at least one Windows user, we also added support for Windows minidump format, aka `mdmp`, and windows-on-raspberry2-fileformat-it’s-almost-a-PE because apparently, it’s a real thing.
+
+# Bindings
+Remember the bindings, and how much languages we supported? Remember when you had to read radare2’s source code to write a simple one-liner, and ended parsing a call to `system` with radare2, pipe, sed, pipe, tr, pipe, awk, pipe, sed ?
+Yeah, us too. This is why we ditched (don’t worry, they are still there, but deprecated) the bindings, and created `r2pipe`. Since you like so much calling radare2 in `system`, this is exactly what is does: popping radare2, and piping commands to it.
+
+This brings several advantages:
+
+We don’t have to maintain a shitload of convoluted bindings (have you ever tried to use `ffi`?), we only have to implement a few commands per languages
+You don’t have to read radare2’s source code if you don’t want to: if you know how to use radare2, you know how to use r2pipe
+Native JSON output! No need to use `sed`/`awk`/`tr`/… anymore!
+
+For example:
+
+```python
+import sys
+import r2pipe
+
+r2 = r2pipe.open(sys.argv[1])
+print('The five first instructions:\n%s\n' % r2.cmd('pi 5'))
+print('And now in JSON:\n%s\n' % r2.cmdj('pij 5'))
+print('architecture: %s' % r2.cmdj('ij')['bin']['machine'])
+```
+
+# r2pm
+Radare2 had an implementation of 2048, a port-scanner, and even a secret ascii-penis, but now, it also has a package manager!
+No, this is not overkill, stop complaining and keep on reading. Radare2 supports a lot of <s>useless</s> things. This is why we put non-code things into separate packages, that can be browsed/searched/installed/removed/updated with the new tool called `r2pm`.
+
+```
+$ r2pm
+Usage: r2pm [cmd] [...]
+Commands:
+ -i,info                 r2pm -i # pkgs info
+ -i,install <pkgname>    r2pm -i baleful
+ -u,uninstall <pkgname>  r2pm -u baleful
+ -l,list                 list installed pkgs
+ -t,test FX,XX,BR BID    check in travis regressions
+ -s,search [<keyword>]   search in database
+ -v,version              show version
+ -h,help                 show this message
+ -c,clean                clear source cache
+Environment:
+SUDO=sudo                use this tool as sudo
+R2PM_PREFIX=/usr         prefix for syspkgs
+R2PM_PLUGDIR=~/.config/radare2/plugins   # default value, home-install for plugins
+R2PM_PLUGDIR=/usr/lib/radare2/last/      # for system-wide plugin installs
+$
+```
+
+Note that `r2pm -s` will show you every available package.
+
+# License
+
+We managed to remove the last bits of GPL licensed code in radare2! We’re not a complete LGPL project (some modules installable with `r2pm` have a different licenses, please pay attention to that). This means that you can use radare2 into your proprietary product, <s>while betraying</s> without giving the source to your users, but if you modify radare2, you need to publish the modifications. It might be easier for you to try to upstream them by the way ;)
+
+# Usability
+As usual, we’re going to pretend that every command has now a fancy colored help display, that we checked everything, yada yada yada. The truth is that now, <s>all</s> almost every commands is documented, and the help is coloured.
+
+Also, there is even more autocompletion for commands like `pf` or `t`, that were super-tricky to use without.
+
+You might remember hearing a loud noise a couple of months ago. This was when jvoisin was told that to have something like the `follow-fork-mode` in GDB, he had to find the syscall number for his architecture, break on this breakpoint with the `dcs` command, then attach to the right process (while having fun figuring which one it is), then continue. Yeah, it was a pretty loud scream. Fortunately, there is now the `dbg.forks` option for this :)
+
+# ESIL
+ESIL is our Intermediary Language, used for emulation, analysis, transformations, trolling, … This is why we added several new commands under `ae` (*A*nalyse with *E*sil), like `aeip` to set the ESIL eip to the current `eip`, ‘aef’ to emulate an entire function, added ESIL support for new architectures, held workshops, …
+We even documented ESIL itself within radare2, since you can disassemble to ESIL with `e asm.esil = true`:
+
+```
+[0x00000000]> ae??
+|Examples: ESIL examples and documentation
+| +=     A+=B => B,A,+=
+| +      A=A+B => B,A,+,A,=
+| *=     A*=B => B,A,*=
+| /=     A/=B => B,A,/=
+| &=     and ax, bx => bx,ax,&=
+| |      or r0, r1, r2 => r2,r1,|,r0,=
+| ^=     xor ax, bx => bx,ax,^=
+| >>=    shr ax, bx => bx,ax,>>=  # shift right
+| <<=    shr ax, bx => bx,ax,<<=  # shift left
+| []     mov eax,[eax] => eax,[],eax,=
+| =[]    mov [eax+3], 1 => 1,3,eax,+,=[]
+| =[1]   mov byte[eax],1 => 1,eax,=[1]
+| =[8]   mov [rax],1 => 1,rax,=[8]
+| $      int 0x80 => 0x80,$
+| $$     simulate a hardware trap
+| ==     pops twice, compare and update esil flags
+| <      compare for smaller
+| <=     compare for smaller or equal
+| >      compare for bigger
+| >=     compare bigger for or equal
+| ?{     if popped value != 0 run the block until }
+| POP    drops last element in the esil stack
+| TODO   the instruction is not yet esilized
+| STACK  show contents of stack
+| CLEAR  clears the esil stack
+| BREAK  terminates the string parsing
+| GOTO   jump to the Nth word popped from the stack
+[0x00000000]> 
+```
+
+Ho, I almost forgot to mention the new `asm.emuwrite`, `asm.emustr`, and `asm.emu` options! If you set them to true, radare2 will do its very best to improves the analysis with ESIL, but be careful, setting those variables may give you an über-verbose output.
+
+# Unicorn
+A lot of people are talking about [unicorn]( http://www.unicorn-engine.org/ ), a CPU emulator. While we think that ESIL is way better for everything and that you totally should use it and contribute to radare2, we added support for it in radare2, it’s as simple as `r2 -D unicorn /bin/ls`. In fact, since our great lead pancake is great, he added support for it before its release, something like 6 months ago.
+
+P.S. Please, be sure you’ve pulled and rebuilt radare2 from git again, after finishing reading this post. Why? Because we can bet - someone already committed something new in the radare2 repository. Make it a new habit - periodically checking out the newest radare2 git. We can make reverse engineering great again!
+
