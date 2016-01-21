@@ -152,5 +152,12 @@ Ho, I almost forgot to mention the new `asm.emuwrite`, `asm.emustr`, and `asm.em
 # Unicorn
 A lot of people are talking about [unicorn]( http://www.unicorn-engine.org/ ), a CPU emulator. While we think that ESIL is way better for everything and that you totally should use it and contribute to radare2, we added support for it in radare2, it’s as simple as `r2 -D unicorn /bin/ls`. In fact, since our great lead pancake is great, he added support for it before its release, something like 6 months ago.
 
-P.S. Please, be sure you’ve pulled and rebuilt radare2 from git again, after finishing reading this post. Why? Because we can bet - someone already committed something new in the radare2 repository. Make it a new habit - periodically checking out the newest radare2 git. We can make reverse engineering great again!
+# Conclusion
+
+Yet another successful release of radare2. If you want to join the party,
+please take a look at our [easy issues](
+https://github.com/radare/radare2/labels/easy ), we'll be happy to help you to
+help us, on [irc]( irc://irc.freenode.net/radare ), or on Telegram.
+
+But more importantly, please, be sure you’ve pulled and rebuilt radare2 from git again, after finishing reading this post. Why? Because we can bet - someone already committed something new in the radare2 repository. Make it a new habit - periodically checking out the newest radare2 git. We can make reverse engineering great again!
 
