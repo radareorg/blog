@@ -1,4 +1,4 @@
-baseurl = "http://beta.radare.today"
+baseurl = "http://radare.today"
 languageCode = "en-us"
 title = "The Official Radare Blog"
 Paginate = -1
