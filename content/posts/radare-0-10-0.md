@@ -35,6 +35,8 @@ About the testsuite, you may notice that it’s much more quick to run it now. W
 
 You might  also be happy to know that radare2 now successfully compiles on [tcc]( http://repo.or.cz/tinycc.git ), the *tiny C compiler*. This might be useful if you’re compiling radare2 on weird platforms. Please be sure to use tcc from git too :) Moreover, radare2 tries as hard as it can to run on your-super-weird-platform-that-no-ones-has-ever-head-off, we implemented the `cp` and `mv` commands, since you might not find those everywhere.
 
+Thanks to revskills for spending time fuzzing and reporting several parts of r2.
+
 # Better support for iOS
 
 Radare2 comes with some new features that will make iOS reverse engineers happy:
@@ -239,3 +241,11 @@ There are now new NodeJS bots for IRC and Telegram, ready to use in the `radare2
 Yet another successful release of radare2. If you want to join the party, please take a look at our [easy issues](https://github.com/radare/radare2/labels/easy ), we'll be happy to help you to help us, on [irc]( irc://irc.freenode.net/radare ), or on Telegram.
 
 But more importantly, please, be sure you’ve pulled and rebuilt radare2 from git again, after finishing reading this post. Why? Because we can bet - someone already committed something new in the radare2 repository. Make it a new habit - periodically checking out the newest radare2 git. We can make reverse engineering great again!
+
+# Thanks to
+
+Hopefully i'm not missing anyone in the list of contributors. Thank you guys!
+
+8tab, Adrian Pistol, Alvaro Muñoz, Avi Weinstock, Ben Gardiner, bhootravi, BlueC0re, bspar, bydo, Claude Hemberger, Darkkey, David Kreuter, David Manouchehri, Dāvis, deffi420, dequis, Derek Wood, dso, dukeBarman, earada, Felix Held, four0four, funktioniert, gk, Grigory Rechistov, iessa s alkuwari, inisider, isra17, Jeffrey Crowell, Jonathan Neuschäfer, Judge Dredd (key 6E23685A), Juha Kivekas, Kamil Rytarowski, Kevin Grandemange, Kiwhacks, mrdanielps, mrpink17, NighterMan, Ole André Vadla Ravnås, Oleksii Kuchma, Pierre Pronchery, PSi, qnix, Ricardo Quesada, Riccardo Schirone, Sam, Sascha Schirra, Serguey Parkhomovsky, seu, sghctoma, shengdi, shuall, Skia, Sushant, Sven Steinbauer, Sylvain Pelissier, szt, Taryn Hill, user, Vladislav Shtepin, Wilhelm Matilainen, Wladimir J. van der Laan, xambroz, yetmorecode, Y. Sapir, zlowram, ...
+
+--pancake
