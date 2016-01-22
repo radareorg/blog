@@ -8,9 +8,7 @@ aliases = [
 ]
 +++
 
-Today, we’re releasing a new version of radare2, the *0.10.0*, codename
-*NOLAN*. Since you might be a but too lazy to read [every single commit](
-https://github.com/radare/radare2/commits/master ), we’re going to highlight some cool new features together!
+On monday 16th, we released a new version of radare2, the *0.10.0*, codename *NOLAN*. Since you might be a but too lazy to read [every single commit](https://github.com/radare/radare2/commits/master), we’re going to highlight some cool new features together!
 
 # Numbers
 Thanks to more than 100 contributors who issued more than 2000 commits, here is what changed:
@@ -20,9 +18,16 @@ $ git checkout 0.10.0 && git diff 0.9.9 --shortstat
  1095 files changed, 80695 insertions(+), 40792 deletions(-)
 ```
 
-We would like to thanks all contributors, especially the newcomers, that made
-this release possible. You can find a (hopefully) complete list of them in the
-[AUTHORS]( https://github.com/radare/radare2/blob/master/AUTHORS.md ) file.
+We would like to thanks all contributors, especially the newcomers, that made this release possible. You can find a (hopefully) complete list of them in the [AUTHORS]( https://github.com/radare/radare2/blob/master/AUTHORS.md ) file.
+
+# GUI
+Still, users keep asking us for an r2 GUI, so pancake decided to make another just, yes, there are many r2 user interfaces.. some of them private, some others public, but none of them as powerful as the commandline. So I guesss there's no sense in using them...
+
+The latest GUI has been implemented on top of the NodeJS r2pipe API and it's called [blessr2](http://radare.org/r/blessr2.html) in honor of the `bless` nodejs api to create beautiful and portable console user interfaces.
+
+![blessr2](/images/blessr2.png)
+
+If this was not enough, pancake also wrote a new Web user interface using the Material design, which turns to be the default interface for the Android and FirefoxOS applications.
 
 # Stability
 We spent a lot of time fuzzing radare2, collecting binaries and writing tests to improve radare2’s reliability. We even harvested similar projects bugtracker to see how well radare2 would deal with binary that broke them. Currently, we have something like 2000 tests dedicated to commands, and most of disassemblers have a 100% coverage.
@@ -31,11 +36,46 @@ About the testsuite, you may notice that it’s much more quick to run it now. W
 
 You might  also be happy to know that radare2 now successfully compiles on [tcc]( http://repo.or.cz/tinycc.git ), the *tiny C compiler*. This might be useful if you’re compiling radare2 on weird platforms. Please be sure to use tcc from git too :) Moreover, radare2 tries as hard as it can to run on your-super-weird-platform-that-no-ones-has-ever-head-off, we implemented the `cp` and `mv` commands, since you might not find those everywhere.
 
+# Better support for iOS
+
+Radare2 comes with some new features that will make iOS reverse engineers happy:
+
+* Asm.emu will tell you which objc_msgSend apis and syscalls are called
+* Better emulation of Thumb, aarch64 and arm32
+* Supports r2pipe in Swift, known to work on tvOS, watchOS, iPhone and OSX.
+* Native OBJC parser implementation, no need to use `class-dump` tool anymore!
+* Some enhancements in process memory dumping
+* Supports tfp0 to read/write kernel memory if kernel is patched properly
+* Exploit an iOS<=8 vulnerability to read 
+* Code Signing is now done properly, updated instructions.
+* Add support for nativelly running on Apple Watch (without jailbreak).
+* Some random debugger bug fixes, still not fully working on iOS
+* List memory modules, not just memory maps
+* Unaligned instructions are different than the invalid ones
+* MACH0 Crypto information is now accessible via SDB
+
+ElCapitan users will get a bit pissed of because they are no longer able to debug `/bin/ls`, because Apple's SIP will block debugging binaries found in system directories. The solution for this is to copy them into your home :P Also, default installation path has changed from /usr to /usr/local
+
+# Debugger
+
+This release was suposed to focus on the debugger, fixing many issues, and adding some new features, here there are some of them:
+
+* Support memory-access hardware breakpoints
+* Much better Windows 32 and 64bit debugger support
+* List opened handles and Windows using `dd`
+* Rarun2 supports pipe execves in std filedescriptors
+* Remote debugging via IO plugins work a bit better now
+* 3 different backtrace algorithms and configurable at runtime
+
+![dbg](/images/webui.png)
+
 # Memory usage
 It seems that no one ever took care of radare2 memory consumption before, because it was still lower than its competitors/alternatives. But for this release, radare2 went on a diet : it now consumes 3 to 5 times less memory !
 
 # Pretty graphs
 Our beloved *ret2libc* spent a lot of time rewriting graphs engine from scratch, with overlaps handling and better colours ! See how cool this is:
+
+![graph](/images/graph.png)
 
 # New architectures support
 We know a lot of people are using radare2 because it supports a lot of funky/exotic/awful/funny/scary architectures.
@@ -50,6 +90,22 @@ Also, we added support for assembling ARM and ARM64, ADN decoding (yes. It’s t
 
 And since we have at least one Windows user, we also added support for Windows minidump format, aka `mdmp`, and windows-on-raspberry2-fileformat-it’s-almost-a-PE because apparently, it’s a real thing.
 
+# Game Consoles
+We have been also working in adding support for more game console ROMs:
+
+* NES (nintendo-entertainment-system)
+* SMD (sega megadrive)
+* SMS (mastersystem/gamegear)
+* DOL (wii/gamecube)
+* GB  (initial support for assembling instructions)
+
+Other new binary formats are now supported too:
+
+* CGC executables
+* MBN/SBL Android trustboot images
+* Support for RPI2 PE Windows executables
+* Windows Minidump (mdmp) files
+
 # Bindings
 Remember the bindings, and how much languages we supported? Remember when you had to read radare2’s source code to write a simple one-liner, and ended parsing a call to `system` with radare2, pipe, sed, pipe, tr, pipe, awk, pipe, sed ?
 Yeah, us too. This is why we ditched (don’t worry, they are still there, but deprecated) the bindings, and created `r2pipe`. Since you like so much calling radare2 in `system`, this is exactly what is does: popping radare2, and piping commands to it.
@@ -57,8 +113,7 @@ Yeah, us too. This is why we ditched (don’t worry, they are still there, but d
 This brings several advantages:
 
 We don’t have to maintain a shitload of convoluted bindings (have you ever tried to use `ffi`?), we only have to implement a few commands per languages
-You don’t have to read radare2’s source code if you don’t want to: if you know how to use radare2, you know how to use r2pipe
-Native JSON output! No need to use `sed`/`awk`/`tr`/… anymore!
+You don’t have to read radare2’s source code if you don’t want to: if you know how to use radare2, you know how to use r2pipe! Append `j` to almost every command to get native JSON output! No need to use `sed`/`awk`/`tr`/… anymore!
 
 For example:
 
@@ -72,8 +127,11 @@ print('And now in JSON:\n%s\n' % r2.cmdj('pij 5'))
 print('architecture: %s' % r2.cmdj('ij')['bin']['machine'])
 ```
 
+All r2pipe APIs has been updated to work on Windows, Linux and OSX. In addition, the new `native://` URI allows to use r2pipe api using the native C API instead of using pipes or sockets. This allows to reuse the same code but speeding up things a lot.
+
 # r2pm
 Radare2 had an implementation of 2048, a port-scanner, and even a secret ascii-penis, but now, it also has a package manager!
+
 No, this is not overkill, stop complaining and keep on reading. Radare2 supports a lot of <s>useless</s> things. This is why we put non-code things into separate packages, that can be browsed/searched/installed/removed/updated with the new tool called `r2pm`.
 
 ```
@@ -149,15 +207,36 @@ We even documented ESIL itself within radare2, since you can disassemble to ESIL
 
 Ho, I almost forgot to mention the new `asm.emuwrite`, `asm.emustr`, and `asm.emu` options! If you set them to true, radare2 will do its very best to improves the analysis with ESIL, but be careful, setting those variables may give you an über-verbose output.
 
-# Unicorn
-A lot of people are talking about [unicorn]( http://www.unicorn-engine.org/ ), a CPU emulator. While we think that ESIL is way better for everything and that you totally should use it and contribute to radare2, we added support for it in radare2, it’s as simple as `r2 -D unicorn /bin/ls`. In fact, since our great lead pancake is great, he added support for it before its release, something like 6 months ago.
+# Extras
+
+The radare2-extras repository has been growing because some stuff that was previously living in the main repository moved there. It comes now with a configure script and all the makefiles needed to build everything and make r2pm happy.
+
+Some of the most interesting additions are:
+
+## Unicorn
+A lot of people are talking about [unicorn](http://www.unicorn-engine.org/), a CPU emulator. While we think that ESIL is way better for everything and that you totally should use it and contribute to radare2, we added support for it in radare2, it’s as simple as `r2 -D unicorn /bin/ls`. In fact, since our great lead pancake is great, he added support for it before its release, something like 6 months ago.
+
+## Baleful
+
+Skuater and thePope reverse engineered a crackme that was done on top of a custom virtual machine, so Skuater wrote the asm/anal/emulation plugins for it.
+
+## BPF
+
+Linux kernel packet filtering is done by a custom virtual machine that emulates code. r2 is now able to assemble, disassemble, analyze, emulate this new architecture. Thanks mrmacete!
+
+## New bots
+
+There are now new NodeJS bots for IRC and Telegram, ready to use in the `radare2-bindings/r2pipe/nodejs/examples/*`.
+
+* r2tgirc : telegram-to-irc bot that communicates the #radare freenode channel with the Telegram's radare one.
+
+* r2tg-bot : Radare2 bot for Telegram and connected to the cloud.
+
+* r2irc-bot : IRC bot of r2 to use any binary in your system from the chat.
+
 
 # Conclusion
 
-Yet another successful release of radare2. If you want to join the party,
-please take a look at our [easy issues](
-https://github.com/radare/radare2/labels/easy ), we'll be happy to help you to
-help us, on [irc]( irc://irc.freenode.net/radare ), or on Telegram.
+Yet another successful release of radare2. If you want to join the party, please take a look at our [easy issues](https://github.com/radare/radare2/labels/easy ), we'll be happy to help you to help us, on [irc]( irc://irc.freenode.net/radare ), or on Telegram.
 
 But more importantly, please, be sure you’ve pulled and rebuilt radare2 from git again, after finishing reading this post. Why? Because we can bet - someone already committed something new in the radare2 repository. Make it a new habit - periodically checking out the newest radare2 git. We can make reverse engineering great again!
-
