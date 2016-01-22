@@ -1,6 +1,5 @@
 +++
 date = "2015-01-21T23:30:07+01:00"
-draft = true
 title = "Radare 0.10.0"
 slug = "radare-0-10-0"
 aliases = [
