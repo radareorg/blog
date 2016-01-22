@@ -8,7 +8,7 @@ aliases = [
 ]
 +++
 
-On monday 16th, we released a new version of radare2, the *0.10.0*, codename *NOLAN*. Since you might be a but too lazy to read [every single commit](https://github.com/radare/radare2/commits/master), we’re going to highlight some cool new features together!
+On Monday 16th, we released a new version of radare2, the *0.10.0*, codename *NOLAN*. Since you might be a but too lazy to read [every single commit](https://github.com/radare/radare2/commits/master), we’re going to highlight some cool new features together!
 
 # Numbers
 Thanks to more than 100 contributors who issued more than 2000 commits, here is what changed:
@@ -21,13 +21,22 @@ $ git checkout 0.10.0 && git diff 0.9.9 --shortstat
 We would like to thanks all contributors, especially the newcomers, that made this release possible. You can find a (hopefully) complete list of them in the [AUTHORS]( https://github.com/radare/radare2/blob/master/AUTHORS.md ) file.
 
 # GUI
-Still, users keep asking us for an r2 GUI, so pancake decided to make another just, yes, there are many r2 user interfaces.. some of them private, some others public, but none of them as powerful as the commandline. So I guesss there's no sense in using them...
+Every time someone says the word "radare2", someone asks about a GUI. Every
+single time. There are already a lot of different interfaces, some are
+web-based, some are in Qt, Gtk, tk, … some are public, some are privates, …
+but not a single one is as powerful as the command line.
+So for now, the recommended way to use radare2 is, the command line.
 
-The latest GUI has been implemented on top of the NodeJS r2pipe API and it's called [blessr2](http://radare.org/r/blessr2.html) in honor of the `bless` nodejs api to create beautiful and portable console user interfaces.
+Another GUI-tradition is that our great leader pancake writes a new one for
+each release. This time, it's implemented on top of the NodeJS r2pipe API and
+it's called [blessr2](http://radare.org/r/blessr2.html) in honor of the `bless`
+nodejs api to create beautiful and portable console user interfaces.
 
 ![blessr2](/images/blessr2.png)
 
-If this was not enough, pancake also wrote a new Web user interface using the Material design, which turns to be the default interface for the Android and FirefoxOS applications.
+Since it took us a very long time to do this release, he had the time to
+implement a second one, using Material design,
+which turns out to be the default one for the Android and FirefoxOS applications.
 
 # Stability
 We spent a lot of time fuzzing radare2, collecting binaries and writing tests to improve radare2’s reliability. We even harvested similar projects bugtracker to see how well radare2 would deal with binary that broke them. Currently, we have something like 2000 tests dedicated to commands, and most of disassemblers have a 100% coverage.
@@ -42,7 +51,7 @@ Thanks to revskills for spending time fuzzing and reporting several parts of r2.
 
 Radare2 comes with some new features that will make iOS reverse engineers happy:
 
-* Asm.emu will tell you which objc_msgSend apis and syscalls are called
+* `asm.emu` will tell you which objc_msgSend apis and syscalls are called
 * Better emulation of Thumb, aarch64 and arm32
 * Supports r2pipe in Swift, known to work on tvOS, watchOS, iPhone and OSX.
 * Native OBJC parser implementation, no need to use `class-dump` tool anymore!
@@ -56,18 +65,22 @@ Radare2 comes with some new features that will make iOS reverse engineers happy:
 * Unaligned instructions are different than the invalid ones
 * MACH0 Crypto information is now accessible via SDB
 
-ElCapitan users will get a bit pissed of because they are no longer able to debug `/bin/ls`, because Apple's SIP will block debugging binaries found in system directories. The solution for this is to copy them into your home :P Also, default installation path has changed from /usr to /usr/local
+ElCapitan users will get a bit pissed of because they are no longer able to
+debug `/bin/ls`, because Apple's SIP will block debugging binaries found in
+system directories. The solution for this is to copy them into your home :P
+Also, default installation path has changed from `/usr` to `/usr/local`.
 
 # Debugger
 
-This release was suposed to focus on the debugger, fixing many issues, and adding some new features, here there are some of them:
+This release was supposed to focus on the debugger, fixing many issues, and
+adding some new <s>bugs</s> features, like:
 
-* Support memory-access hardware breakpoints
+* Support for memory-access hardware breakpoints
 * Much better Windows 32 and 64bit debugger support
 * List opened handles and Windows using `dd`
-* Rarun2 supports pipe execves in std filedescriptors
+* Rarun2 supports pipe execves in std file descriptors
 * Remote debugging via IO plugins work a bit better now
-* 3 different backtrace algorithms and configurable at runtime
+* 3 different backtrace algorithms, configurable at runtime
 
 ![dbg](/images/webui.png)
 
@@ -216,7 +229,11 @@ The radare2-extras repository has been growing because some stuff that was previ
 Some of the most interesting additions are:
 
 ## Unicorn
-A lot of people are talking about [unicorn](http://www.unicorn-engine.org/), a CPU emulator. While we think that ESIL is way better for everything and that you totally should use it and contribute to radare2, we added support for it in radare2, it’s as simple as `r2 -D unicorn /bin/ls`. In fact, since our great lead pancake is great, he added support for it before its release, something like 6 months ago.
+A lot of people are talking about [unicorn](http://www.unicorn-engine.org/), a
+CPU emulator. While we think that ESIL is way better for everything and that
+you totally should use it and contribute to radare2, we added support for it in
+radare2, it’s as simple as `r2 -D unicorn /bin/ls`. In fact, since our great
+leader pancake is great, he added support for it before its release, something like 6 months ago.
 
 ## Baleful
 
