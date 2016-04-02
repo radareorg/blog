@@ -1,11 +1,12 @@
 baseurl = "http://radare.today"
 languageCode = "en-us"
 title = "The Official Radare Blog"
-Paginate = -1
+Paginate = 10
 
 [params]
 name = "The radare team"
 description = "The blog of radare2"
+bio = ""
 twitter = "radareorg"
 copyright = "The radare team"
 enableRSS = true
