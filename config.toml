@@ -4,11 +4,11 @@ title = "The Official Radare Blog"
 Paginate = -1
 
 [params]
-  name = "The radare team"
-  description = "The blog of radare2"
-  twitter = "radareorg"
-  copyright = "The radare team"
-  enableRSS = true
+name = "The radare team"
+description = "The blog of radare2"
+twitter = "radareorg"
+copyright = "The radare team"
+enableRSS = true
 
-  about = "http://radare.org"
-  tweet = "https://twitter.com/radareorg"
+about = "http://radare.org"
+tweet = "https://twitter.com/radareorg"
