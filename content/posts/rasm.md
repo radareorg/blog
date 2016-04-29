@@ -245,7 +245,7 @@ R2Pipe provides a simple `command` -> `result` interface to talk to **radare2**,
 For this we must use the proper r2 commands:
 
 * **pa** assemble code inline
-* **pad** disasseble code inline
+* **pad** disassemble code inline
 
 ```
 [0x00000000]> pa nop
