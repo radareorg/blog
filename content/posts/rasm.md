@@ -284,6 +284,4 @@ Radare2 provides multiple functionalities splitted into separate libraries, whic
 
 This functionality is accessible thru the r2 commandline, the rasm2 program and using the C API.
 
-This opens the door to 
-
 [--pancake](https://twitter.com/trufae)
