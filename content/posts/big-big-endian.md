@@ -26,10 +26,10 @@ This needs to be avoided!
 
 Why? What is actually happening?
 
-When you cast the opcode stream to a unsigned int, the compiler uses the endianness
+When you cast the opcode stream to a `unsigned int`, the compiler uses the endianness
 of the host to interpret the bytes and stores it in host endianness.  This leads to
 very unportable code, because if you compile on a different endian machine, the
-value stored in "value" might be 0x40302010 instead of 0x10203040.
+value stored in "value" might be `0x40302010` instead of `0x10203040`.
 
 In the past, radare devs were not as strict about this issue, and as a result,
 needed to swap the endian of values regularly in the code.
@@ -43,12 +43,12 @@ Instead of casting streams of bytes to larger width integers, do the following:
 	ut8 opcode[4] = {0x10, 0x20, 0x30, 0x40};
 	ut32 value = opcode[0] | opcode[1] << 8 | opcode[2] << 16 | opcode[3] << 24;
 
-	or if you prefer the other endian:
+or if you prefer the other endian:
 
 	ut32 value = opcode[3] | opcode[2] << 8 | opcode[1] << 16 | opcode[0] << 24;
 
 This is much better because you actually know which endian your bytes are stored in
-within the integer value, REGARDLESS of the host endian of the machine.
+within the integer value, *REGARDLESS* of the host endian of the machine.
 
 
 Endian helper functions
@@ -67,13 +67,11 @@ Please use these at all times, eg:
 	//   otherwise reads in LE
 	val32 = r_read_ble32(buffer, isbig)
 
-There are a number of helper functions for 64, 32, 16, and 8 bit reads and writes.
+There are a number of helper functions for `64`, `32`, `16`, and `8` bit reads and writes.
 
-(Note that 8 bit reads are equivalent to casting a single byte of the buffer
-to a ut8 value, ie endian is irrelevant).
+(Note that 8 bit reads are equivalent to casting a single byte of the buffer to
+a `ut8` value, ie endian is irrelevant).
 
 Happy hacking!
 
 - damo22
-
-
