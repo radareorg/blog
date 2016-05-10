@@ -15,16 +15,16 @@ New analysis round is added for argument detection. It is architecture independe
 
 ![analysis](/images/Screenshot at 2016-05-09 22:32:52.png)
 
-`Radare2` also supports renaming declared variable/arguments this can be done using the command `afXn`, where `X` can be:
+`Radare2` also supports renaming declared variable/arguments this can be done using the command ```afXn```, where ```X``` can be:
 
- - `a` in case of normal arguments
- - `A` in case of [fastcall](https://msdn.microsoft.com/en-us/library/6xa169sk.aspx) 
- - `e` in case stack pointer is involved
+ - ```a``` in case of normal arguments
+ - ```A``` in case of [fastcall](https://msdn.microsoft.com/en-us/library/6xa169sk.aspx)
+ - ```e``` in case stack pointer is involved
  - 'v' if it is a variable
 
-For example `afan arg_5h my_first_argument` will rename `arg_5h` to be `my_first argument`, You can also set the variable/argument type using the `afXt` where X is the same as that used for `afXn`.
+For example ```afan arg_5h my_first_argument``` will rename ```arg_5h``` to be ```my_first argument``` You can also set the variable/argument type using the ```afXt``` where X is the same as that used for ```afXn```.
 
-The most important thing to know is how to use this analysis round. Fortunately it is embedded in the `aa` command, so for general purpose uses you won't need to do anything extra, but there will be a scenario where you define new function at some place where no function existed before. In that case you can enforce this analysis round for the newly created function using `afCa`. It will analyze function located at the current offset and set variables /arguments accordingly.
+The most important thing to know is how to use this analysis round. Fortunately it is embedded in the ```aa``` command, so for general purpose uses you won't need to do anything extra, but there will be a scenario where you define new function at some place where no function existed before. In that case you can enforce this analysis round for the newly created function using ```afCa```. It will analyze function located at the current offset and set variables /arguments accordingly.
 
 This is a little example on how to use the new set of commands ;).
 
