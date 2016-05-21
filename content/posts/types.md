@@ -13,7 +13,7 @@ But some of the basic cparse support has been implemented and I think it's time 
 
 Current cparse is able to handle cpp and C syntax with support for enums, structs and nested structs. There's an ongoing discussion to define how function signatures should be stored in sdb.
 
-Types are managed with the 't' command. By default it loads some basic ones like 'char *', 'unsigned int' or 'long'. The 't' command dumps the core->anal->sdb_types database which contains the following structure: 
+Types are managed with the 't' command. By default it loads some basic ones like 'char *', 'unsigned int' or 'long'. The 't' command dumps the core->anal->sdb_types database which contains the following structure:
 
 ```
 [0x00000000]> t
@@ -82,11 +82,11 @@ Displaying Types
 ------------
 Types are linked to 'pf' print format command, so the types specify the format char of 'pf' to display or modify it.
 
-Types can be mapped at any address with the 'tl' command, and then using 'tf' it will show the data in there. This is used by the disasm loop to display inline structures.
+Types can be mapped at any address with the 'tl' command, which will be used in analysis. Or 'tp' command can be used to cast your type and show the data in there. This is used by the disasm loop to display inline structures.
 
 ```
 [0x00000000]> tl addr 0x4000
-[0x00000000]> tf 0x4000
+[0x00000000]> tp addr 0x4000
 struct addr {
 street : 0x00004000 = "Wallaby Way"
   city : 0x00004000 = "Sydney"
@@ -106,6 +106,9 @@ Then we just use the magic of the r2 shell to interpret the command right there 
 ```
 
 Note the dot at the begining will execute every line of the output of the command as an r2 command. The '@' token, splits the line and evaluates the right expression. Then it does a temporal seek at this address runs the command and comes back.
+
+There are also commands 'ts', 'tu' and 'te' - to show structure types, unions and enums
+correspondigly.
 
 If you want to learn more on Types. See the rest of the commands of 't?'. And if you feel brave don't esitate to checkout the source and send us a patch.
 
