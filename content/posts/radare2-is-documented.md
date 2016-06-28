@@ -15,7 +15,9 @@ The "radare book" was released together with radare 1.0, several years ago, so s
 
 You can read it [online]( http://radare.org/doc/html/contents.html ) or download the [PDF]( http://radare.org/get/radare.pdf ).
 
-Recently, our tester in chief, maijin, started a project to update the radare book to create the [radare2 book]( http://maijin.github.io/radare2book/ ); feel free to contribute.
+Recently, our tester in chief, maijin, started a project to update the radare book to create the [radare2 book](http://radare.gitbooks.io/radare2book/content/); feel free to contribute.
+
+A book focused on practical case by monosource is also available : [radare2-explorations](https://monosource.gitbooks.io/radare2-explorations/content/)
 
 # The API
 
