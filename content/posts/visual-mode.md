@@ -11,7 +11,7 @@ One of the main complain we get about radare2 is that it has no [GUI]( https://e
 
 Like with very command in r2, you can get help with the `?`. Also, notice the fact that the CLI-command to get the same result it displayed on the top of your terminal.
 
-![help](/images/2014/Aug/help.png)
+![help](/images/help.png)
 
 The visual mode comes in several fashion that you can cycle with the `p` key:
 
@@ -24,11 +24,11 @@ The visual mode comes in several fashion that you can cycle with the `p` key:
 
 The mode can be really powerful when used during dynamic analysis, since it can display the stack, registers state and the disassembly listing in the same time. Use `.` to seek to _eip_, and `Enter` to follow address of the current jump/call.
 
-![visual debugger](/images/2014/Aug/visual_dbg-1.png)
+![visual debugger](/images/visual_dbg-1.png)
 
 If you're not used to radare2, you can use the HUD to quickly access your favorites commands by pressing the `_` key. Just type some letters of your command, and press enter when it gets selected. You can even add *your* commands by edition the hud file in your `R2HOME` folder (Likely equal to `~/.config/radare2/hud`).
 
-![HUD](/images/2014/Aug/hud.png)
+![HUD](/images/hud.png)
 
 Like in [IDA]( https://www.hex-rays.com/products/ida/index.shtml ), you can add comments with the `;` key, toggl breakpoints with `F2`, single-step with `F7`, step-over with `F8` and continue with `F9`.
 
@@ -40,7 +40,7 @@ There are some hidden pearls inside the Visual mode that allow you to configure 
 
 To jump around metadata like functions or strings, you can hit the `t` key, to select where you want to go. Cross-references (also known as XREF) and references are available respectively with the `X` and the `x` key.
 
-![xref](/images/2014/Aug/xref.png)
+![xref](/images/xref.png)
 Notice the fact that the main function is detected (top of the picture) as being called only once, by the `entry0` function, which is the entrypoint of the binary.
 
 Since most of the radare2 [developers]( https://github.com/radare/radare2/pulse/monthly ) are using [vim]( http://www.vim.org/ ), you can find most of its shortcuts in visual mode, like `hjkl` to move around, `g` and `G` to go to the begining or the end of the file, `i` to insert, ...
