@@ -11,6 +11,7 @@ aliases = [
 This year we're hosting our own **Radare Summer of Code**, again!
 
 This is why we have selected 4 students:
+
  - Aneesh Dogra (FAT PE binaries)
  - Alexandru Razvan Caciulescu (ROP generator)
  - Rakholia Jenish (Kernel level interfaces)
