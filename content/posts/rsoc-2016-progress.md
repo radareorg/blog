@@ -1,5 +1,5 @@
 +++
-date = "2016-09-02T13:00:10+02:00"
+date = "2016-08-02T13:00:10+02:00"
 draft = false
 title = "RSoC 2016 progress"
 slug = "RSoC 2016 progress"
