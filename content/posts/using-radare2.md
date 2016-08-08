@@ -28,7 +28,7 @@ Keep in mind that:
 * find xref of a function: `axt [offset|yourfunctioname]`
 * list libc imports: `is~imp.`
 * generate cyclical pattern: `ragg2 -P $SIZE -r`
-* find offset of pattern: `woO $VALUE`
+* find offset of pattern: `wopO $VALUE`
 * change the deep of the rop-search: `e search.roplen = 4`
 * computing how far a symbol is from where you currently are: `fd [offset|yourfunctioname]`
 * find protections in binary:
