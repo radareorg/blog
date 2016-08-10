@@ -1,4 +1,4 @@
-+++ date = "2016-08-10T19:16:00+02:00" draft = false title = "Emulating a simple bootloader" slug = "emulating-simple-bootloader" aliases = [ "emulating-simple-bootloader" ] +++
++++ date = "2016-08-12T19:16:00+02:00" draft = false title = "Emulating a simple bootloader" slug = "emulating-simple-bootloader" aliases = [ "emulating-simple-bootloader" ] +++
 
 ## Introduction
 
