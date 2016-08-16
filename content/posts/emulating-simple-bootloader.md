@@ -24,7 +24,7 @@ Whenever i use r2pipe i feel home, moreover there's an example (in nodejs) of a 
 My bios looked like this:
 
 ```python
-import r2pipe, sys, os, json
+import r2pipe, sys, os
 
 r2 = r2pipe.open('#!pipe')
 
@@ -58,7 +58,7 @@ def wait_key():
 
 # this handles the interrupts
 def handle_intr(intNum):
-	regs = json.loads(r2.cmd('arj'))
+	regs = r2.cmdj('arj')
 
 	# helper funcs to read/write hi and low parts of regs
 	def xh(regName, setValue = None):
