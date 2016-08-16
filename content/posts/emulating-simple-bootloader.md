@@ -1,5 +1,12 @@
-+++ date = "2016-08-12T19:16:00+02:00" draft = false title = "Emulating a simple bootloader" slug = "emulating-simple-bootloader" aliases = [ "emulating-simple-bootloader" ] +++
-
++++
+date = "2016-08-16T19:16:00+02:00"
+draft = false
+title = "Emulating a simple bootloader"
+slug = "emulating-simple-bootloader"
+aliases = [
+	"emulating-simple-bootloader"
+]
++++
 ## Introduction
 
 Generally speaking, emulating a bootloader is simpler than it is for regular binaries, because they lack external libraries and usually have direct access to memory and hardware.
