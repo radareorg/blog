@@ -1,5 +1,5 @@
 +++
-date = "2015-08-25T13:13:29+02:00"
+date = "2016-08-25T13:13:29+02:00"
 draft = false
 title = "GSOC, The last commit 213c6f"
 slug = "GSOC-The-last-commit-213c6f"
