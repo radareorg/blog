@@ -27,11 +27,11 @@ gunpoint_2daf5fe3fb236b398ff9e5705a058a7f.dat: Gameboy ROM: "FLUX", [ROM ONLY], 
 
 So it is a Gameboy ROM. I load it up in [VisualBoyAdvance]( http://sourceforge.net/projects/vba/ ) and see what the game is.
 
-![running_game_1.png](/images/2014/Oct/pVD3Je8-1.png)
+![running_game_1.png](/images/pVD3Je8-1.png)
 
 It is a static image, and after some time, we receive this text.
 
-![running_game_2.png](/images/2014/Oct/meh.png)
+![running_game_2.png](/images/meh.png)
 
 Looks like we will have to put in some inputs from the joypad to get the flag. It is a crackme style but for the Gameboy! Sounds fun.
 
@@ -434,7 +434,7 @@ And we get a nice graph like this.  I have some annotations on mine, from revers
 
 type structure, which makes sense for value and index checking.
 
-![biggraph.png](/images/2014/Oct/bg.png)
+![biggraph.png](/images/bg.png)
 
 So, after some analysis, and guessing, we can figure the following. There is some debouncing/not expected to be perfect for clock cycles for button presses, so there must be tolerance for `0xFF00` to be the same for multiple cycles, or to be 0 with no penalty.
 
@@ -535,7 +535,7 @@ $10 - A                 $1 - Right
 
 Plug it in to VisualBoyAdvance and grab our 200 points!
 
-![win.png](/images/2014/Oct/win.png)
+![win.png](/images/win.png)
 
 Thanks to FluxFingers for a great CTF!
 

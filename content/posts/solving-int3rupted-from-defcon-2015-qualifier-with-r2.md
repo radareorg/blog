@@ -42,7 +42,7 @@ impactsite ~ » cat /usr/lib/ldscripts/elf_x86_64.x | grep SEGMENT_START
   . = SEGMENT_START("ldata-segment", .);
 ```
 
-![header](/images/2015/06/elf_header.png)
+![header](/images/elf_header.png)
 
 Although it is a tedious process, you can dump the enough of the binary to load it up in your favorite disassembler.
 
@@ -57,19 +57,19 @@ So, quickly after reversing (which I will leave as an exercise to the reader), a
 
 Let's look at how int3rupted reads in the user's input. The function takes in a length, a fd to read from, a buffer to write to, and a "stop" character (newline).
 
-![read_user_input](/images/2015/06/disasm.png)
+![read_user_input](/images/disasm.png)
 
 Oh, what's this?!? The "length" var is increased, but it's termination value is at `length == 0`. This means we have an _unchecked_ read.
 
 Let's have a look at who else calls the `read_user_input` function.
 
-![xrefs](/images/2015/06/pd2.png)
+![xrefs](/images/pd2.png)
 
 Can it really be so simple, just a basic stack smash from `main_menu`? There is no `system` called in the binary, and there is *ASLR* activated, but if you recall, we have an arbitrary read, so we can just leak the addresses of libc functions, simple! There isn't even a stack canary to worry about.
 
 Let's use `rabin2` to find the address to read in order to leak the libc function `puts`.
 
-![puts](/images/2015/06/rabin.png)
+![puts](/images/rabin.png)
 
 Let's just assume that it's on Ubuntu trusty, because all of the other challenges were. Otherwise there are some nice [database tools]( https://github.com/niklasb/libc-database ) to use.
 
@@ -83,7 +83,7 @@ So, from here, there is not much left to do. Just construct an exploit that does
 Simple, right?
 
 And like magic, we can get a shell! 5 easy points. The final exploit below has comments for the r2 commands to get the needed values (like rop gadgets and offsets).
-![shell](/images/2015/06/shell.png)
+![shell](/images/shell.png)
 
 ```ruby
 #!/usr/bin/env ruby

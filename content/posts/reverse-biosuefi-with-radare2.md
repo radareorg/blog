@@ -26,7 +26,7 @@ In order to modify a binary, radare2 must open the file in a writing mode using 
 
 Using seek `s` to move around the binary, wx to insert/write some hexadecimal: `wx 9090` for example, writes two `nop` and `wa` to assemble and write the opcodes: `wa push ebp` for example.
 
-![wx and wa](/images/2015/08/wxwa-1.png)
+![wx and wa](/images/wxwa-1.png)
 
 ### Using Visual mode
 
@@ -36,32 +36,32 @@ The Visual Mode is the best way to patch assembly or hexadecimal. It is similar 
 
 First let's patch the binary using hexadecimal patching. First go to the Visual hexadecimal panel:
 
-![Visual Mode](/images/2015/08/V.png)
+![Visual Mode](/images/V.png)
 
 Then activate the cursor selection: `c`. You can now select hexadecimal or ASCII representation using `tab` (notice the white border).
 
-![Cursor mode](/images/2015/08/Vc.png)
+![Cursor mode](/images/Vc.png)
 
 You can now insert hexadecimal code or string by typing `i`.
 
-![Insert String](/images/2015/08/Vcadd.png)
+![Insert String](/images/Vcadd.png)
 
 #### Opcode patching and Visual assembler
 
 Now let switch to the disassembly panel in visual mode (Vpp).
 
-![Visual Mode: Disassembly mode](/images/2015/08/VisualDisassembly.png)
+![Visual Mode: Disassembly mode](/images/VisualDisassembly.png)
 
 Like the hexadecimal view, you can enable the cursor mode using `c` and select opcodes you want to replace.
 
-![Cursor mode in Disassembly](/images/2015/08/Vcc.png)
+![Cursor mode in Disassembly](/images/Vcc.png)
 
 To change the `push ebp` for example by `xor eax, eax` opcode you can use `a`:
 
-![Va](/images/2015/08/Va.png)
+![Va](/images/Va.png)
 
 Visual mode also contain an interesting live preview Opcode patching: the Visual Assembler `A`.
 
 Let's replace this `xor eax,eax` by a `jmp 0x08048376`, notice the arrow on the left (==Live preview==).
 
-![Visual Assembler](/images/2015/08/VA.png)
+![Visual Assembler](/images/VA.png)
