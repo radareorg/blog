@@ -78,7 +78,7 @@ See the [commits](https://github.com/Maijin/caseXXXX)
 
 You can insert radare2 commands into your project file, that can be executed from the script with `Pnx`. This is useful if you have a set of commands that need to be run to bring radare2 into a specific state each time you start working on your project.
 
-Any like prefixed with a `:` is considered a command and will be run when you call `Pnx`
+Any line prefixed with a `:` is considered a command and will be run when you call `Pnx`
 
 # Future of Project Files and How to Help
 
