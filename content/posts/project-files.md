@@ -72,7 +72,7 @@ Here is an example of this in use [malware analysis article](http://radare.today
 
 See the [commits](https://github.com/Maijin/caseXXXX)
 
-![CaseXXXX](/images/project_caseXXXX)
+![Case](/images/project_case)
 
 ### Storing commands in your project file
 
