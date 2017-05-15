@@ -1,4 +1,13 @@
-+++ date = "2017-05-15T02:45:16+02:00" draft = false title = "GSoC 2017 selection results" slug = "gsoc_2017_selection" aliases = [ "gsoc_2017_sel" ] +++
++++
+date = "2017-05-15T02:45:16+02:00"
+draft = false
+title = "GSoC 2017 selection results"
+slug = "gsoc_2017_selection"
+aliases = [
+ "gsoc_2017_sel"
+]
++++
+
 # Google Summer of Code 2017
 
 ![](https://i.imgur.com/u6c06A9.png)
