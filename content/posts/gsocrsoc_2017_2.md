@@ -19,21 +19,21 @@ First I fixed a bug where r2 was reporting support for `vCont` packets and not u
 The next feature I added was `=!qRcmd` to the gdb io system, so that one could send monitor commands to be run by the target gdbserver. Next, I closed a very old issue by adding a drp sub-command to parse a gdb maintenance register profile into an r2
 one.
 
-![=!qRcmd](qrcmd.png)!
+![=!qRcmd](/images/qrcmd.png)
 
 Then I added the capability to read the filename that was executed from the gdbserver (even with the io system, with `=!exec_file`). Also support for reading the list of threads running for the process. Adding the printing of debug messages to the r2 gdbserver will help the implementation of the protocol. With the help of this, I added support for reading/writing single registers to gdbserver, and also better reporting of stop reason.
 
-![gdbserver debug messages](gdbserver.png)
+![gdbserver debug messages](/images/gdbserver.png)
 
 Next I added support for reporting of debug info with `di`, an io system command to
-get/set the maximum packet size with `=!pktsz`, and proper handling of stop reason 
+get/set the maximum packet size with `=!pktsz`, and proper handling of stop reason
 to the r2 gdb client.
 Finally, closing another very old issue, I added automatic loading of symbol information
 in gdb debugging (provided either the binary is present locally at the same absolute path
 as on the target, or in the current working directory). In addition, one can set the
 path of the binary in the local system, with `e dbg.exe.path`.
 
-![symbol loading](symload.png)
+![symbol loading](/images/symload.png)
 
 ## Windows support (xarkes)
 
@@ -135,37 +135,37 @@ rune only supported 64 bit memory operations up until now. I worked on an implem
     Memory:
     -------------------
     | 0x9000 - 0x9002 |
-    ------------------- 
-    
+    -------------------
+
 2.  Input: Read for 2 bytes at memory adress 0x9003
     Memory:
     -------------------    -------------------
     | 0x9000 - 0x9002 |    | 0x9003 - 0x9005 |
-    -------------------    -------------------   
-    
+    -------------------    -------------------
+
 3.  Input: Access for 3 bytes at memory address 0x9001
     Memory:
     -------------------           -------------------
     | 0x9000 - 0x9002 |           | 0x9003 - 0x9005 |
-    -------------------           -------------------   
+    -------------------           -------------------
               ^       ^ ^       ^ ^       ^
               |       | |       | |       |
               -- bv1 -- -- bv2 -- -- bv3 --
-             
+
     Here,
     bv1: Result of extract operation on bitvector representing memory at 0x9000.
     bv2: Newly created bitvector representing memory of length 1 byte at 0x9002.
     bv3: Result of extract operation on bitvector representing memory at 0x9003.
-    
-    * A result bitvector of size equal to the access size is created 
+
+    * A result bitvector of size equal to the access size is created
       and is initialized to zero.
-    
-    * bv1, bv2 and bv3 are zero extended to match the access size 
+
+    * bv1, bv2 and bv3 are zero extended to match the access size
       (i.e 3 bytes or 24 bits).
-    
-    * Depending on the read offset, 
+
+    * Depending on the read offset,
       these bitvectors are then left shifted appropriately.
-    
+
     * The result is then basically the logical OR of all the 4 quantities:
       (We could also use XOR since there are no overlaps)
       result = result ^ bv1 ^ bv2 ^ bv3
