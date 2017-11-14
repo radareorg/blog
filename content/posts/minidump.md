@@ -14,15 +14,7 @@ This article describes how to perform analysis of minidumps using radare2 **mdmp
 
 ## Installation
 
-At the time of writing, the MDMP plugin resides in the [radare2-extras repository](https://github.com/radare/radare2-extras) as it is not yet part of the radare2 core. Thus it can be installed as follows:
-
-```
-$ r2pm init
-$ r2pm update
-$ r2pm -i mdmp
-```
-
-Once successfully installed radare2 should identify the fileformat as `mdmp` rather than `any`.
+If you use radare2 from git as recommended nothing to do, you should already be able to identify the fileformat as `mdmp` rather than `any`.
 
 # The format
 
