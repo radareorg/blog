@@ -8,8 +8,6 @@ aliases = [
 ]
 +++
 
-# GSoC 2018 selection results
-
 We are happy to announce this year we accepted **five** students: two for [radare2](http://rada.re) itself, two for [radeco]( https://github.com/radare/radeco ) and one for [cutter](https://github.com/radareorg/cutter).
 
 
