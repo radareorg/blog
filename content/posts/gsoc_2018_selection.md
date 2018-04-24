@@ -10,7 +10,6 @@ aliases = [
 
 We are happy to announce this year we accepted **five** students: two for [radare2](http://rada.re) itself, two for [radeco]( https://github.com/radare/radeco ) and one for [cutter](https://github.com/radareorg/cutter).
 
-
 ## HMPerson1
 
 Hi, I'm Michael Zhang, also known as [HMPerson1](https://github.com/HMPerson1). I'm a first-year student at [Purdue University](https://purdue.edu/). I use radare2 regularly when playing CTFs to disassemble and analyze binaries. Although radare is very powerful, there's only so much that can be done staring at dissassembly. Having access to source code would make analysis much easier.
@@ -20,7 +19,6 @@ This summer, I'll be working on adding structured control flow recovery to [rade
 My project is to convert the control flow graph described by this IR into a more structured form, specifically into the control flow structures used in C (i.e. `for` and `while` loops; and `if-else` and `switch` statements). To do this, I will be implementing the algorithm described in the paper titled [No More Gotos](https://doi.org/10.14722/ndss.2015.23185).
 
 Kriw and I will be working together to create a working decompiler by the end of this summer that can correctly decompile most binary programs into human-readable source code.
-
 
 ## Kriw
 
@@ -55,6 +53,7 @@ The major goal of this task is to implement an analysis that would infer types o
 * Handling of complex nested structures
 * Type inference engine based on function arguments types, return types
 * Export and import return and argument types with function signatures
+
 
 
 ## mandlebro
