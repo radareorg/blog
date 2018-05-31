@@ -65,7 +65,7 @@ All of this resulted in a new, better `ag?` help that we hope clear even for the
 
 Here are the few highlights of my work for this month :
 
-### `afta` optimization
+### afta optimization
 
 I started first trying to optimize afta which was before emulating entire function, refactored it to buffer only a few instructions before call instruction and emulate it when we hit a known function call
 
@@ -75,7 +75,7 @@ Previously function stack frame was calculated at the end of the analysis, this 
 
 ### Working with types commands
 
-1. Array of struct now works with `ts` command
+1. Array of struct now works with ts command
 
 ```
 [0x00000000]> "td struct foo { int a; int b; };"
@@ -97,7 +97,7 @@ Previously function stack frame was calculated at the end of the analysis, this 
 
 2. Manage enum types properly - enum data type is now stored in sdb in a consistent way with rest of the type storage,
 
-3. Fix `te` to list all values of enum
+3. Fix te to list all values of enum
 
 ```
 [0x00000000]> "td enum Foo {COW=1,BAR=2};"
@@ -106,7 +106,7 @@ COW = 0x1
 BAR = 0x2
 ```
 
-4. Fixed struct offset for dst operand in `ta`
+4. Fixed struct offset for dst operand in ta
 
 5. Currently working on structure offset propagation, which requires a lot of change in opcode parser to support RAnalop.dst/src in all architectures, I am going to finish this soon and move onto Type Inference task!
 
