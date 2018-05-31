@@ -61,20 +61,20 @@ All of this resulted in a new, better `ag?` help that we hope clear even for the
 
 ## sivaramaaa
 
-
 Here are the few highlights of my work for this month :
 
-* `afta` optimization
+- `afta` optimization
 
     I started first trying to optimize afta which was before emulating entire function, refactored it to buffer only a few instructions before call instruction and emulate it when we hit a known function call
 
-* Improve variable recovery
+- Improve variable recovery
 
    Previously function stack frame was calculated at the end of the analysis, this could be wrong since stack frame is not fixed, so I tweaked the analysis loop to fix this issue
 
 ### Working with types commands
 
-* Array of struct now works with `ts` command <br><br>
+- Array of struct now works with `ts` command
+
 ```
 [0x00000000]> "td struct foo { int a; int b; };"
 [0x00000000]> "td struct bar { int x; struct foo y[2]; };"
@@ -92,17 +92,20 @@ Here are the few highlights of my work for this month :
        b : 0x00000010 = 0
     ]
 ```
-* Manage enum types properly - enum data type is now stored in sdb in a consistent way with rest of the type storage,
-* Fix `te` to list all values of enum
+- Manage enum types properly - enum data type is now stored in sdb in a consistent way with rest of the type storage,
+
+- Fix `te` to list all values of enum
+
 ```
 [0x00000000]> "td enum Foo {COW=1,BAR=2};"
 [0x00000000]> te Foo
-	COW = 0x1
-    BAR = 0x2
+COW = 0x1
+BAR = 0x2
 ```
-* Fixed struct offset for dst operand in `ta`
 
-* Currently working on structure offset propagation, which requires a lot of change in opcode parser to support RAnalop.dst/src in all architectures, I am going to finish this soon and move onto Type Inference task!
+- Fixed struct offset for dst operand in `ta`
+
+- Currently working on structure offset propagation, which requires a lot of change in opcode parser to support RAnalop.dst/src in all architectures, I am going to finish this soon and move onto Type Inference task!
 
 ## Kriw
 
