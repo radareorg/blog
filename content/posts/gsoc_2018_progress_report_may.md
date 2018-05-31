@@ -8,6 +8,8 @@ aliases = [
 ]
 +++
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 A few weeks passed but our students worked hard and achieved a tremendous results already. Lets see what they have to say about this:
 
 ## Cyanpencil's update
