@@ -167,6 +167,7 @@ My next plans are:
 ## mandlebro
 
 During the first two weeks of GSOC, I worked on a couple of necessary features before starting working on the debugging aspects of [Cutter](https://github.com/radareorg/cutter):
+
  * **independent seeks**: this allows different widgets to have different seeks. Previously, all widgets would always be in sync with each other, and with the radare2 instance running in the background. Now, you can toggle if you would like your widget to be in sync with the other widgets.
 
 ![indep_seek](https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/syncseek.gif)
