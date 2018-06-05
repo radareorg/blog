@@ -81,10 +81,10 @@ Previously function stack frame was calculated at the end of the analysis, this 
 [0x00000000]> "td struct foo { int a; int b; };"
 [0x00000000]> "td struct bar { int x; struct foo y[2]; };"
 [0x00000000]> ts bar
-	pf d[2]? x (foo)y
-    [0x00000000]> .ts bar
-     x : 0x00000000 = 0
-     y :
+  pf d[2]? x (foo)y
+[0x00000000]> .ts bar
+  x : 0x00000000 = 0
+  y :
     [
                   struct<foo>
        a : 0x00000004 = 0
