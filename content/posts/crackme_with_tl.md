@@ -8,9 +8,11 @@ aliases = [
 ]
 +++
 
-Today we will look into the recently introduced feature in r2 (so be warned it's still a WIP xD) which is Structure offset propagation and use this to solve a crackme based on reversing an Android JNI (Java Native Interface) library.
+Today we will look into the recently introduced feature in r2 - structure offset propagation.
 
-This challenge is originally from NDH2012-wargame, So we are provided with an [NDH.apk](https://github.com/sivaramaaa/CTF_repo/blob/master/NDH2k12/NDH.apk) file, Now after decompiling and using JD-GUI to browse through the code we can find some interesting functions : 
+We will use it to solve a crackme based on reversing an Android JNI (Java Native Interface) library.Beware that the feature is still WIP and being constantly improved.
+
+This challenge is originally from NDH2012-wargame, so we are provided with an [NDH.apk](https://github.com/sivaramaaa/CTF_repo/blob/master/NDH2k12/NDH.apk) file, now after decompiling and using JD-GUI to browse through the code we can find some interesting functions : 
 
 ```java 
 // Java source file
@@ -29,7 +31,7 @@ $ file libverifyPass.so
 libverifyPass.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, stripped
 ```
 
-So let's start by opening it in r2 (~~IDA~~ :P) -
+So let's start by opening it in ~~IDA~~ r2 -
 
 ```
 $ r2 ./libverifyPass.so
@@ -65,11 +67,11 @@ We could easily spot the "sym.(..).print" function that was called from the java
  ....
 | 0x00000f8a      9847     blx r3
 ```
-We could see that one of the arguments passed to this print function is a **JNIEnv** struct pointer which contains info about many callback function (For detailed explaination about JNI , take a look at this [wiki](https://en.wikipedia.org/wiki/Java_Native_Interface))
+We could see that one of the arguments passed to this print function is a **JNIEnv** struct pointer which contains info about many callback functions (For detailed explaination about JNI , take a look at this [wiki](https://en.wikipedia.org/wiki/Java_Native_Interface))
 
-Thia program uses this type of call 3 times, with the indexes 0x2A4, 0x290 and 0x29C. 
+This program uses such type of call 3 times, with the indexes 0x2A4, 0x290 and 0x29C. 
 
-To retreive the names of the corresponding functions, we can directly use the [jni.h](https://github.com/sivaramaaa/CTF_repo/blob/master/NDH2k12/jniapi.h) file or this [doc](https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/functions.html#wp23720) which contains the indexes in the JNIEnv interface function table : 
+To retreive the names of corresponding functions, we can directly use [jni.h](https://github.com/sivaramaaa/CTF_repo/blob/master/NDH2k12/jniapi.h) file or this [doc](https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/functions.html#wp23720) which contains indexes in JNIEnv interface function table : 
 
 ```cc
 0x24A / 4 = 169 --> const jbyte* GetStringUTFChars(JNIEnv *env, jstring string, jboolean *isCopy);
@@ -77,7 +79,7 @@ To retreive the names of the corresponding functions, we can directly use the [j
 0x29C / 4 = 167 --> jstring NewStringUTF(JNIEnv *env, const char *bytes);
 ```
 
-As u can see it's a bit painful process, this is where our struct offset propagation comes into the picture!
+As you can see it's a bit painful process, this is where our struct offset propagation comes into picture!
 
 ```
 [0x00000f60]> to ./jni.h (load the header file)
@@ -88,7 +90,8 @@ JNINativeInterface
 _JNIEnv
 ```
 
-You can either use esil emulation or debugging to find out the address of JNIEnv struct and then link the struct to the address and watch the magic happen :) 
+You can either use ESIL emulation or debugging to find the address of JNIEnv struct.
+Now link both the struct and address using tl command and watch the magic happen :) 
 
 ```
 [0x00000f60]> tl JNINativeInterface = 0x464c457f
@@ -114,7 +117,7 @@ You can either use esil emulation or debugging to find out the address of JNIEnv
 
 ```
 
-So coming to the solution of this challenge, as we see there are some string length check happening and at last two strings are loaded from .rodata section and xored together to print the flag
+Finally moving on to the solution of this challenge, we can see that there are some string length checks happening, and at last two strings are loaded from .rodata section which is xored together to print the flag
 
 ```python
 >> a = [0x52,0x1A,0x09,0x7B ...]
