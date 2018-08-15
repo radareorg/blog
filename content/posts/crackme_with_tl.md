@@ -91,7 +91,23 @@ _JNIEnv
 ```
 
 You can either use ESIL emulation or debugging to find the address of JNIEnv struct.
-Now link both the struct and address using tl command and watch the magic happen :) 
+For sake of simplicity, we will use the address that is mapped to our SP (Stack Pointer), which is `0x00000000` as we see from the output below:
+
+```
+:> px $w @ sp
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x00000000  7f45 4c46                                .ELF
+```
+
+As we saw from the `pdf` output above, the stack pointer (SP) is being used as the base pointer with different offsets from local variables. This means that the base of our JNIEnv structure is whatever the value of SP at the time.
+
+```
+:> px $w @ [sp]
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x464c457f  ffff ffff                                ....
+```
+
+From what we can see here, `[SP]` here is `0x464c457f`. This actually represents the first few bits of an ELF binary's header. Now link both the struct and address using tl command and watch the magic happen :) 
 
 ```
 [0x00000f60]> tl JNINativeInterface = 0x464c457f
