@@ -22,13 +22,13 @@ During the duration of the project I both worked in radare2 and Cutter. On radar
 ### Multiple panels and independent seeks
 * [Independent seeks](https://github.com/radareorg/cutter/commit/0cea9e3287fa12a8a240834a7484c1a957f686c1): you can now have different widgets with different seeks. Previously, all widgets would always be in sync with each other, and with the radare2 instance running in the background.
 
-![indep_seek](https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/syncseek.gif)
+![](/images/syncseek.gif)
 
  * [Multiple widgets:](https://github.com/radareorg/cutter/commit/0cea9e3287fa12a8a240834a7484c1a957f686c1) you can now open more than one instance of the same widget. This means that you can now look at several  functions in graph/linear mode at the same time via the menu `Windows`->`Add extra...`:
 
-![](https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/mult_wid11.png)
+![](/images/mult_wid11.png)
 
-![](https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/mult_wid2.png)
+![](/images/mult_wid2.png)
 
 ### Debug and emulation actions
 There are several way to interact with the debugging/emulation engine running:
@@ -43,7 +43,7 @@ There are several way to interact with the debugging/emulation engine running:
     * Continue until line;
     * Set $ProgramCounterName here;
 
-![](https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/context_menu.png)
+![](/images/context_menu.png)
 
 ### Debug and emulation widgets
 Currently the following widgets related to debugging are available:
@@ -61,7 +61,7 @@ Currently the following widgets related to debugging are available:
 * **Register references widget** displays register telescoping.
 * **Memory map widget** displays the mapped regions and their permissions.
 
-![](https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/debug_widgets.png)
+![](/images/debug_widgets.png)
 
 
 ### ESIL
