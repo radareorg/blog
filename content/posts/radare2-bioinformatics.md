@@ -9,7 +9,7 @@ tags:
     - bioinformatics
     - reveng
     - radare2
-title: The case for radare2 and bioinformatics
+title: Radare2 and bioinformatics: a good match?
 ---
 
 # Intro
