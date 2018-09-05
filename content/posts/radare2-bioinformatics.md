@@ -1,18 +1,13 @@
----
-author: brainstorm
-date: '2018-08-31T00:00:00.000000+00:00'
-excerpt: Musings on adding more biology formats into the radare2 reverse engineering framework
-layout: post
-modified: '2018-08-31T00:00:00.000000+00:00
-permalink: https://blogs.nopcode.org/brainstorm/2018/08/31/radare2-bioinformatics
-tags:
-    - bioinformatics
-    - reveng
-    - radare2
++++
+author = brainstorm
+date = '2018-08-31T00:00:00+00:00"
+aliases = [ "Musings on adding more biology formats into the radare2 reverse engineering framework" ]
+draft = false
+slug = "radare2-bioinformatics"
 title: Radare2 and bioinformatics: a good match?
----
++++
 
-# Intro
+## Intro
 
 Ahead of this [years' radarecon][radarecon2018], pancake nudged me into discussion we both have about how [software reverse engineering][reddit_reveng] and bioinformatics compare and might complement each other, if at all. Inspired by [Bunnie Huang's writeups][bunnie_on_biology_reveng] on (computational) biology as a living example of a cross-domain polymath, I'll attempt to write down some thoughts and **pointers on how radare could be used (or not) in bioinformatics** and hopefully manage expectations on what's possible today.
 
@@ -48,7 +43,7 @@ Observing bioinformatics [from the RSE perspective][RSE], I see great contributi
 2. Scientific algorithm optimization and security.
 3. Outreach.
 
-# Radare2 TL;DR for bioinformaticians
+## Radare2 TL;DR for bioinformaticians
 
 Here's some explanation on [how radare works from a user perspective][radare2book]. If you barely recall what assembly was from school, [I'll leave you in good hands][azeria_labs] to catch up with [ARM assembly here][arm_assembly]
 
@@ -59,7 +54,7 @@ Also, some relatively recent UI eyecandy from [Cutter][cutter]:
 Often touted as "steep learning curve" framework due to its commands, radare2 has been misunderstood for years, since in reality, keybindings allow for distraction-free **fast iteration** during binary analysis.
 
 
-# Bioinfomatics TL;DR for radare2 developers
+## Bioinfomatics TL;DR for radare2 developers
 
 If you are a r2 developer, those are the formats radare would need to understand and implement to be minimally interesting for our biologist neighbors (optional ones, inside parenthesis):
 
@@ -80,7 +75,7 @@ Group reads by some arbitrary criteria, subsample, filter them, write out, etc..
 **That is, FAST exploratory bioinformatics analysis (EBA) without the overhead of writing discrete commands or putting together [workflows][commonwl], [pipelines][bcbio] and/or lengthy documentation**
 
 
-# Outro
+## Outro
 
 1. How would radare **really help** with "biology reverse engineering"?
 
