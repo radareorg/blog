@@ -1,10 +1,9 @@
 +++
-author = brainstorm
 date = '2018-08-31T00:00:00+00:00"
 aliases = [ "Musings on adding more biology formats into the radare2 reverse engineering framework" ]
 draft = false
 slug = "radare2-bioinformatics"
-title: Radare2 and bioinformatics: a good match?
+title = "Radare2 and bioinformatics: a good match?"
 +++
 
 ## Intro
