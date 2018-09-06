@@ -67,7 +67,7 @@ There's great educational potential if this is implemented right since **radare 
 
 For instance, being able to **examine individual reads with VIM shortcuts**, flip/cycle [CIGAR encodings][CIGAR], like with the radare2 bit editor:
 
-![radare2 bit editor][/images/r2_bit_editor.png]
+![radare2 bit editor](/images/r2_bit_editor.png)
 
 Group reads by some arbitrary criteria, subsample, filter them, write out, etc...
 
