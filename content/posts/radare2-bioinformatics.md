@@ -1,10 +1,9 @@
 +++
-author = brainstorm
-date = '2018-08-31T00:00:00+00:00"
+date = "2018-08-31T00:00:00+00:00"
 aliases = [ "Musings on adding more biology formats into the radare2 reverse engineering framework" ]
 draft = false
 slug = "radare2-bioinformatics"
-title: Radare2 and bioinformatics: a good match?
+title = "Radare2 and bioinformatics: a good match?"
 +++
 
 ## Intro
@@ -68,7 +67,7 @@ There's great educational potential if this is implemented right since **radare 
 
 For instance, being able to **examine individual reads with VIM shortcuts**, flip/cycle [CIGAR encodings][CIGAR], like with the radare2 bit editor:
 
-![radare2 bit editor][/images/r2_bit_editor.png]
+![radare2 bit editor](/images/r2_bit_editor.png)
 
 Group reads by some arbitrary criteria, subsample, filter them, write out, etc...
 
