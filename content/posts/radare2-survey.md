@@ -1,6 +1,10 @@
-
-radare2 Community Survey Results
-==================================
++++
+date = "2019-02-02T00:00:00+00:00"
+aliases = [ "Radare2 Community Survey Results" ]
+draft = false
+slug = "radare2-survey"
+title = "Radare2 Community Survey Results"
++++
 
 Overview
 --------
