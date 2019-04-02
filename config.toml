@@ -13,3 +13,4 @@ enableRSS = true
 
 about = "https://www.radare.org"
 tweet = "https://twitter.com/radareorg"
+theme = "ananke"
