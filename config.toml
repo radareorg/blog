@@ -1,4 +1,4 @@
-baseurl = "http://radare.today"
+baseurl = "https://radare.today"
 languageCode = "en-us"
 title = "The Official Radare Blog"
 Paginate = 10
@@ -11,5 +11,5 @@ twitter = "radareorg"
 copyright = "The radare team"
 enableRSS = true
 
-about = "http://radare.org"
+about = "https://www.radare.org"
 tweet = "https://twitter.com/radareorg"
