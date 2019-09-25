@@ -2,6 +2,7 @@ baseurl = "https://radare.today"
 languageCode = "en-us"
 title = "The Official Radare Blog"
 Paginate = 10
+theme = "ananke"
 
 [params]
 name = "The radare team"
@@ -13,4 +14,3 @@ enableRSS = true
 
 about = "https://www.radare.org"
 tweet = "https://twitter.com/radareorg"
-theme = "ananke"
