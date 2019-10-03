@@ -2,8 +2,7 @@
 language: generic
 dist: bionic
 addons:
-  apt:
-    packages: hugo
+  snaps: hugo
 
 script:
   - hugo
