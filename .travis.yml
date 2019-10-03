@@ -1,9 +1,22 @@
 
 language: generic
 dist: bionic
+
 addons:
   snaps: hugo
 
 script:
   - hugo
 
+deploy:
+  provider: pages
+  local_dir: public
+  skip_cleanup: true
+  github_token: "$GITHUB_TOKEN"
+  keep_history: false
+  on:
+    branch: master
+
+env:
+  global:
+    - secure: S/cdCIPf2dj/G8LgLFRETAVq2XaOkmu0nnL2DJBY0qtg8P/F21JedEUQp+3QBVXCakvN7ZHvJ2QhAu/JI69dVTDDD/MPVlwR0wb/pV+vgGUDimMXBHdUnyuaacpty5Ya6+CLGAETMgXmBEZ3nZGwSl57GDsSu2gKRAEieeCn/B7KDbACbHZdf//NAgUw1Az/HNs35oKxtfI7Qiwa9Zx5czYDwaaFt/Vf8nt11Nf0NuTgokyH9FMs9b/2SZoJHg5kfCJnLWE20vRbIvx/5XHlpHHSJw4oc2vF6W620xOYTGdQbiwBrfGdES3CsE/mGby2hnmTxC6+TaxtRYlpPJQajqhZQlrNnwmENJD7NLxDZcurRFFG+DccsbfNCM/yUlzQswlAMSPlvjpZYM06AEnOyo39nVMHdvTa+nBK6Ht8xwDrJPVB1YhCexYRTwjYJkV0JR4qrDHQMHYBT/RestmecIyJo/ScJIUvapeoIDAUk+2Z/Xc7J+LHBoQ/W5K8mFyewkTZXxtoariT5i46Ks3aJtDpfHl3f+KW4Rf8XizIZPEyPbfwr9DUq6fr7hExZSusqm5o+xr2MYhev5ZO+a3cggHpMEBYJHBiZfPeSG7BniueyNqPrS9viLEICVUiiCtFq8z6wqs2l1pVyMqQn8W3f/TZMbPQgzj/PqsFv8m7dlM=
