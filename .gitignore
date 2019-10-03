@@ -23,7 +23,7 @@ _testmain.go
 *.test
 *.prof
 public/*
-themes/*
+#themes/*
 
 *.swp
 *.swo

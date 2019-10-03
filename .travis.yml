@@ -1,0 +1,10 @@
+
+language: generic
+dist: bionic
+addons:
+  apt:
+    packages: hugo
+
+script:
+  - hugo
+
