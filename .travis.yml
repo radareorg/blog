@@ -1,0 +1,9 @@
+
+language: generic
+dist: bionic
+addons:
+  snaps: hugo
+
+script:
+  - hugo
+
