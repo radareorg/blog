@@ -1,4 +1,5 @@
-baseurl = "https://radare.today"
+#baseurl = "https://radare.today"
+baseURL = "https://radareorg.github.io/blog"
 languageCode = "en-us"
 title = "The Official Radare Blog"
 Paginate = 10
