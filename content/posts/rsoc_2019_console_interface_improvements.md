@@ -30,15 +30,15 @@ I also added support for some bash commands like `uniq`, `sort`, `join`, etc.,
 ### Task 3: Support color-scheme in radiff2 graphs
 My next task was to add support for ASCII/Unicode graphs for radiff2. But I noticed that the `agd`-based diff commands were not implemented in radare2. So I began with that, once it was complete, exporting them to radiff2 was relatively simple. Now, radiff2 supports all these graph outputs:
 
-•	`Ascii art`
-•	`r2 commands`
-•	`Graphviz dot`
-•	`Graph Modelling Language (GML)`
-•	`JSON`
-•	`JSON with disarm`
-•	`SDB key-value`
-•	`Tiny ASCII art`
-•	`Interactive ASCII art`
+ - ASCII or Unicode (UTF-8) art
+ - r2 commands
+ - Graphviz dot
+ - Graph Modelling Language (GML)
+ - JSON
+ - JSON with disasm
+ - SDB key-value
+ - Tiny ASCII/Unicode art
+ - Interactive ASCII/Unicode art
 
 The generated ASCII diff graph between true and false:
 
