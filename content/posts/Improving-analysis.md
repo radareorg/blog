@@ -13,7 +13,7 @@ One of the main tasks of Radare2 is to statically analyse executables. This incl
 
 New analysis round is added for argument detection. It is architecture independent and supposed to capture all arguments and variables then auto rename them. This analysis round is built on top of [ESIL](https://github.com/radare/radare2book/blob/master/esil.md). It will detect all the `base pointer + num` and store them as arguments and `base pointer - num` and store them as variable. The `stack pointer + num` will always be stored as argument whether it is argument or variable. Identifying whether `stack pointer + offset` is argument or variable is still work in progress. The analysis on the left is the one generated using the new `aa` command, while the one on the right is an old instance of the same `aa`.
 
-![analysis](/images/Screenshot at 2016-05-09 22:32:52.png)
+![analysis](/blog/images/Screenshot at 2016-05-09 22:32:52.png)
 
 `Radare2` also supports renaming declared variable/arguments this can be done using the command ```afXn```, where ```X``` can be:
 

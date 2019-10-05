@@ -34,14 +34,14 @@ We know that the learning curve for radare2 is *super*-steep, and we're sorry ab
 ## i4004
 Let's go back in time to 1971. At this time, Intel released the first general purpose programmable microprocessor on the market, the [i4004]( https://en.wikipedia.org/wiki/Intel_4004)
 
-![i4004 CPU](/images/C4004_-Intel-.jpg)
+![i4004 CPU](/blog/images/C4004_-Intel-.jpg)
 
 It was a blazing-fast CPU, 740 kHz, able to directly address 640 bytes of RAM! So now, 34 years later, radare2 supports this CPU.
  
 # LH5801
 While we're back in time, did you know that we're supporting the good old [LH5801]( http://www.old-computers.com/museum/computer.asp?st=1&c=965 )? 
 
-![pocket computer](/images/shapre.JPG)
+![pocket computer](/blog/images/shapre.JPG)
 
 It's a 8bit CPU that was used in the first [pocket computer]( https://en.wikipedia.org/wiki/Pocket_computer )!
  
@@ -56,11 +56,11 @@ Added two alternative analysis loops with several levers to tune some options li
 local-flags/function-labels are also back for every supported architecture.
 
 PE relocations are now displayed in a *sexy* way:
-![PE RELOC](/images/reloc.png)
-![PE RELOC 2](/images/reloc2.png)
+![PE RELOC](/blog/images/reloc.png)
+![PE RELOC 2](/blog/images/reloc2.png)
 
 There is (basic) support for [CRIS]( https://en.wikipedia.org/wiki/ETRAX_CRIS ) analysis
-![Cris anal](/images/cris.png)
+![Cris anal](/blog/images/cris.png)
 
 Also, can you [spot]( https://twitter.com/radareorg/status/580289536892252160 ) Dalvik-related enhancements?
 
@@ -92,15 +92,15 @@ Some people are using radare2 instead of [binwalk]( http://binwalk.org/ ) to run
 Remember when we [bragged about]( http://radare.today/initial-ascii-art-graph-layout/ ) the awesome ASCII-graph support in radare2? Well, today, thanks to [r0nk]( https://github.com/r0nk ), we'll brag again:
 
 Graphs now have awesome colours by default:
-![Graph colours](/images/r2graphloop.png)
+![Graph colours](/blog/images/r2graphloop.png)
 
 Of course, colours are supported in the minigraph too!
 
-![Coloured minigraph](/images/meh.png)
+![Coloured minigraph](/blog/images/meh.png)
 
 We've got two display mode for graphs edges. You can switch between them with the `e` key.
 
-![Graph edge styles](/images/r2graphmain.png)
+![Graph edge styles](/blog/images/r2graphmain.png)
 
 # Teaching
 Radare2 is not only used to reverse exotic binaries, or craft ingenious exploits : it's also used to teach computer science!
@@ -111,18 +111,18 @@ Since not everyone is fluent with weird instructions set, radare2 comes with an 
 
 You can also try our *proto-alpha-preprod* decompiler with `pdc`:
 
-![decompiler](/images/decomp.png)
+![decompiler](/blog/images/decomp.png)
 
 # Debugger
 ## WinDBG
 [TheLemonMan]( https://github.com/LemonBoy ) added support for [WinDBG]( https://msdn.microsoft.com/en-us/windows/hardware/hh852365 ), the ring-0 debugger of Windows. This means that you can not only debug drivers with radare2, but also virtual machines. Imagine, breaking, modifying and stepping Windows, with radare2!
 
-![WinDBG support](/images/windbg.jpg)
+![WinDBG support](/blog/images/windbg.jpg)
 
 ## Tracing
 Thanks to [earada]( https://twitter.com/earada ), tracing is now working much better and can be displayed in the ascii-art and web graphs.
 
-![tracing](/images/tracing.png)
+![tracing](/blog/images/tracing.png)
 
 # Web interface
 We already said a lot about our [new web interface]( http://radare.today/the-new-web-interface/ ), by [pwntester]( https://github.com/pwntester ), but I'm quite sure that you can't have enough of it:
@@ -138,7 +138,7 @@ We already said a lot about our [new web interface]( http://radare.today/the-new
 - debugger support
 - tracing
 
-![tracegraph](/images/tracegraph.png)
+![tracegraph](/blog/images/tracegraph.png)
 
 # r2pipe
 Since radare2 is a fast-moving target, instead of using *traditional-bindings*, the recommended way to call radare2 from a foreign language is to use *r2pipe*, which is roughly an API to communicate with an instance of radare2 using HTTP, PIPEs, TCP sockets or STDIO to run r2 commands and get the output in a string.
@@ -181,12 +181,12 @@ By the way, if you're using radare2 at work, we'll be delighted if you [let us k
 
 ## Bonus screenshots
 
-![Edge style comparison](/images/r2graphlines.png)
+![Edge style comparison](/blog/images/r2graphlines.png)
 Comparison of the two edge styles.
 
-![R2 3D logo](/images/r2-3D-logo.png)
+![R2 3D logo](/blog/images/r2-3D-logo.png)
 Awesome stereograms!
 
-![Mazda](/images/mazda.jpeg)
+![Mazda](/blog/images/mazda.jpeg)
 Of course radare2 runs on your Mazda!
 Yes, it's a car :)

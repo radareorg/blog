@@ -21,7 +21,7 @@ We'd like to congratulate our 3 volunteers for their hard work and dedication. T
 
 ### Structures support
 [Skia]( http://libskia.so/ ) did great to implement structures support, a bit *à la* 010Editor.
-![structure](/images/687474703a2f2f7777772e6c6962736b69612e736f2f7075622f72322532306c696e6b65642532306c6973742e706e67.png)
+![structure](/blog/images/687474703a2f2f7777772e6c6962736b69612e736f2f7075622f72322532306c696e6b65642532306c6973742e706e67.png)
 Now with `r2 -nn` it is possible to analyze the file header structs using the `pf.`, `pxa` and other related commands.
 
 ```

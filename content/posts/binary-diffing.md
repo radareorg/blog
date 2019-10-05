@@ -53,7 +53,7 @@ And now the cool feature : radare2 supports graph-diffing, à la [DarunGrim]( ht
 For example, `radiff2 -g main /bin/true  /bin/false | xdot -` will show the differences between the main function of `true` and `false`. You can compare it to `radiff2 -g main /bin/false /bin/true` (Notice the order of the arguments) to get the two versions.
 
 This is the result:
-![/bin/true and /bin/false graph diff](/images/true_false.png)
+![/bin/true and /bin/false graph diff](/blog/images/true_false.png)
 
 The parts in yellow are indicating that some offsets are not matching, the grey one is a perfect match, while the red one highlight a strong difference. If you look closely, you'll see that the left one is `mov edi, 0x1; call sym.imp.exit`, while the right one is `xor edi, edi; call sym.imp.exit`.
 

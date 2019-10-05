@@ -13,7 +13,7 @@ aliases = [
 
 **Disclaimer**: Projects files are highly subject to change but here is the current state on March 14th 2017. The feature is still under high work in progress please see the section Future of Project Files and How to Help.
 
-![CaseXXXX](/images/project_intro.png)
+![CaseXXXX](/blog/images/project_intro.png)
 
 # Purposes
 
@@ -41,13 +41,13 @@ The `rc` file contains plaintext radare2 commands.
 
 For example here are the flags:
 
-![](/images/project_flags.jpg)
+![](/blog/images/project_flags.jpg)
 
 The sections:
-![](/images/project_sections.jpg)
+![](/blog/images/project_sections.jpg)
 
 The Configuration:
-![](/images/project_eval.jpg)
+![](/blog/images/project_eval.jpg)
 
 But many other things are stored such as analysis, symbols etc. I strongly encourage you to look at the content of the rc files to get a better understanding of radare2 itself.
 
@@ -72,7 +72,7 @@ Here is an example of this in use [malware analysis article](http://radare.today
 
 See the [commits](https://github.com/Maijin/caseXXXX)
 
-![Case](/images/project_case.jpg)
+![Case](/blog/images/project_case.jpg)
 
 ### Storing commands in your project file
 

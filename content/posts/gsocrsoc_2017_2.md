@@ -19,11 +19,11 @@ First I fixed a bug where r2 was reporting support for `vCont` packets and not u
 The next feature I added was `=!qRcmd` to the gdb io system, so that one could send monitor commands to be run by the target gdbserver. Next, I closed a very old issue by adding a drp sub-command to parse a gdb maintenance register profile into an r2
 one.
 
-![=!qRcmd](/images/qrcmd.png)
+![=!qRcmd](/blog/images/qrcmd.png)
 
 Then I added the capability to read the filename that was executed from the gdbserver (even with the io system, with `=!exec_file`). Also support for reading the list of threads running for the process. Adding the printing of debug messages to the r2 gdbserver will help the implementation of the protocol. With the help of this, I added support for reading/writing single registers to gdbserver, and also better reporting of stop reason.
 
-![gdbserver debug messages](/images/gdbserver.png)
+![gdbserver debug messages](/blog/images/gdbserver.png)
 
 Next I added support for reporting of debug info with `di`, an io system command to
 get/set the maximum packet size with `=!pktsz`, and proper handling of stop reason
@@ -33,7 +33,7 @@ in gdb debugging (provided either the binary is present locally at the same abso
 as on the target, or in the current working directory). In addition, one can set the
 path of the binary in the local system, with `e dbg.exe.path`.
 
-![symbol loading](/images/symload.png)
+![symbol loading](/blog/images/symload.png)
 
 ## Windows support (xarkes)
 

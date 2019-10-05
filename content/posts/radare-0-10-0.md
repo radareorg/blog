@@ -32,7 +32,7 @@ each release. This time, it's implemented on top of the NodeJS r2pipe API and
 it's called [blessr2](http://radare.org/r/blessr2.html) in honor of the `bless`
 nodejs api to create beautiful and portable console user interfaces.
 
-![blessr2](/images/blessr2.png)
+![blessr2](/blog/images/blessr2.png)
 
 Since it took us a very long time to do this release, he had the time to
 implement a second one, using Material design,
@@ -82,7 +82,7 @@ adding some new <s>bugs</s> features, like:
 * Remote debugging via IO plugins work a bit better now
 * 3 different backtrace algorithms, configurable at runtime
 
-![dbg](/images/webui.png)
+![dbg](/blog/images/webui.png)
 
 # Memory usage
 It seems that no one ever took care of radare2 memory consumption before, because it was still lower than its competitors/alternatives. But for this release, radare2 went on a diet : it now consumes 3 to 5 times less memory !
@@ -90,7 +90,7 @@ It seems that no one ever took care of radare2 memory consumption before, becaus
 # Pretty graphs
 Our beloved *ret2libc* spent a lot of time rewriting graphs engine from scratch, with overlaps handling and better colours ! See how cool this is:
 
-![graph](/images/graph.png)
+![graph](/blog/images/graph.png)
 
 # New architectures support
 We know a lot of people are using radare2 because it supports a lot of funky/exotic/awful/funny/scary architectures.

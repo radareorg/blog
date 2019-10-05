@@ -61,7 +61,7 @@ Here's the new `ag?` help that summarizes my changes:
 Jumptables were creating a lot of trouble in ascii-art graphs, and most of the times the resulting layout was broken. See [this issue](https://github.com/radare/radare2/issues/10275) to see what were the problems.
 I tried my best to make the layout better, and this is what I came out with:
 
-![](/images/gso2018-graph-jmptable.png)
+![](/blog/images/gso2018-graph-jmptable.png)
 _Graph view of a switch statement_
 
 However, there are still some problems to fix with graph edges (in particular, there are a bit too many overlaps).
@@ -73,7 +73,7 @@ However, there are still some problems to fix with graph edges (in particular, t
 `RConsCanvas`, radare2's own way of drawing complex interfaces in the terminal, had some glitches with UTF-8 characters because it didn't take into account the different byte-length of those special characters. Implementing the support for UTF-8 took quite a lot of time because it meant rewriting many things from scratch and because I had to keep intact the support for ANSI escape codes.
 But I'm pretty happy with the result, as now with UTF-8 we can create even more beautiful interfaces:
 
-![](/images/gsoc2018-utf8-panels.png)
+![](/blog/images/gsoc2018-utf8-panels.png)
 _Here's a screen of the "panels" view with some comments in arabic and braille_
 
 
@@ -84,7 +84,7 @@ _Here's a screen of the "panels" view with some comments in arabic and braille_
 
 Radare2 already had autocompletion in the visual offset prompt, which worked similarly to bash's autocompletion. My job was to make it more visually appealing by implementing something similar to the autocompletion inside (terminal) vim, where an interactive widget appears under the cursor. Here's the result:
 
-![](/images/gsoc-2018-autocompletion-widget.gif)
+![](/blog/images/gsoc-2018-autocompletion-widget.gif)
 _A gif demonstrating the scrolling of the autocompletion widget while in visual offset prompt_
 
 

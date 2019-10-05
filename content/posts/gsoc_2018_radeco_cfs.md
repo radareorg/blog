@@ -12,7 +12,7 @@ aliases = [
 ## Introduction
 This summer, I implemented the control flow structuring algorithm described in [*No More Gotos*](https://doi.org/10.14722/ndss.2015.23185). The algorithm takes a program represented as a control flow graph and converts it into a semantically equivalent program but with all control flow represented with C-like control flow statements (e.g. `if`-statements, `while`-loops, etc.) and **zero `goto` statements**.
 ### Example
-![example cfg](/images/example_cfg.png)
+![example cfg](/blog/images/example_cfg.png)
 ```cpp
 bool c0 = test0();
 if (!c0) {

@@ -11,7 +11,7 @@ As you know, we have 2 students working on r2 for the [Google Summer of Code]( h
 
 As we're 3 weeks into the Summer, here's what one of our student, [sushant94]( https://github.com/sushant94 ) has to say about what he's been working on!
 
-![GSoC logo](/images/gsoc2015-300x270.jpg)
+![GSoC logo](/blog/images/gsoc2015-300x270.jpg)
 
 It's been three weeks into GSoC and I'm having an amazing time. I am working along side [dkreuter](https://twitter.com/dkreuter_) and been learning tons from him too!
 
@@ -44,4 +44,4 @@ This is just a glimpse of what's in for the upcoming weeks:
 ### Bonus:
 Here is a small example of the CFG graph that we're currently about to generate
 
-![cfg](https://raw.githubusercontent.com/sushant94/sushant94.github.io/master/images/cfg.png)
+![cfg](https://raw.githubusercontent.com/sushant94/sushant94.github.io/master/blog/images/cfg.png)

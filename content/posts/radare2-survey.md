@@ -18,7 +18,7 @@ In the following blog post, we will try to summarize the main critics you've hea
 Overall, we want to say a BIG THANKS to everyone who filled the survey. We care about your comments! We will publish more surveys in the future, so stay tuned and follow us on social media to get to know when is the next survey.
 
 
-![r2survey_dev_focus](/images/r2survey-dev-focus.png)
+![r2survey_dev_focus](/blog/images/r2survey-dev-focus.png)
 
 
 Cutter - Our Graphical User Interface
@@ -85,7 +85,7 @@ from r2book for more details.
 Decompiler
 ----------
 
-![r2survey_decompiler](/images/r2survey-decompiler.png)
+![r2survey_decompiler](/blog/images/r2survey-decompiler.png)
 
 Decompilation is not an easy task, and as in many aspects of radare2 we have integrated several decompilers with r2, but this is not a core feature of r2. Same goes for a GUI, so those tasks have been delegated to radeco/r2dec and Cutter which are developed under the radareorg umbrella. We can improve the integration with those tools, but the quality of the decompilation doesn't depend on r2, so feel free to contribute or fill issues in those projects which run on top of r2.
 

@@ -107,20 +107,20 @@ The binary generated is disassembled by radare2. Below is the ESIL output that r
 ```
 __NOTE__: Due to the large size of images, I've chosen not to embed the full images here. Please feel free to checkout the links for outputs.
 
-This ESIL is parsed by radeco into an intermediate radeco IL: [Non-SSA IL](https://raw.githubusercontent.com/sushant94/sushant94.github.io/new_post/images/cfg_2.png)
+This ESIL is parsed by radeco into an intermediate radeco IL: [Non-SSA IL](https://raw.githubusercontent.com/sushant94/sushant94.github.io/new_post/blog/images/cfg_2.png)
 
 The CFG is then transformed into the SSA representation. The first block shown below for reference:
-![ssa](https://raw.githubusercontent.com/sushant94/sushant94.github.io/master/images/ssa_small.png)
+![ssa](https://raw.githubusercontent.com/sushant94/sushant94.github.io/master/blog/images/ssa_small.png)
 
-[Link](https://raw.githubusercontent.com/sushant94/sushant94.github.io/new_post/images/ssa.png) to full image
+[Link](https://raw.githubusercontent.com/sushant94/sushant94.github.io/new_post/blog/images/ssa.png) to full image
 
 Constant propagation is run on the SSA form. Radeco implements [Sparse Conditional Constant Propagation](https://en.wikipedia.org/wiki/Sparse_conditional_constant_propagation) which performs constant propagation and unreachable dead code elimination simultaneously.
 
 The first block is shown below for reference.
 
-![after constant propagation](https://raw.githubusercontent.com/sushant94/sushant94.github.io/master/images/const_small.png)
+![after constant propagation](https://raw.githubusercontent.com/sushant94/sushant94.github.io/master/blog/images/const_small.png)
 
-[Link](https://raw.githubusercontent.com/sushant94/sushant94.github.io/new_post/images/const_prop.png) to full image
+[Link](https://raw.githubusercontent.com/sushant94/sushant94.github.io/new_post/blog/images/const_prop.png) to full image
 
 As you can see from the above output, the unreachable branch is eliminated and radeco infers correctly the values of registers and flags after the function has been run.
 

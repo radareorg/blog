@@ -38,7 +38,7 @@ r2-0.9.8 now builds for [Android L]( https://en.wikipedia.org/wiki/Android_Lolli
 * Android mips64
 * Android aarch64
 
-![android screenshot](/images/adroid.jpg)
+![android screenshot](/blog/images/adroid.jpg)
 
 Also, we are now supporting crosscompilation for iOS devices. No need to use jailbroken devices as main builders. The `sys/ios-sdk.sh` script supports the very latest XCode from Yosemite.
 
@@ -60,7 +60,7 @@ We're now supporting:
 
 ## Better Debugger
 
-![debugger](/images/regstacklisting.png)
+![debugger](/blog/images/regstacklisting.png)
 
 Also, we have reworked on w32 to make the native debugger work again and support hardware breakpoint registers on x86. (thanks Skuater!)
 
@@ -73,7 +73,7 @@ Bear in mind that GDB is a totally fucked up protocol with lot of incompatibilit
 ## SDB integration
 [SDB]( https://github.com/radare/sdb ) is our key-value database system, that we're integrating into radare2. This simplifies the code, and increases the performances in many areas.
 
-![SDB](/images/sdb.png)
+![SDB](/blog/images/sdb.png)
 
 You can play around with SDB using the `k` commands.
 
@@ -91,12 +91,12 @@ The R_IO layer have been heavily tested, reviewed and partly rewritten to be mor
 
 
 ## DWARF
-![](/images/dwarf.png)
+![](/blog/images/dwarf.png)
 Montekki spent some time to add support for [DWARF]( http://dwarfstd.org/ )! Now you can debug your favourite ELF binary (almost) without reading assembly! 
 
 ## ESIL
 [ESIL]( https://github.com/radare/radare2/wiki/ESIL ) stands for *Evaluable Strings Intermedate Language*. It aims to describe a Forth-like representation for every opcode; the goal within radare being emulation, in order to improve the analysis.
-![](/images/esil.png)
+![](/blog/images/esil.png)
 
 With ESIL it is now possible to:
 
@@ -109,7 +109,7 @@ With ESIL it is now possible to:
 We will continue to enhance the ESIL support to  emulate code in a better fashion, and we plan to use it for injecting code on child processes and more.
 
 # Exploitation
-![pop pop ret](/images/rop_pwn1.png)
+![pop pop ret](/blog/images/rop_pwn1.png)
 - Analyze an specific memory address with `ai`
 - Take references from registers and memory with `drr/pxr` (*à la* PEDA)
 - ROP gadget searcher (`/R`)
@@ -120,7 +120,7 @@ We will continue to enhance the ESIL support to  emulate code in a better fashio
 ## ASCII art graphs
 Spawned by default when pressing `V` inside the *Visual mode* when placing the cursor on an already analized function. For callgraphs use `VVV`.
 
-![graph](/images/Screenshot-2014-04-29-01-51-31.png)
+![graph](/blog/images/Screenshot-2014-04-29-01-51-31.png)
 
 Graphviz, JSON and HTML5 interactive graphs are still supported, but not used by default.
 
@@ -135,7 +135,7 @@ We will soon release another post explaining all the details of the finalized RS
 
 ### Structures support
 [Skia]( http://libskia.so/ ) did great to implement structures support, a bit *à la* 010Editor.
-![structure](/images/687474703a2f2f7777772e6c6962736b69612e736f2f7075622f72322532306c696e6b65642532306c6973742e706e67.png)
+![structure](/blog/images/687474703a2f2f7777772e6c6962736b69612e736f2f7075622f72322532306c696e6b65642532306c6973742e706e67.png)
 
 Now with `r2 -nn` it is possible to analyze the file header structs using the `pf.`, `pxa` and other related commands.
 
@@ -197,17 +197,17 @@ Since we're a bunch of nice people, we also implemented:
 
 # Screenshots!
 
-![colourscheme](/images/B0IyY38CcAIzxdy.png)
+![colourscheme](/blog/images/B0IyY38CcAIzxdy.png)
 A new colourscheme
 
-![pxa](/images/meh.jpg)
+![pxa](/blog/images/meh.jpg)
 Coloured hexdump
 
-![Gameby patching](/images/gb.png)
+![Gameby patching](/blog/images/gb.png)
 Because patching Gameboy ROM with radare2 is fun!
 
-![Demangling](/images/demangling.jpg)
+![Demangling](/blog/images/demangling.jpg)
 Prototype of demangling
 
-![sonare](/images/sonare.png)
+![sonare](/blog/images/sonare.png)
 First screenshot of [sonare]( https://github.com/sapir/sonare ), a Qt-based disassembly viewer based on radare2.

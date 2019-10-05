@@ -19,4 +19,4 @@ Additionally the `?` key in `VV` (visual graph) view now shows the help message 
 
 Here is a cool screenshot:
 
-![img](/images/VeCMo1r.png)
+![img](/blog/images/VeCMo1r.png)

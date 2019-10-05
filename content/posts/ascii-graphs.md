@@ -7,7 +7,7 @@ aliases = [
 	"ascii-graphs"
 ]
 +++
-![graph](/images/Screenshot-2014-04-29-01-51-31.png)
+![graph](/blog/images/Screenshot-2014-04-29-01-51-31.png)
 
 We may not have a GUI like IDA, but we still have some graphs. This is a small (200 lines of code) proof of concept, but there is more to come
 
@@ -20,6 +20,6 @@ We may not have a GUI like IDA, but we still have some graphs. This is a small (
 
 You can try this new feature with `VV` if you are using [radare2 from git]( https://github.com/radare/radare2/ ).
 
-![better graph](/images/BmWvHyyIcAAoIfo-png-large.png)
+![better graph](/blog/images/BmWvHyyIcAAoIfo-png-large.png)
 
 And by the way, this is documented, and has some  tests to avoid regressions. Feel free to take a look at the [/libr/cons]( https://github.com/radare/radare2/tree/master/libr/cons ) folder if you want to contribute.

@@ -164,7 +164,7 @@ fn sym.write_strlen () {
 
 ### Radeco Architecture
 
-![diagram radare and radeco](/images/radeco_architecture.png)
+![diagram radare and radeco](/blog/images/radeco_architecture.png)
 
 Radeco takes information from radare2 through r2pipe interface, then it converts assembly code to internal representation. After some analyse steps (e.g., deadcode elimination, constant propagation, common subexpressions elimination), the C-like expressions are recovered from it, and pseudocode is generated after graph modified to remove goto statements.
 

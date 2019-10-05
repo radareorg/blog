@@ -14,16 +14,16 @@ Hello all, I’m [deepakchethan](https://github.com/deepakchethan) from India. I
 ### Task 1: Generalize the code of popup widget:
 Radare2 already had vim-like autocompletion in the visual offset prompt. My job was to generalize it and integrate it with the RCons. This feature can be enabled by setting `scr.prompt.popup`. It is still a little buggy but the result is as follows:
 
-![popup](/images/rsoc_popup.png)
+![popup](/blog/images/rsoc_popup.png)
 
 ### Task 2: Improving autocompletion and dietline modes (vi/emacs-like hotkeys)
 Autocompletion was not supported for k and other mount based commands. I was tasked to add them. I also integrated dietline into *mount shell* (ms) and *HUD* mode.
 
-![hud](/images/rsoc_hud.png)
+![hud](/blog/images/rsoc_hud.png)
 
 I added the missing emacs hotkeys and added vi modes, which can be enabled by setting `scr.prompt.vi` to `true`. As a bonus if you set `scr.prompt.mode` to `true`, the color of the prompt changes based on the vi mode (control/insert). See the exact list of the hotkeys in [Dietline](https://radare.gitbooks.io/radare2book/content/basic_commands/dietline.html) Radare2 book chapter.
 
-![vi](/images/rsoc_vi.png)
+![vi](/blog/images/rsoc_vi.png)
 
 I also added support for some bash commands like `uniq`, `sort`, `join`, etc.,
 
@@ -42,21 +42,21 @@ My next task was to add support for ASCII/Unicode graphs for radiff2. But I noti
 
 The generated ASCII diff graph between true and false:
 
-![radiff](/images/rsoc_radiff2_graph.png)
+![radiff](/blog/images/rsoc_radiff2_graph.png)
 
 ### Task 4: Further improvements for UTF-8, BiDi:
 All the reflines in disasm were of the same kind, which was a bit confusing. So I added different colors for up and down going reflines. The new look:
 
-![refline](/images/rsoc_refline.png)
+![refline](/blog/images/rsoc_refline.png)
 
 I also added UTF8 support for line graph commands like `p=` and `p==`.
 
-![p==](/images/rsoc_p=.png)
+![p==](/blog/images/rsoc_p=.png)
 
 ### Task 5: Implement table commands and API (like it is done for graphs)
 I was not able to implement the table API, but pancake did it. So I was tasked to add UTF-8 support and integrate the table API in the various commands that will benefit from the table representation. The `p-h` command integrated with the table API looks as follows:
 
-![Table](/images/rsoc_table.png)
+![Table](/blog/images/rsoc_table.png)
 
 ### Task 6: Various bugfixes and improvements for visual, visual panels and graph modes
 I fixed quite a bunch of bugs and all of these can be found [here](https://github.com/radareorg/radare2/pulls?utf8=%E2%9C%93&q=is%3Apr+is%3Aclosed+author%3Adeepakchethan+).  

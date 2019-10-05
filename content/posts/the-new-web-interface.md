@@ -14,7 +14,7 @@ Lets highlight the new features:
 # Graphing
 The web-interface is now using [viz.js]( https://github.com/mdaines/viz.js/ ) to show interractive graphs, and the disassembly has now syntax highlighting, like the command line interface. When we say Interractive, we mean that you can not only move the graph, but also modify, edit and annotate it.
     
-![shortcuts](/images/kkjXu31.png)
+![shortcuts](/blog/images/kkjXu31.png)
 
 # IDA shortcuts
 Afficionados of IDA shouldn't be lost anymore, since the web-interface now shares a lot of its shortcuts:
@@ -31,6 +31,6 @@ You can now see hexdump, graph view, disassembly, settings and strings since eac
 
 By the way, changes made within the web interface are persistent, this means that you can build your colourscheme in an interractive manner. nOf course, every useful information that can be used to move in the binary can be displayed in the side bar, like functions, sections, imports, relocs, and flags.
 
-![colour selector](/images/SmAmHLD.png)
+![colour selector](/blog/images/SmAmHLD.png)
 
 Since everything is not doable within the web interface (yet), you'll find a command-line widget at the bottom of your screen, and the changes are propagated in real-time.

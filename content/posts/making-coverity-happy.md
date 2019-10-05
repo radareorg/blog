@@ -9,6 +9,6 @@ aliases = [
 +++
 We are currently using [Coverity]( coverity.com ) to spot bugs and issues. During the last week, *jvoisin* and *xvilka* went full berzerk and killed more than a hundret of bugs, also helped by the usual contributors.
 
-![happy coverity](/images/coverifix.jpg)
+![happy coverity](/blog/images/coverifix.jpg)
 
 Feel free to help us and enter our one-fix-a-day contest!

@@ -14,8 +14,8 @@ This is why we are releasing a new interface based on emoji! No need to know eng
 
 We hope that such a mode could bring the joy of reverse engineering to everyone, including kids. Please leave your feedback and suggest a new intuitive substitutions of the text commands.
 
-![pd](/images/ramoji2-pd.png)
-![px](/images/ramoji2-px.png)
+![pd](/blog/images/ramoji2-pd.png)
+![px](/blog/images/ramoji2-px.png)
 
 P.S. We have plans to rethink ESIL in the similar way, so any program in native code could be represented as a set of a fancy pictures. We need your opinion on that. 
 

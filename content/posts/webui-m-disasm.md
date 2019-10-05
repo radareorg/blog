@@ -23,14 +23,14 @@ Before this implementation, scrolling was only possible inside the current displ
 
 As user, you can improve the knowledge of the currently displayed data. This UI require to know about flags and functions to show useful reflinks. So, don't hesitate to press *process analysis* in the panel top bar and chose whatever suit you:
 
-![Analysis dialog](/images/webui_analysis.png)
+![Analysis dialog](/blog/images/webui_analysis.png)
 
 Also, if the line allows you to process some operations, the UI will suggest you with the contextual menu to apply some commands on it (still in progress). You can currently try the following:
 
-![Contextual menu](/images/webui_contextmenu.png)
+![Contextual menu](/blog/images/webui_contextmenu.png)
 
 In the same logic as the browser, there is also a feature to follow your jumps. The navigation bar, or seek history allows you to know where you were and going back and forth between the addresses.
 
-![Nav bar](/images/webui_navbar.png)
+![Nav bar](/blog/images/webui_navbar.png)
 
 These features should help to make the UI better. Don't hesistate to give us feedback about it!

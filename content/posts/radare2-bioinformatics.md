@@ -12,7 +12,7 @@ Ahead of this [years' radarecon][radarecon2018], pancake nudged me into discussi
 
 For starters, back in 2015, the simple [Illumina BCL file format][illumina_bcl_format] got included in [radare-extras][radare_extras]. As I was providing some specs and explaning [how DNA sequencing worked][dna_sequencing] in general, [pancake quickly put together a radare plugin][radare_bcl_plugin] for this fairly straightforward file format. 
 
-![BCL format](/images/bcl_format_tldr_csr4.jpg)
+![BCL format](/blog/images/bcl_format_tldr_csr4.jpg)
 
 Then fast forward into 2018, [radare seems to want more][radare4bio]. Here comes the crux of the matter:
 
@@ -67,7 +67,7 @@ There's great educational potential if this is implemented right since **radare 
 
 For instance, being able to **examine individual reads with VIM shortcuts**, flip/cycle [CIGAR encodings][CIGAR], like with the radare2 bit editor:
 
-![radare2 bit editor](/images/r2_bit_editor.png)
+![radare2 bit editor](/blog/images/r2_bit_editor.png)
 
 Group reads by some arbitrary criteria, subsample, filter them, write out, etc...
 

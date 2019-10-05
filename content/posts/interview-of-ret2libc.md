@@ -77,8 +77,8 @@ Almost one month since our last article, time flees. This article is an intervie
 - Screenshots ?
 
 
-![Graph example](/images/full.png)
+![Graph example](/blog/images/full.png)
 *Example of graph*
 
-![Disasm in graph](/images/disasm.png)
+![Disasm in graph](/blog/images/disasm.png)
 *Disassembly in graph, without colours (yet)*
