@@ -114,7 +114,7 @@ Please ping me physically [during the radare2 2018 con][radarecon2018] or via [t
   [radare_extras]: https://github.com/radare/radare2-extras
   [htslib]: http://www.htslib.org/
   [MC]: https://en.wikipedia.org/wiki/Midnight_Commander
-  [sam_spec]: [https://samtools.github.io/hts-specs/SAMv1.pdf]
+  [sam_spec]: https://samtools.github.io/hts-specs/SAMv1.pdf
   [biostars]: http://biostars.org/
   [CIGAR]: https://wiki.bits.vib.be/index.php/CIGAR
   [bioinfo_formats]: https://bioinformatics-workbook.readthedocs.io/en/latest/introduction/fileFormats/
