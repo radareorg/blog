@@ -6,7 +6,8 @@ addons:
   snaps: hugo
 
 script:
-  - hugo
+  - hugo version
+  - hugo -v
 
 deploy:
   provider: pages
