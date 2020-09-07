@@ -1,6 +1,6 @@
 +++
 title = "RSoC 2019 Final: Console Interface Improvements"
-aliases = ["RSoC 2019 Final: Console Interface Improvements"]
+aliases = ["RSoC 2019 Final - Console Interface Improvements"]
 date = 2019-10-01T14:10:05+05:30
 slug = "rsoc-2019-console-interface-improvement"
 draft = false
