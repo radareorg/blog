@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC 2nd stage and RSoC 1st stage report</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC 2nd stage and RSoC 1st stage report" />
+<meta property="og:description" content="GSoC 2nd stage and RSoC 1st stage report Good morning ladies and gentlemen. As you probably know radare2 project was overly busy this summer by hosting Google Summer of Code and our own - Radare Summer of Code, 5 students in total. Woot, but now as summer comes to a close, we would like to report the progress from each of our students!
+Srimanta Barua (GDB server and client) Compared to the feature-implementing frenzy of the first phase, the second phase of GSoC involved more bug-fixes and closing of old issues." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/gsocrsoc_2017_2/" />
+<meta property="article:published_time" content="2017-08-14T08:00:00+02:00" />
+<meta property="article:modified_time" content="2017-08-14T08:00:00+02:00" />
+
+
+<meta itemprop="name" content="GSoC 2nd stage and RSoC 1st stage report">
+<meta itemprop="description" content="GSoC 2nd stage and RSoC 1st stage report Good morning ladies and gentlemen. As you probably know radare2 project was overly busy this summer by hosting Google Summer of Code and our own - Radare Summer of Code, 5 students in total. Woot, but now as summer comes to a close, we would like to report the progress from each of our students!
+Srimanta Barua (GDB server and client) Compared to the feature-implementing frenzy of the first phase, the second phase of GSoC involved more bug-fixes and closing of old issues.">
+<meta itemprop="datePublished" content="2017-08-14T08:00:00+02:00" />
+<meta itemprop="dateModified" content="2017-08-14T08:00:00+02:00" />
+<meta itemprop="wordCount" content="1870">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC 2nd stage and RSoC 1st stage report"/>
+<meta name="twitter:description" content="GSoC 2nd stage and RSoC 1st stage report Good morning ladies and gentlemen. As you probably know radare2 project was overly busy this summer by hosting Google Summer of Code and our own - Radare Summer of Code, 5 students in total. Woot, but now as summer comes to a close, we would like to report the progress from each of our students!
+Srimanta Barua (GDB server and client) Compared to the feature-implementing frenzy of the first phase, the second phase of GSoC involved more bug-fixes and closing of old issues."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC 2nd stage and RSoC 1st stage report</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 14, 2017
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="gsoc-2nd-stage-and-rsoc-1st-stage-report">GSoC 2nd stage and RSoC 1st stage report</h1>
+<p>Good morning ladies and gentlemen. As you probably know radare2 project was overly busy this summer by hosting Google Summer of Code and our own - Radare Summer of Code, 5 students in total. Woot, but now as summer comes to a close, we would like to report the progress from each of our students!</p>
+<h2 id="srimanta-barua-gdb-server-and-client">Srimanta Barua (GDB server and client)</h2>
+<p>Compared to the feature-implementing frenzy of the first phase, the second phase of GSoC involved more bug-fixes and closing of old issues.</p>
+<p>First I fixed a bug where r2 was reporting support for <code>vCont</code> packets and not using them. Next, I added support for pid/tid specific continue, and <em>continue with signal</em> (<code>dck</code> in r2).
+The next feature I added was <code>=!qRcmd</code> to the gdb io system, so that one could send monitor commands to be run by the target gdbserver. Next, I closed a very old issue by adding a drp sub-command to parse a gdb maintenance register profile into an r2
+one.</p>
+<p><img src="/blog/images/qrcmd.png" alt="=!qRcmd"></p>
+<p>Then I added the capability to read the filename that was executed from the gdbserver (even with the io system, with <code>=!exec_file</code>). Also support for reading the list of threads running for the process. Adding the printing of debug messages to the r2 gdbserver will help the implementation of the protocol. With the help of this, I added support for reading/writing single registers to gdbserver, and also better reporting of stop reason.</p>
+<p><img src="/blog/images/gdbserver.png" alt="gdbserver debug messages"></p>
+<p>Next I added support for reporting of debug info with <code>di</code>, an io system command to
+get/set the maximum packet size with <code>=!pktsz</code>, and proper handling of stop reason
+to the r2 gdb client.
+Finally, closing another very old issue, I added automatic loading of symbol information
+in gdb debugging (provided either the binary is present locally at the same absolute path
+as on the target, or in the current working directory). In addition, one can set the
+path of the binary in the local system, with <code>e dbg.exe.path</code>.</p>
+<p><img src="/blog/images/symload.png" alt="symbol loading"></p>
+<h2 id="windows-support-xarkes">Windows support (xarkes)</h2>
+<p>As for this month, I continued working on the windows platform support. I started with adding the <code>idp</code> command, which will read symbols from a <code>.pdb</code> file. For instance you can load symbols into your radare2 session like this by calling <code>.idp* [user32.pdb]</code> (the &lsquo;*&rsquo; character stands for &lsquo;output in radare commands&rsquo; and &lsquo;.&rsquo; for &lsquo;load&rsquo; &ndash; many radare2 commands use the same syntax). I also added the <code>pdb.autoload</code> configuration which allows radare2 to automatically fetch the pdb files and load the symbols for each loaded library while debugging a Portable Executable.</p>
+<p>The other big thing I worked on is the debugging of libraries. This is not merged yet because we are still thinking about the concept but I already added library functions execution with rarun2. You can call a specific function with this command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ rarun2 runlib<span style="color:#f92672">=</span>/lib/libc-2.25.so runlib.fcn<span style="color:#f92672">=</span>system arg1<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ls /&#34;</span>
+</code></pre></div><p>This will execute as intended <code>system(&quot;ls /&quot;)</code>. Rarun2 is totally portable and you can even use it on Windows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">&gt;rarun2.exe runlib<span style="color:#f92672">=</span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\u</span>ser32.dll runlib.fcn<span style="color:#f92672">=</span>MessageBoxA arg1<span style="color:#f92672">=</span>%0 arg2<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;This is the body text&#34;</span> arg3<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Title&#34;</span> arg4<span style="color:#f92672">=</span>%0
+</code></pre></div><p>The <code>%</code> format is used to pass directly an integer to a function, rather than a char pointer.
+Now if one&rsquo;s really want to debug a library function, one can still call radare2 over rarun2:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ radare2 -d rarun2 runlib<span style="color:#f92672">=</span>/lib/libc-2.25.so runlib.fcn<span style="color:#f92672">=</span>system arg1<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ls /&#34;</span>
+</code></pre></div><p>But radare2 won&rsquo;t break automatically on the function call, a few steps or breakpoints are required before.</p>
+<p>I had the time to fix some issues related to PDB file loading, msvc demangle information, network path handling (e.g. <code>\\VBoxSRV\bins\bin.exe</code>) and meson build improvements. Talking about building, I also added the generation of <code>.sdb</code> files when compiling with meson build system, which means that next release should be very stable for Windows users.</p>
+<p>About August, I already started working on improving the Windbg support. I think that most of this month will be focused on this task as Windbg protocol is not documented and current support lacks a lot of features.</p>
+<h2 id="reverse-debugging-rkx1209">Reverse Debugging (rkx1209)</h2>
+<p>This month, I started first from adding &ldquo;debug continue back&rdquo; <code>dcb</code> command, which can unwind program counter backward until it hit the latest breakpoint.
+So if you set a breakpoint once, then you can always return back to that point from any place you like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>0x004028a0<span style="color:#f92672">]</span>&gt; db 0x004028a2 <span style="color:#75715e"># Break at 0x4028a2</span>
+<span style="color:#f92672">[</span>0x004028a0<span style="color:#f92672">]</span>&gt; 10dso
+<span style="color:#f92672">[</span>0x004028a0<span style="color:#f92672">]</span>&gt; dr rip
+0x004028b9                  <span style="color:#75715e"># Step out 10 times</span>
+<span style="color:#f92672">[</span>0x004028a0<span style="color:#f92672">]</span>&gt; dcb           <span style="color:#75715e"># Continue back until last breakpoint</span>
+<span style="color:#f92672">[</span>0x004028a0<span style="color:#f92672">]</span>&gt; dr rip
+0x004028a2                  <span style="color:#75715e"># Now backed to 0x4028a2</span>
+</code></pre></div><p>I also added <code>dtst</code> command, which can export current trace sessions to file. The file path can be specified by <code>e dir.dbgsnap=/path/to/file</code>. And of course, you can import sessions from file by <code>dtsf</code> command.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>0x004028c2<span style="color:#f92672">]</span>&gt; dtst records_for_test
+Session saved in records_for_test.session and dump in records_for_test.dump
+<span style="color:#f92672">[</span>0x004028c2<span style="color:#f92672">]</span>&gt; dtsf records_for_test
+session: 0, 0x4028a0 diffs: <span style="color:#ae81ff">0</span>
+session: 1, 0x4028c2 diffs: <span style="color:#ae81ff">0</span>
+</code></pre></div><p>Moreover, I added <code>dtsC</code> command, which can leave a comment to each trace session. It can be usefull for users who analyze lcomplex program to keep key information in their mind.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>0x004028c2<span style="color:#f92672">]</span>&gt; dtsC <span style="color:#ae81ff">0</span> program start
+<span style="color:#f92672">[</span>0x004028c2<span style="color:#f92672">]</span>&gt; dtsC <span style="color:#ae81ff">1</span> decryption start
+<span style="color:#f92672">[</span>0x004028c2<span style="color:#f92672">]</span>&gt; dts
+session: <span style="color:#ae81ff">0</span>   at:0x004028a0   <span style="color:#e6db74">&#34;program start&#34;</span>
+session: <span style="color:#ae81ff">1</span>   at:0x004028c2   <span style="color:#e6db74">&#34;decryption start&#34;</span>
+</code></pre></div><p>Finally, I added <code>aesb</code> command, which is step back function for <strong>ESIL</strong>.
+Yes. radare2 has now <strong>reverse debugging capability in ESIL mode</strong>.
+To seek program counter backward in ESIL mode, firstly you need to save the trace session by <code>aets+</code> command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>0x00404870<span style="color:#f92672">]</span>&gt; aets+
+</code></pre></div><p>And then, you can step back by <code>aesb</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#f92672">[</span>0x00404870<span style="color:#f92672">]</span>&gt; aer rip
+0x00404870
+<span style="color:#f92672">[</span>0x00404870<span style="color:#f92672">]</span>&gt; 5aeso
+<span style="color:#f92672">[</span>0x00404870<span style="color:#f92672">]</span>&gt; aer rip
+0x0040487d
+<span style="color:#f92672">[</span>0x00404870<span style="color:#f92672">]</span>&gt; aesb
+<span style="color:#f92672">[</span>0x00404870<span style="color:#f92672">]</span>&gt; aer rip
+0x00404879
+</code></pre></div><p>Following tasks are what&rsquo;s in for August:</p>
+<ul>
+<li>Implement watchpoint, that can be usefull when used with reverse debugging functions.</li>
+<li>Add more tests for reverse debugging, trace session and watchpoint.</li>
+</ul>
+<h2 id="rune-chinmay_dd">rune (chinmay_dd)</h2>
+<p>For rune, I started off with improving the existing console interface. Users can now set registers and memory addresses as symbolic or give them constant values.  I also added a simple way to save these configurations to a <code>project</code> as a JSON file so that it becomes easier to load them once the current execution run is over.</p>
+<p>As explained in <a href="http://radare.today/posts/r2api/">this</a> blog article, we moved API functions into a new repository called radare2-r2pipe-api since we wanted to keep the core functionality of the r2pipe completely separate from the higher level abstractions and structures (to be used in libraries such as radeco-lib and rune).</p>
+<p>The Context API consisted of functions which could allow modification of memory and registers as well. But, in the long run we want this tool/library to be used by researchers and enthusiasts to try out their own implementations with each of the decomposable modules such as Context, Explorer and Engine. Hence, all memory abstractions were moved into a new trait called Memory and all register related operations into a trait called RegStore. Context is now generic over any combination of types A and B where A implements Memory and B implements RegStore. This made sure that we can very easily <code>plug</code> memory model implementations and things would just work!</p>
+<p>rune only supported 64 bit memory operations up until now. I worked on an implementation of a Segment-based Memory Model which handles single byte symbolization of memory. You can read <a href="https://gist.github.com/chinmaydd/0f98e0ffc5341afb32077ffb30eb72ba">here</a> to know more about the implementation details. High-level idea:</p>
+<pre><code>1.  Input: Read for 2 bytes at memory 0x9000
+    Memory:
+    -------------------
+    | 0x9000 - 0x9002 |
+    -------------------
+
+2.  Input: Read for 2 bytes at memory adress 0x9003
+    Memory:
+    -------------------    -------------------
+    | 0x9000 - 0x9002 |    | 0x9003 - 0x9005 |
+    -------------------    -------------------
+
+3.  Input: Access for 3 bytes at memory address 0x9001
+    Memory:
+    -------------------           -------------------
+    | 0x9000 - 0x9002 |           | 0x9003 - 0x9005 |
+    -------------------           -------------------
+              ^       ^ ^       ^ ^       ^
+              |       | |       | |       |
+              -- bv1 -- -- bv2 -- -- bv3 --
+
+    Here,
+    bv1: Result of extract operation on bitvector representing memory at 0x9000.
+    bv2: Newly created bitvector representing memory of length 1 byte at 0x9002.
+    bv3: Result of extract operation on bitvector representing memory at 0x9003.
+
+    * A result bitvector of size equal to the access size is created
+      and is initialized to zero.
+
+    * bv1, bv2 and bv3 are zero extended to match the access size
+      (i.e 3 bytes or 24 bits).
+
+    * Depending on the read offset,
+      these bitvectors are then left shifted appropriately.
+
+    * The result is then basically the logical OR of all the 4 quantities:
+      (We could also use XOR since there are no overlaps)
+      result = result ^ bv1 ^ bv2 ^ bv3
+</code></pre><p>Preliminary results seem promising and I am planning to spend some time writing solid tests to cover all cases.</p>
+<p>The advantage of having core modules implemented as a trait, enables us to add implementations on the fly. I managed to integrate my <code>DirectedExplorer</code> <a href="https://github.com/sushant94/rune/blob/3cb9c462dc60ec66d7ec7d33aeb4ea996f934e0f/src/explorer/directed.rs">implementation</a> which allows user to direct the explorer before running the engine so that we can steer the control along branches we want to explore. Ofcourse, we also have the existing BFS and DFS Explorer module which works with the entire setup just fine! :)</p>
+<h2 id="radeco-zhuo-zhang">Radeco (Zhuo Zhang)</h2>
+<p>For radeco-lib, I started with fixing the build fails. It last for a long time, from the simple mis-typing to some logical errors like infinite recursion. Now, the newest Pull Request could pass the test, although Value Set Analysis was disabled for I haven&rsquo;t finish this stage.</p>
+<p>After that, I rewrote the algorithm for <code>Common Subexpression Elimination</code> (CSE). Now radeco-lib could find out nearly all the common subexpressions and eliminated the ones within a single basic block. The main idea is sorting the operands of commutative opcodes before CSE by a <a href="https://github.com/radare/radeco-lib/blob/master/src/analysis/cse/ssasort.rs">simple sorting algorithm</a> on SSA. Future work, when the whole working chain is finished, on CSE will be concentrating on cross-blocks elimination.</p>
+<p>My main task in 1st stage was building the Memory SSA, or in other words, starting Data Flow Analysis on memory. It&rsquo;s a long-term work involving Memory SSA Generation, Value Set Analysis (VSA) and Type Inference Analysis. Sadly, I only finished the first part in 1st stage. Now, radeco-lib could generate <a href="https://github.com/radare/radeco-lib/blob/master/src/middle/ssa/memoryssa.rs"><code>raw Memory SSA</code></a>, which only included three kinds of variables and didn&rsquo;t distinguish different variables of the same kind. If we want more accurate result, we should move into VSA. By the way, the three kinds of variables are local variables which are used on the stack, global variables which are placed onto .bss/.data/.rodata segments and extra variables which are heap variables. All the three kinds of variables correspond the concept, Memory-Regions, in VSA. Thus, the generation would be easily moving forwards.</p>
+<p>Of course, the basic structure of VSA has been built after our great Brainstorming, more details are available <a href="https://www.zybuluo.com/SmashStack/note/850129"><code>HERE</code></a>. If anyone has better ideas or want to communicate with me about VSA, feel free to send me an <a href="mailto:zhangzhuo@sjtu.edu.cn">email</a>.</p>
+<p>Nowadays, radeco-lib could support the first part of decompiler, taking radare2 as disassembler, translating ESIL into radecoIL based on SSA, doing CSE and Constant Propagation, and then generating raw Memory SSA. Also, as mentioned, the next step of my job would be concentrating on VSA and Type Inference. It&rsquo;s an urgent work and if we finish these, the Data Flow Analysis of radeco-lib could be accomplished. I managed to finish these in the 2nd stage and hope the first part of Radeco could work.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgsocrsoc_2017_2%2f - GSoC%202nd%20stage%20and%20RSoC%201st%20stage%20report by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

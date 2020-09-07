@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>The BIG big endian patch</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="The BIG big endian patch" />
+<meta property="og:description" content="This text comes from radare2&rsquo;s doc/endian. And aims to explain the reason why radare2 codebase was handling endianness in a problematic way. damo22 cooked a huge patch addressing those issues and making the code endian-independent. This means that at compile time the code doesn&rsquo;t assumes any local specific endian.
+Endian issues As hackers, we need to be aware of endianness.
+Endianness can become a problem when you try to process buffers or streams of bytes and store intermediate values as integers with width larger than a single byte." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/big-big-endian/" />
+<meta property="article:published_time" content="2016-05-04T16:04:13+02:00" />
+<meta property="article:modified_time" content="2016-05-04T16:04:13+02:00" />
+
+
+<meta itemprop="name" content="The BIG big endian patch">
+<meta itemprop="description" content="This text comes from radare2&rsquo;s doc/endian. And aims to explain the reason why radare2 codebase was handling endianness in a problematic way. damo22 cooked a huge patch addressing those issues and making the code endian-independent. This means that at compile time the code doesn&rsquo;t assumes any local specific endian.
+Endian issues As hackers, we need to be aware of endianness.
+Endianness can become a problem when you try to process buffers or streams of bytes and store intermediate values as integers with width larger than a single byte.">
+<meta itemprop="datePublished" content="2016-05-04T16:04:13+02:00" />
+<meta itemprop="dateModified" content="2016-05-04T16:04:13+02:00" />
+<meta itemprop="wordCount" content="428">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="The BIG big endian patch"/>
+<meta name="twitter:description" content="This text comes from radare2&rsquo;s doc/endian. And aims to explain the reason why radare2 codebase was handling endianness in a problematic way. damo22 cooked a huge patch addressing those issues and making the code endian-independent. This means that at compile time the code doesn&rsquo;t assumes any local specific endian.
+Endian issues As hackers, we need to be aware of endianness.
+Endianness can become a problem when you try to process buffers or streams of bytes and store intermediate values as integers with width larger than a single byte."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>The BIG big endian patch</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 4, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>This text comes from radare2&rsquo;s <code>doc/endian</code>. And aims to explain the reason why radare2 codebase was handling endianness in a problematic way. damo22 cooked a huge patch addressing those issues and making the code endian-independent. This means that at compile time the code doesn&rsquo;t assumes any local specific endian.</p>
+<h1 id="endian-issues">Endian issues</h1>
+<p>As hackers, we need to be aware of endianness.</p>
+<p>Endianness can become a problem when you try to process buffers or streams
+of bytes and store intermediate values as integers with width larger than
+a single byte.</p>
+<p>It can seem very easy to write the following code:</p>
+<pre><code>ut8 opcode[4] = {0x10, 0x20, 0x30, 0x40};
+ut32 value = *(ut32*)opcode;
+
+... and then continue to use &quot;value&quot; in the code to represent the opcode.
+</code></pre>
+<p>This needs to be avoided!</p>
+<p>Why? What is actually happening?</p>
+<p>When you cast the opcode stream to a <code>unsigned int</code>, the compiler uses the endianness
+of the host to interpret the bytes and stores it in host endianness.  This leads to
+very unportable code, because if you compile on a different endian machine, the
+value stored in &ldquo;value&rdquo; might be <code>0x40302010</code> instead of <code>0x10203040</code>.</p>
+<p>In the past, radare devs were not as strict about this issue, and as a result,
+needed to swap the endian of values regularly in the code.</p>
+<h1 id="solution">Solution</h1>
+<p>Use bitshifts and OR instructions to interpret bytes in a known endian.
+Instead of casting streams of bytes to larger width integers, do the following:</p>
+<pre><code>ut8 opcode[4] = {0x10, 0x20, 0x30, 0x40};
+ut32 value = opcode[0] | opcode[1] &lt;&lt; 8 | opcode[2] &lt;&lt; 16 | opcode[3] &lt;&lt; 24;
+</code></pre>
+<p>or if you prefer the other endian:</p>
+<pre><code>ut32 value = opcode[3] | opcode[2] &lt;&lt; 8 | opcode[1] &lt;&lt; 16 | opcode[0] &lt;&lt; 24;
+</code></pre>
+<p>This is much better because you actually know which endian your bytes are stored in
+within the integer value, <em>REGARDLESS</em> of the host endian of the machine.</p>
+<h1 id="endian-helper-functions">Endian helper functions</h1>
+<p>Radare2 now uses helper functions to interpret all byte streams in a known endian.</p>
+<p>Please use these at all times, eg:</p>
+<pre><code>// read 4 bytes from a stream in BE
+val32 = r_read_be32(buffer)
+// read 4 bytes from a stream in LE
+val32 = r_read_le32(buffer)
+// read 4 bytes from a stream:
+//   if isbig is true, reads in BE
+//   otherwise reads in LE
+val32 = r_read_ble32(buffer, isbig)
+</code></pre>
+<p>There are a number of helper functions for <code>64</code>, <code>32</code>, <code>16</code>, and <code>8</code> bit reads and writes.</p>
+<p>(Note that 8 bit reads are equivalent to casting a single byte of the buffer to
+a <code>ut8</code> value, ie endian is irrelevant).</p>
+<p>Happy hacking!</p>
+<ul>
+<li>damo22</li>
+</ul>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fbig-big-endian%2f - The%20BIG%20big%20endian%20patch by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

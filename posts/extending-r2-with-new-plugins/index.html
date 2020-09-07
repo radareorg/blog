@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Extending r2 with new plugins</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Extending r2 with new plugins" />
+<meta property="og:description" content="One of the key features behind r2 is how easily it can be extended with new libraries or plugins. In this blopost, we&rsquo;ll see the steps to add a new plugin in radare2.
+Let&rsquo;s say we want to add a new plugin for r_asm because we are working with binaries of an architecture not supported by r2. Of course, adding a new plugin for another lib would be mostly the same." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/extending-r2-with-new-plugins/" />
+<meta property="article:published_time" content="2014-11-09T12:00:00+01:00" />
+<meta property="article:modified_time" content="2014-11-09T12:00:00+01:00" />
+
+
+<meta itemprop="name" content="Extending r2 with new plugins">
+<meta itemprop="description" content="One of the key features behind r2 is how easily it can be extended with new libraries or plugins. In this blopost, we&rsquo;ll see the steps to add a new plugin in radare2.
+Let&rsquo;s say we want to add a new plugin for r_asm because we are working with binaries of an architecture not supported by r2. Of course, adding a new plugin for another lib would be mostly the same.">
+<meta itemprop="datePublished" content="2014-11-09T12:00:00+01:00" />
+<meta itemprop="dateModified" content="2014-11-09T12:00:00+01:00" />
+<meta itemprop="wordCount" content="551">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Extending r2 with new plugins"/>
+<meta name="twitter:description" content="One of the key features behind r2 is how easily it can be extended with new libraries or plugins. In this blopost, we&rsquo;ll see the steps to add a new plugin in radare2.
+Let&rsquo;s say we want to add a new plugin for r_asm because we are working with binaries of an architecture not supported by r2. Of course, adding a new plugin for another lib would be mostly the same."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Extending r2 with new plugins</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        November 9, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>One of the key features behind r2 is how easily it can be extended with new libraries or plugins. In this blopost, we&rsquo;ll see the steps to add a new plugin in radare2.</p>
+<p>Let&rsquo;s say we want to add a new plugin for <code>r_asm</code> because we are working with binaries of an architecture not supported by r2. Of course, adding a new plugin for another lib would be mostly the same.</p>
+<p>From now to the end of the document, we will name this new plugin as &ldquo;<em>myarch</em>&rdquo;.</p>
+<p>Please note that you can keep your plugin outside the radare2 <a href="https://github.com/radare/radare2">main tree</a>, like the ones in <a href="https://github.com/radare/radare2-extras">radare2-extras</a>.</p>
+<p>The first thing we have to do is give a look to the r_asm header, located at <code>libr/include/r_asm.h</code>, and find out which callbacks we need to implement. They will be always defined under a structure named <code>r_libname_plugin_t</code> or <code>RLibnamePlugin</code>. In the case of <code>r_asm</code>, look closely at <code>RAsmPlugin</code>:</p>
+<pre><code>typedef struct r_asm_plugin_t {
+	[...]
+	int (*init)(void *user);
+	int (*fini)(void *user);
+	int (*disassemble)(RAsm *a, RAsmOp *op, ut8 *buf, ut64 len);
+	int (*assemble)(RAsm *a, RAsmOp *op, const char *buf);
+	RAsmModifyCallback modify;
+	int (*set_subarch)(RAsm *a, const char *buf);
+} RAsmPlugin;
+</code></pre><p>We can implement all the callbacks or only those needed for our purposes. In this case we only want to code the <em>disassemble</em> function.</p>
+<p>Then, we will create a new file named asm_myarch.c under <code>libr/asm/p/</code>. The typical skeleton woud be:</p>
+<pre><code>static int disassemble(RAsm *a, RAsmOp *op, ut8 *buf, ut64 len) {
+	/* TODO: Implement disassemble code here,
+     * give a look to the other plugins */
+}
+
+RAsmPlugin r_asm_plugin_myarch = {
+	.name = &quot;MyArch&quot;,
+	.desc = &quot;disassembly plugin for MyArch&quot;,
+	.arch = &quot;myarch&quot;,
+	.bits = (int[]){ 32, 64, 0 }, /* supported wordsizes */
+	.init = NULL,
+	.fini = NULL,
+	.disassemble = &amp;disassemble,
+	.modify = NULL,
+	.assemble = NULL,
+};
+
+#ifndef CORELIB
+struct r_lib_struct_t radare_plugin = {
+	.type = R_LIB_TYPE_ASM,
+	.data = &amp;r_asm_plugin_myarch
+};
+#endif
+</code></pre><p>Be careful with the name convention to avoid collisions with other existing plugins. Don&rsquo;t forget that you have lots of examples inside <code>libr/*/p/</code> on how plugins are implemented.</p>
+<p>If we need more files for the plugin to work, e.g. a backend, we will create a folder under <code>libr/asm/arch/</code> called like the plugin arch (<em>myarch</em>) and copy all the files to <code>libr/asm/arch/myarch/</code>.</p>
+<p>The next step is to add a new &ldquo;<em>extern</em>&rdquo; in the header file, so we can compile it as static plugin if we want to. In <code>libr/include/r_asm.h</code>:</p>
+<pre><code>[...]
+extern RAsmPlugin r_asm_plugin_x86;
+extern RAsmPlugin r_asm_plugin_x86_olly;
+extern RAsmPlugin r_asm_plugin_x86_nasm;
+[...]
+extern RAsmPlugin r_asm_plugin_myarch;
+</code></pre><p>Obviously, we need to tell the build system how to compile our code, this is done adding a new file called <code>libr/asm/p/myarch.mk</code>, which would seem like this:</p>
+<pre><code>OBJ_MYARCH=asm_myarch.o
+# myarch backend
+OBJ_MYARCH+=../arch/myarch/udis86/file1.o
+OBJ_MYARCH+=../arch/myarch/udis86/file2.o
+[...]
+
+STATIC_OBJ+=${OBJ_MYARCH}
+TARGET_MYARCH=asm_myarch.${EXT_SO}
+
+ALL_TARGETS+=${TARGET_MYARCH}
+
+${TARGET_MYARCH}: ${OBJ_MYARCH}
+	${CC} ${LDFLAGS} ${CFLAGS} -o ${TARGET_MYARCH} ${OBJ_MYARCH}
+</code></pre><p>And appending it to the list of compiled plugins in <code>libr/asm/p/Makefile</code>:</p>
+<pre><code>[...]
+ARCHS+=myarch.mk
+[...]
+</code></pre><p>Finally, we only need to define if it must be compiled as static or shared, which is done editing <code>plugins.def.cfg</code>, in the source root. In this case, we will compile it as static, so we add a new line following the other asm plugins:</p>
+<pre><code>STATIC=&quot;asm.java
+asm.arm
+[...]
+asm.x86
+asm.myarch
+[...]
+</code></pre><p>Ok, We have just created our first r2 plugin. Now, exec:</p>
+<pre><code>$ make mrproper &amp;&amp; ./configure &amp;&amp; make &amp;&amp; make install
+</code></pre><p>and enjoy! :)</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fextending-r2-with-new-plugins%2f - Extending%20r2%20with%20new%20plugins by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

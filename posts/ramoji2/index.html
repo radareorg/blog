@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Ramoji2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Ramoji2" />
+<meta property="og:description" content="The main complain by new radare2 users is the learning curve because of the complexity of the mnemonic commands.
+This is why we are releasing a new interface based on emoji! No need to know english, or assembly or even understand what the hell the entropy is. Just look at those cute pictures and build a story right in your terminal.
+We hope that such a mode could bring the joy of reverse engineering to everyone, including kids." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/ramoji2/" />
+<meta property="article:published_time" content="2016-04-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-04-01T00:00:00+00:00" />
+
+
+<meta itemprop="name" content="Ramoji2">
+<meta itemprop="description" content="The main complain by new radare2 users is the learning curve because of the complexity of the mnemonic commands.
+This is why we are releasing a new interface based on emoji! No need to know english, or assembly or even understand what the hell the entropy is. Just look at those cute pictures and build a story right in your terminal.
+We hope that such a mode could bring the joy of reverse engineering to everyone, including kids.">
+<meta itemprop="datePublished" content="2016-04-01T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2016-04-01T00:00:00+00:00" />
+<meta itemprop="wordCount" content="189">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Ramoji2"/>
+<meta name="twitter:description" content="The main complain by new radare2 users is the learning curve because of the complexity of the mnemonic commands.
+This is why we are releasing a new interface based on emoji! No need to know english, or assembly or even understand what the hell the entropy is. Just look at those cute pictures and build a story right in your terminal.
+We hope that such a mode could bring the joy of reverse engineering to everyone, including kids."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Ramoji2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 1, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>The main complain by new radare2 users is the learning curve because of the complexity of the mnemonic commands.</p>
+<p>This is why we are releasing a new interface based on emoji! No need to know english, or assembly or even understand what the hell the entropy is. Just look at those cute pictures and build a story right in your terminal.</p>
+<p>We hope that such a mode could bring the joy of reverse engineering to everyone, including kids. Please leave your feedback and suggest a new intuitive substitutions of the text commands.</p>
+<p><img src="/blog/images/ramoji2-pd.png" alt="pd">
+<img src="/blog/images/ramoji2-px.png" alt="px"></p>
+<p>P.S. We have plans to rethink ESIL in the similar way, so any program in native code could be represented as a set of a fancy pictures. We need your opinion on that.</p>
+<p>P.P.S Ah, almost forgot to say - we call it &lsquo;EUI&rsquo; - Emoji User Interface. Enjoy ;)</p>
+<pre><code>$ base64 -D | tar xJv ; cd ramoji2 
+
+/Td6WFoAAATm1rRGAgAhARwAAAAQz1jM4BP/BR1dADkYSf7aIeDHUm/e9V91
+a78Qn3p1wPzW7czf8nkl5/ZepFrDGxZbL7GoPq2Nc5F4Ad1pIbO+dQSqpbjG
+cvJsxKUw9FMhL7D5fLJvFi8B079PE3vkw7iYqU1CnJn0SuL2kd1jAJQP93e0
+Ev/Chmp0dN9yxMl0wZcTTNuxQJ9Rt/+OW1/Ay7VEBNRBVsBaM0tn6ZUy98ZE
+fBV9FmvUv9ZbNpiHWHDw3OVkwpa5Dt8KGLBrqtFGoUHmaYc/2VhcjWlZACcK
+H1BzS/7XdQAXZWncNXYjDm8/p0OLxRMRaxod8aD57fTDP79cy82FA7N+HJ6T
+yp/obNHN4HYON0uPhleh/I564QGvq8uL9AaZiRokBzKiOTBk9wWMGiUoNPIh
+hoadUh0oCGlfjhHVyq9TnHFbydiTp025OxGD0xbgFqm9bH1nzaILIAAZ0JtK
+KeBpAmPIve5BM/RA32rEuGCpliCVS1z9GVryifytXFoSKpmaNP3/dUHe5FRt
+imBtNadpdND8hebNJiEZ2zS3pXepIslA7oCNfZ+NGjg6VRVK7TkhYj2HCfXd
+nGJ7WAh9KJCq+tnefcryESfl2wOJKbMsBY6xbkA6sDkmwx+n/EfvjloHicps
+fAs0yoYcDjiq+p52KL7NVZxB2qKXZffvqdTRFtpniGN0lMdlUjFqJyc60Rjw
+OBKi3RccO6KG6FDFo22gX/ib5bGo6iCXjXeyRqPFO9DGiXgtvA3sAiHl/5vP
+coOy4uc9dr1Pj9r7eJPAplV2FfFEEpiF/mW1ocr0fBKrugjIiLrtZR/0KA6l
++tYqP7Ux1L9Exq/iyAEUl62j51hb4em19YiVq6EAAtSvpJlgZEq7g3SxU4kV
+9jLopuNWDajYuvIJhAeTPW3N0r8EYR2YPF4IxIiM9YosatQCsIpgIgNr4pHx
+210QkmVKpMhnKSDi6suFkS3f1RzRtsMXrdNjRQOHZGMRwiCC+LEAX5JCRDkC
++7mE6iGGXlNx8Q04h7yaOcPdpod66ftMjUbIer1Lini1Vj1ph02h7S0hhHbn
+PxQKE7L8cyIyysJPhQW1HU7wyVTaYDyADWK9V0RPrV0yHLPBpOLSUwTaQ7Gd
+aIL0EtghoBVyxLuQRsPUINkzQCgzQAM+UK1kndjZoFlF7Hp8fMxamMxafJCz
+nIdpv/CSLD0nq4hNdXnO2XzOThJTPHvNO8kRpWs5gzxBhwVLMvyy/dZvLE3M
+YYyIOLYHzCxtdWFT6cpN2aizCxJjD/3IOKgAjaTq6ImeCYwS7iYGPffcF5FC
+P8Vo7IUh7BOL6NoNH3rwbSEDtxxlh/1JUKUq7x/1PhCG2vV3bLIVBzK95/qW
+aZKgT1g4C03IPEh06oFD1Pm1Af+qiHZ9OCfxaKheA42Kxqj+5SMkqcsNoyHV
+z8HGyeL6Wb7Sq9AMR0ojlFfhi+X+sI323eB18x/PgN/Otq7Td5lzQz9XABnf
+EvOwXzBDWqFffu+Mj7Kr9zXMTnC0OKWRZi85atDwIj+PI2KZZqEBYV5ddkx9
+IsBtffu/nnnt9g/RcgehzZn0CqrSnjQHHJZ9HxtMsn9aR/mTtkLcGJFSgvTt
+6195qU56JiyRPGt3b9N8827VbBZRgy+mBO6aJ6rn9fK2OEXf79f9418e3OAH
+Rj6iXGEQGA1zDTNTEE7UXKnBEfRec9j/v2fxnJovZrq+5eYa6LX331o2r6OT
+vM5GFn7ahIrAwwBhaIhYEUl2RBmbb0VZpajj0obdg9RT4bcAAAAACvtSB7/Q
+QH8AAbkKgCgAAKIvJ2+xxGf7AgAAAAAEWVo=
+
+$ npm install ; node index.js /bin/ls
+</code></pre>
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2framoji2%2f - Ramoji2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

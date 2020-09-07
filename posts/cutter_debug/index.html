@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC 2018 Final: Debugging and Emulation Support for Cutter</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC 2018 Final: Debugging and Emulation Support for Cutter" />
+<meta property="og:description" content="Intro Hi, I&rsquo;m mandlebro and during the summer I worked on the GSOC project &ldquo;Debugging and Emulation Support for Cutter&rdquo;. The goal of this GSOC project was to integrate radare2&rsquo;s debugging and emulation capabilities in Cutter.
+You can check all my commits in the following links:
+ Cutter commits radare2 commits  Developed features During the duration of the project I both worked in radare2 and Cutter. On radare2 side I provided a json interface to existing r2 commands so that they could be well parsed on Cutter side as well as worked on some ESIL features." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/cutter_debug/" />
+<meta property="article:published_time" content="2018-08-20T11:52:13+00:00" />
+<meta property="article:modified_time" content="2018-08-20T11:52:13+00:00" />
+
+
+<meta itemprop="name" content="GSoC 2018 Final: Debugging and Emulation Support for Cutter">
+<meta itemprop="description" content="Intro Hi, I&rsquo;m mandlebro and during the summer I worked on the GSOC project &ldquo;Debugging and Emulation Support for Cutter&rdquo;. The goal of this GSOC project was to integrate radare2&rsquo;s debugging and emulation capabilities in Cutter.
+You can check all my commits in the following links:
+ Cutter commits radare2 commits  Developed features During the duration of the project I both worked in radare2 and Cutter. On radare2 side I provided a json interface to existing r2 commands so that they could be well parsed on Cutter side as well as worked on some ESIL features.">
+<meta itemprop="datePublished" content="2018-08-20T11:52:13+00:00" />
+<meta itemprop="dateModified" content="2018-08-20T11:52:13+00:00" />
+<meta itemprop="wordCount" content="781">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC 2018 Final: Debugging and Emulation Support for Cutter"/>
+<meta name="twitter:description" content="Intro Hi, I&rsquo;m mandlebro and during the summer I worked on the GSOC project &ldquo;Debugging and Emulation Support for Cutter&rdquo;. The goal of this GSOC project was to integrate radare2&rsquo;s debugging and emulation capabilities in Cutter.
+You can check all my commits in the following links:
+ Cutter commits radare2 commits  Developed features During the duration of the project I both worked in radare2 and Cutter. On radare2 side I provided a json interface to existing r2 commands so that they could be well parsed on Cutter side as well as worked on some ESIL features."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC 2018 Final: Debugging and Emulation Support for Cutter</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 20, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h3 id="intro">Intro</h3>
+<p>Hi, I&rsquo;m <a href="https://github.com/fcasal">mandlebro</a> and during the summer I worked on the GSOC project &ldquo;Debugging and Emulation Support for Cutter&rdquo;. The goal of this GSOC project was to integrate <a href="https://github.com/radare/radare2">radare2</a>&rsquo;s debugging and emulation capabilities in <a href="https://github.com/radareorg/cutter">Cutter</a>.</p>
+<p>You can check all my commits in the following links:</p>
+<ul>
+<li><a href="https://github.com/radareorg/cutter/commits?author=fcasal">Cutter commits</a></li>
+<li><a href="https://github.com/radare/radare2/commits?author=fcasal">radare2 commits</a></li>
+</ul>
+<h2 id="developed-features">Developed features</h2>
+<p>During the duration of the project I both worked in radare2 and Cutter. On radare2 side I provided a json interface to existing r2 commands so that they could be well parsed on Cutter side as well as worked on some ESIL features. Here are some of the main implemented features:</p>
+<h3 id="multiple-panels-and-independent-seeks">Multiple panels and independent seeks</h3>
+<ul>
+<li><a href="https://github.com/radareorg/cutter/commit/0cea9e3287fa12a8a240834a7484c1a957f686c1">Independent seeks</a>: you can now have different widgets with different seeks. Previously, all widgets would always be in sync with each other, and with the radare2 instance running in the background.</li>
+</ul>
+<p><img src="/blog/images/syncseek.gif" alt=""></p>
+<ul>
+<li><a href="https://github.com/radareorg/cutter/commit/0cea9e3287fa12a8a240834a7484c1a957f686c1">Multiple widgets:</a> you can now open more than one instance of the same widget. This means that you can now look at several  functions in graph/linear mode at the same time via the menu <code>Windows</code>-&gt;<code>Add extra...</code>:</li>
+</ul>
+<p><img src="/blog/images/mult_wid11.png" alt=""></p>
+<p><img src="/blog/images/mult_wid2.png" alt=""></p>
+<h3 id="debug-and-emulation-actions">Debug and emulation actions</h3>
+<p>There are several ways to interact with the debugging/emulation engine running:</p>
+<ul>
+<li><strong>Debug toolbar</strong> which has buttons for all supported debugging actions. These are:
+<ul>
+<li>Start debug/emulation/attach to a process;</li>
+<li>Stop debugging/emulation/detach from process;</li>
+<li>Continue execution;</li>
+<li>Continue until main/syscall/call;</li>
+<li>Step into, step over, step out.</li>
+</ul>
+</li>
+<li><strong>Context menu</strong> which allow for actions that usually depend on a offset and is accessed by <code>Right clicking</code>-&gt;<code>Debug</code>:
+<ul>
+<li>Add/remove breakpoint;</li>
+<li>Continue until line;</li>
+<li>Set $ProgramCounterName here;</li>
+</ul>
+</li>
+</ul>
+<p><img src="/blog/images/context_menu.png" alt=""></p>
+<h3 id="debug-and-emulation-widgets">Debug and emulation widgets</h3>
+<p>Currently the following widgets related to debugging are available:</p>
+<ul>
+<li><strong>Registers widget:</strong>
+<ul>
+<li>allows to change a register by editing its value;</li>
+<li>hovering over a register displays the register telescoping;</li>
+<li>the registers that changed value in the last debugging action are highlighted green;</li>
+</ul>
+</li>
+<li><strong>Stack widget:</strong> allows to view the stack, edit stack addresses and seek to addresses in the stack.</li>
+<li><strong>Breakpoint widget</strong>:
+<ul>
+<li>displays all current breakpoints</li>
+<li>allows to delete a single breakpoint or all breakpoints</li>
+<li>allows to toggle a breakpoint inactive;</li>
+<li>add breakpoints by providing a series of offsets separated by space.</li>
+</ul>
+</li>
+<li><strong>Backtrace widget</strong> displays backtrace information;</li>
+<li><strong>Register references widget</strong> displays register telescoping.</li>
+<li><strong>Memory map widget</strong> displays the mapped regions and their permissions.</li>
+</ul>
+<p><img src="/blog/images/debug_widgets.png" alt=""></p>
+<h3 id="esil">ESIL</h3>
+<p>In the last leg of the project I also devoted some time to ESIL and implemented some of interesting features:</p>
+<ul>
+<li><a href="https://github.com/radare/radare2/commit/9a83761c6df6c483160e6c1ec43c4a50b36f64e2">Breakpoints now work in ESIL emulation:</a> previously when emulating, continuing the execution with <code>aec</code> would not stop at inserted breakpoint. Now ESIL emulation shares the same set of breakpoints as the radare2 debugger.</li>
+<li><a href="https://github.com/radare/radare2/commit/410ff31de8a5c83bf7e5195ce813077991bbe8b2">ESIL continue until call:</a> Although most debugger <code>continue until ...</code> commands were also implemented in the ESIL emulation, <code>continue until call</code> was missing and is now available with <code>aecc</code></li>
+<li><a href="https://github.com/radare/radare2/pull/10823/files">Eval variable to break emulation on invalid instructions:</a> Prior to ESIL breakpoints, when running continue command <code>aec</code> on ESIL emulation, we will most likely start trying to emulate zones of memory/instructions that are not there since they were not loaded as would happen in a real running instance of the binary. And ESIL emulation would happily sled on those invalid instructions until ^C. Now you can change this behaviour by changing the value of <code>esil.breakoninvalid</code> to true using the r2 command <code>e esil.breakoninvalid = true</code>.</li>
+</ul>
+<h2 id="what-is-missing">What is missing</h2>
+<p>Although the debugger and emulation work fine there are still some issues which probably require major work on r2 debugger and were not sucessfully finished. Both issues lie with radare2&rsquo;s debugger being developed to be used from the single threaded process which is radare2, and not a multiple threaded GUI like Cutter.</p>
+<p>Specifically, the problem lies in the interface with the debugee program, <code>ptrace</code>. Although it is a very powerful interface to another process, allowing to access registers, read and write the program memory, etc., this all must be done from the same tracer thread.</p>
+<ul>
+<li><strong>Console widget:</strong> Cutter already uses <a href="http://radare.today/posts/background_tasks/">background tasks</a> in the console widget. This however means that when we are debugging and try to inspect the program memory in the console, a new thread will do that work and run the <code>ptrace</code> command. As mentioned before, this will fail since <code>ptrace</code> only allows one thread to make calls to the debuggee. A way to solve this would be to wrap all <code>ptrace</code> calls in a way that even if different threads try calling it, always the same tracer thread will actually call <code>ptrace</code>.</li>
+<li><strong>stdin:</strong> When the debugee process asks for input, or is left running, all context is switched to that process until an input is given or ^C is sent. This means that during that time, all the Cutter widgets will freeze since they cannot update.</li>
+</ul>
+<h2 id="thanks">Thanks</h2>
+<p>I would like to sincerely thank <a href="https://github.com/xarkes">xarkes</a>, <a href="https://github.com/thestr4ng3r">Florian</a> and <a href="https://github.com/Maijin">Maijin</a> for the support during the project!</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fcutter_debug%2f - GSoC%202018%20Final%3a%20Debugging%20and%20Emulation%20Support%20for%20Cutter by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/background_tasks/">Background Tasks in radare2<aside class="dates">Jul 3 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

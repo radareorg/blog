@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Binary diffing</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Binary diffing" />
+<meta property="og:description" content="Yesterday, a new feature was pushed to radare2: offset-based function diffing. We&rsquo;d like to take this opportunity to write a bit about radare2&rsquo;s diffing features before showing the shiny new one.
+Let&rsquo;s take a copy of a cracked crackme as an example, and the true and false binaries.
+Without parameter, radiff2 will by default show what bytes changed, and the corresponding offsets.
+$ radiff2 genuine cracked 0x000081e0 85c00f94c0 =&gt; 9090909090 0x000081e0 0x0007c805 85c00f84c0 =&gt; 9090909090 0x0007c805 $ rasm2 -d 85c00f94c0 test eax, eax sete al Notice how the two jumps are noped." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/binary-diffing/" />
+<meta property="article:published_time" content="2014-08-21T16:28:49+02:00" />
+<meta property="article:modified_time" content="2014-08-21T16:28:49+02:00" />
+
+
+<meta itemprop="name" content="Binary diffing">
+<meta itemprop="description" content="Yesterday, a new feature was pushed to radare2: offset-based function diffing. We&rsquo;d like to take this opportunity to write a bit about radare2&rsquo;s diffing features before showing the shiny new one.
+Let&rsquo;s take a copy of a cracked crackme as an example, and the true and false binaries.
+Without parameter, radiff2 will by default show what bytes changed, and the corresponding offsets.
+$ radiff2 genuine cracked 0x000081e0 85c00f94c0 =&gt; 9090909090 0x000081e0 0x0007c805 85c00f84c0 =&gt; 9090909090 0x0007c805 $ rasm2 -d 85c00f94c0 test eax, eax sete al Notice how the two jumps are noped.">
+<meta itemprop="datePublished" content="2014-08-21T16:28:49+02:00" />
+<meta itemprop="dateModified" content="2014-08-21T16:28:49+02:00" />
+<meta itemprop="wordCount" content="467">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Binary diffing"/>
+<meta name="twitter:description" content="Yesterday, a new feature was pushed to radare2: offset-based function diffing. We&rsquo;d like to take this opportunity to write a bit about radare2&rsquo;s diffing features before showing the shiny new one.
+Let&rsquo;s take a copy of a cracked crackme as an example, and the true and false binaries.
+Without parameter, radiff2 will by default show what bytes changed, and the corresponding offsets.
+$ radiff2 genuine cracked 0x000081e0 85c00f94c0 =&gt; 9090909090 0x000081e0 0x0007c805 85c00f84c0 =&gt; 9090909090 0x0007c805 $ rasm2 -d 85c00f94c0 test eax, eax sete al Notice how the two jumps are noped."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Binary diffing</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 21, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Yesterday, a new feature was <a href="https://github.com/radare/radare2/commit/9f18c219a6ecc9952130a6c265461f652cb6cd55">pushed</a> to radare2: offset-based function diffing. We&rsquo;d like to take this opportunity to write a bit about radare2&rsquo;s diffing features before showing the shiny new one.</p>
+<p>Let&rsquo;s take a copy of a cracked crackme as an example, and the <code>true</code> and <code>false</code> binaries.</p>
+<p>Without parameter, <code>radiff2</code> will by default show what bytes changed, and the corresponding offsets.</p>
+<pre><code>$ radiff2 genuine cracked
+0x000081e0 85c00f94c0 =&gt; 9090909090 0x000081e0
+0x0007c805 85c00f84c0 =&gt; 9090909090 0x0007c805
+
+$ rasm2 -d 85c00f94c0
+test eax, eax
+sete al
+
+</code></pre><p>Notice how the two jumps are noped.</p>
+<p>For bulk processing, you may want to have a higher-overview of the differences. This is why radare2 is able to compute the <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">distance</a> and the percentage of similarity between two files with the <code>-s</code> option:</p>
+<pre><code>$ radiff2 -s /bin/true /bin/false
+similarity: 0.97
+distance: 743
+</code></pre><p>If you want more concrete data, it&rsquo;s also possible to <em>count</em> the differences, with the <code>-c</code> option:</p>
+<pre><code>$ radiff2 -c genuine cracked
+2
+</code></pre><p>If you&rsquo;re unsure about the fact that you&rsquo;re dealing with similar binaries, you can check if some functions are matching with the <code>-C</code> option. The columns being: &ldquo;First file offset&rdquo;, &ldquo;Percentage of matching&rdquo; and &ldquo;Second file offset&rdquo;.</p>
+<pre><code>$ radiff2 -C /bin/false /bin/true 
+                   entry0  0x4013e8 |   MATCH  (0.904762) | 0x4013e2  entry0
+sym.imp.__libc_start_main  0x401190 |   MATCH  (1.000000) | 0x401190  sym.imp.__libc_start_main
+             fcn.00401196  0x401196 |   MATCH  (1.000000) | 0x401196  fcn.00401196
+             fcn.0040103c  0x40103c |   MATCH  (1.000000) | 0x40103c  fcn.0040103c
+             fcn.00401046  0x401046 |   MATCH  (1.000000) | 0x401046  fcn.00401046
+             [...]
+</code></pre><p>And now the cool feature : radare2 supports graph-diffing, à la <a href="http://www.darungrim.org/">DarunGrim</a>, with the <code>-g</code> option. You can either give a symbol name, of specify two offsets in case the function you want to diff doesn&rsquo;t have the same name in both file.</p>
+<p>For example, <code>radiff2 -g main /bin/true  /bin/false | xdot -</code> will show the differences between the main function of <code>true</code> and <code>false</code>. You can compare it to <code>radiff2 -g main /bin/false /bin/true</code> (Notice the order of the arguments) to get the two versions.</p>
+<p>This is the result:
+<img src="/blog/images/true_false.png" alt="/bin/true and /bin/false graph diff"></p>
+<p>The parts in yellow are indicating that some offsets are not matching, the grey one is a perfect match, while the red one highlight a strong difference. If you look closely, you&rsquo;ll see that the left one is <code>mov edi, 0x1; call sym.imp.exit</code>, while the right one is <code>xor edi, edi; call sym.imp.exit</code>.</p>
+<p>Binary diffing is an important feature for reverse engineering. It can be used to analyze <a href="https://en.wikipedia.org/wiki/Patch_Tuesday">security updates</a>, infected binaries, firmware changes and more..</p>
+<p>We have only shown the code analysis diffing functionality, but radare2 supports more sort of diffing between two binaries at byte level, deltified similarities and more to come.</p>
+<p>We have plans to implement more kinds of bindiffing functionalities into r2, and why not, add support for ascii art graph diffing and better integration with the rest of the toolkit.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fbinary-diffing%2f - Binary%20diffing by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

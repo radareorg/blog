@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Android Crackme and Structure offset propagation</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Android Crackme and Structure offset propagation" />
+<meta property="og:description" content="Today we will look into the recently introduced feature in r2 - structure offset propagation.
+We will use it to solve a crackme based on reversing an Android JNI (Java Native Interface) library.Beware that the feature is still WIP and being constantly improved.
+This challenge is originally from NDH2012-wargame, so we are provided with an NDH.apk file, now after decompiling and using JD-GUI to browse through the code we can find some interesting functions :" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/crackme_with_tl/" />
+<meta property="article:published_time" content="2018-06-16T01:45:16+02:00" />
+<meta property="article:modified_time" content="2018-06-16T01:45:16+02:00" />
+
+
+<meta itemprop="name" content="Android Crackme and Structure offset propagation">
+<meta itemprop="description" content="Today we will look into the recently introduced feature in r2 - structure offset propagation.
+We will use it to solve a crackme based on reversing an Android JNI (Java Native Interface) library.Beware that the feature is still WIP and being constantly improved.
+This challenge is originally from NDH2012-wargame, so we are provided with an NDH.apk file, now after decompiling and using JD-GUI to browse through the code we can find some interesting functions :">
+<meta itemprop="datePublished" content="2018-06-16T01:45:16+02:00" />
+<meta itemprop="dateModified" content="2018-06-16T01:45:16+02:00" />
+<meta itemprop="wordCount" content="814">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Android Crackme and Structure offset propagation"/>
+<meta name="twitter:description" content="Today we will look into the recently introduced feature in r2 - structure offset propagation.
+We will use it to solve a crackme based on reversing an Android JNI (Java Native Interface) library.Beware that the feature is still WIP and being constantly improved.
+This challenge is originally from NDH2012-wargame, so we are provided with an NDH.apk file, now after decompiling and using JD-GUI to browse through the code we can find some interesting functions :"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Android Crackme and Structure offset propagation</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        June 16, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Today we will look into the recently introduced feature in r2 - structure offset propagation.</p>
+<p>We will use it to solve a crackme based on reversing an Android JNI (Java Native Interface) library.Beware that the feature is still WIP and being constantly improved.</p>
+<p>This challenge is originally from NDH2012-wargame, so we are provided with an <a href="https://github.com/sivaramaaa/CTF_repo/blob/master/NDH2k12/NDH.apk">NDH.apk</a> file, now after decompiling and using JD-GUI to browse through the code we can find some interesting functions :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// Java source file
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span>
+<span style="color:#f92672">{</span>
+     System<span style="color:#f92672">.</span><span style="color:#a6e22e">loadLibrary</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;verifyPass&#34;</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+NDHActivity localNDHActivity <span style="color:#f92672">=</span> NDHActivity<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">;</span>
+String str1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">val$tv2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getText</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">();</span>
+String str2 <span style="color:#f92672">=</span> localNDHActivity<span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>str1<span style="color:#f92672">);</span>
+</code></pre></div><p>After reading through the code we can find that the validation routine is contained in a <a href="https://github.com/sivaramaaa/CTF_repo/blob/master/NDH2k12/libverifyPass.so">JNI lib</a> file.</p>
+<pre><code>$ file libverifyPass.so
+libverifyPass.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, stripped
+</code></pre><p>So let&rsquo;s start by opening it in <del>IDA</del> r2 -</p>
+<pre><code>$ r2 ./libverifyPass.so
+[0x00000f50]&gt; aaa
+...
+[0x00000f50]&gt; afl
+0x00000f38    1 12           sym.imp.__gnu_Unwind_Find_exidx
+0x00000f44    1 12           sym.imp.difftime
+0x00000f50    1 12           entry0
+0x00000f60   15 500          sym.Java_com_app_ndh_NDHActivity_print
+...
+</code></pre><p>We could easily spot the &ldquo;sym.(..).print&rdquo; function that was called from the java source file</p>
+<pre><code>[0x00000f60]&gt; pdf
+|   sym.Java_com_app_ndh_NDHActivity_print ();
+| ; var int local_4h @ sp+0x4
+  ....
+| 0x00000f60      30b5     push {r4, r5, lr}
+| 0x00000f62      cdb0     sub sp, 0x134
+| 0x00000f64      7e4c     ldr r4, [0x00001160]
+| 0x00000f66      7c44     add r4, pc
+| 0x00000f68      0390     str r0, [sp + local_ch] //
+| 0x00000f6a      0291     str r1, [sp + local_8h] // Arguments stored in stack
+| 0x00000f6c      0192     str r2, [sp + local_4h] //
+  ....
+| 0x00000f76      039b     ldr r3, [sp + local_ch]
+| 0x00000f78      1a68     ldr r2, [r3] // JNIEnv struct loaded
+| 0x00000f7a      a923     movs r3, 0xa9
+| 0x00000f7c      9b00     lsls r3, r3, 2
+| 0x00000f7e      d358     ldr r3, [r2, r3]
+ ....
+| 0x00000f8a      9847     blx r3
+</code></pre><p>We could see that one of the arguments passed to this print function is a <strong>JNIEnv</strong> struct pointer which contains info about many callback functions (For detailed explaination about JNI , take a look at this <a href="https://en.wikipedia.org/wiki/Java_Native_Interface">wiki</a>)</p>
+<p>This program uses such type of call 3 times, with the indexes 0x2A4, 0x290 and 0x29C.</p>
+<p>To retreive the names of corresponding functions, we can directly use <a href="https://github.com/sivaramaaa/CTF_repo/blob/master/NDH2k12/jniapi.h">jni.h</a> file or this <a href="https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/functions.html#wp23720">doc</a> which contains indexes in JNIEnv interface function table :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cc" data-lang="cc"><span style="color:#ae81ff">0x24A</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">169</span> <span style="color:#f92672">--&gt;</span> <span style="color:#66d9ef">const</span> jbyte<span style="color:#f92672">*</span> GetStringUTFChars(JNIEnv <span style="color:#f92672">*</span>env, jstring string, jboolean <span style="color:#f92672">*</span>isCopy);
+<span style="color:#ae81ff">0x290</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">164</span> <span style="color:#f92672">--&gt;</span> jsize GetStringLength(JNIEnv <span style="color:#f92672">*</span>env, jstring string);
+<span style="color:#ae81ff">0x29C</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">167</span> <span style="color:#f92672">--&gt;</span> jstring NewStringUTF(JNIEnv <span style="color:#f92672">*</span>env, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>bytes);
+</code></pre></div><p>As you can see it&rsquo;s a bit painful process, this is where our struct offset propagation comes into picture!</p>
+<pre><code>[0x00000f60]&gt; to ./jni.h (load the header file)
+[0x00000f60]&gt; ts 
+_JavaVM
+JNIInvokeInterface
+JNINativeInterface
+_JNIEnv
+</code></pre><p>You can either use ESIL emulation or debugging to find the address of JNIEnv struct.
+For sake of simplicity, we will use the address that is mapped to our SP (Stack Pointer), which is <code>0x00000000</code> as we see from the output below:</p>
+<pre><code>:&gt; px $w @ sp
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x00000000  7f45 4c46                                .ELF
+</code></pre><p>As we saw from the <code>pdf</code> output above, the stack pointer (SP) is being used as the base pointer with different offsets from local variables. This means that the base of our JNIEnv structure is whatever the value of SP at the time.</p>
+<pre><code>:&gt; px $w @ [sp]
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x464c457f  ffff ffff                                ....
+</code></pre><p>From what we can see here, <code>[SP]</code> here is <code>0x464c457f</code>. This actually represents the first few bits of an ELF binary&rsquo;s header. Now link both the struct and address using tl command and watch the magic happen :)</p>
+<pre><code>[0x00000f60]&gt; tl JNINativeInterface = 0x464c457f
+[0x00000f60]&gt; pdf
+...
+| 0x00000f7c      9b00   lsls r3, r3, 2
+| 0x00000f7e      d358   ldr r3, [r2, r3] ; JNINativeInterface.GetStringUTFChars
+| 0x00000f84      081c   adds r0, r1, 0
+| 0x00000f86      111c   adds r1, r2, 0
+| 0x00000f88      0022   movs r2, 0
+| 0x00000f8a      9847   blx r3
+...
+| 0x0000100e      d358   ldr r3, [r2, r3] ; JNINativeInterface.GetStringLength
+| 0x00001010      0399   ldr r1, [sp + local_ch]
+| 0x00001012      019a   ldr r2, [sp + local_4h]
+| 0x00001014      081c   adds r0, r1, 0
+| 0x00001016      111c   adds r1, r2, 0
+| 0x00001018      9847   blx r3
+....
+| 0x00001110      a723   movs r3, 0xa7
+| 0x00001112      9b00   lsls r3, r3, 2
+| 0x00001114      d258   ldr r2, [r2, r3] ; JNINativeInterface.NewStringUTF
+
+</code></pre><p>Finally moving on to the solution of this challenge, we can see that there are some string length checks happening, and at last two strings are loaded from .rodata section which is xored together to print the flag</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span> a <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0x52</span>,<span style="color:#ae81ff">0x1A</span>,<span style="color:#ae81ff">0x09</span>,<span style="color:#ae81ff">0x7B</span> <span style="color:#f92672">...</span>]
+<span style="color:#f92672">&gt;&gt;</span> b <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0x5C</span>,<span style="color:#ae81ff">0x20</span>,<span style="color:#ae81ff">0x72</span>,<span style="color:#ae81ff">0x10</span> <span style="color:#f92672">...</span>]
+<span style="color:#f92672">&gt;&gt;</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join( [ chr(a[i] <span style="color:#f92672">^</span> b[i]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(a)) ] )
+<span style="color:#e6db74">&#39;Radare2_is_great&#39;</span> (obviously <span style="color:#f92672">not</span> the flag, <span style="color:#66d9ef">try</span> it on ur own to get it :P)
+</code></pre></div>
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fcrackme_with_tl%2f - Android%20Crackme%20and%20Structure%20offset%20propagation by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

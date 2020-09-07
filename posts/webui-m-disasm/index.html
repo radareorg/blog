@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Disassembly functionnalities inside Web UI /m</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Disassembly functionnalities inside Web UI /m" />
+<meta property="og:description" content="by GautierGC
+In this blog post, we will discover the functionnalities of the disasm panel from the material Web UI and how are they implemented. This take place in the Material Web UI in place of the current implementation. If you want to read more details about the implementation and how it works, you can read this technical article on my blog.
+So, this new module about disassembly has the following functionnalities:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/webui-m-disasm/" />
+<meta property="article:published_time" content="2016-08-11T19:02:46+01:00" />
+<meta property="article:modified_time" content="2016-08-11T19:02:46+01:00" />
+
+
+<meta itemprop="name" content="Disassembly functionnalities inside Web UI /m">
+<meta itemprop="description" content="by GautierGC
+In this blog post, we will discover the functionnalities of the disasm panel from the material Web UI and how are they implemented. This take place in the Material Web UI in place of the current implementation. If you want to read more details about the implementation and how it works, you can read this technical article on my blog.
+So, this new module about disassembly has the following functionnalities:">
+<meta itemprop="datePublished" content="2016-08-11T19:02:46+01:00" />
+<meta itemprop="dateModified" content="2016-08-11T19:02:46+01:00" />
+<meta itemprop="wordCount" content="367">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Disassembly functionnalities inside Web UI /m"/>
+<meta name="twitter:description" content="by GautierGC
+In this blog post, we will discover the functionnalities of the disasm panel from the material Web UI and how are they implemented. This take place in the Material Web UI in place of the current implementation. If you want to read more details about the implementation and how it works, you can read this technical article on my blog.
+So, this new module about disassembly has the following functionnalities:"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Disassembly functionnalities inside Web UI /m</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 11, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>by <a href="https://twitter.com/GautierGC">GautierGC</a></p>
+<p>In this blog post, we will discover the functionnalities of the disasm panel from the material Web UI and how are they implemented. This take place in the Material Web UI in place of the current implementation. If you want to read more details about the implementation and how it works, you can read <a href="https://blog.gautiercolajanni.fr/gsoc/r2/2016/08/11/disassembly-rewriting-and-refactoring.html">this technical article</a> on my blog.</p>
+<p>So, this <em>new</em> module about disassembly has the following functionnalities:</p>
+<ul>
+<li>infinite scrolling</li>
+<li>contextual menu</li>
+<li>navigation bar (seek history)</li>
+</ul>
+<p>Some parts of this module were reused from the previous module I&rsquo;ve made: hexdump. Also, this module has a different logic about the representation of the data. Here we add some light processing to the HTML-ready content that r2 provide us. The hexdump was made around a chain to process and build the whole representation with it. They were advantages to it, here, the constraints aren&rsquo;t the same. I&rsquo;ve made some refactoring on this code to authorize the re-use of some parts.</p>
+<p>Before this implementation, scrolling was only possible inside the current displayed block, navigation was possible with two buttons. Now, this module handle an infinite scrolling to display all the content if it was all here. Everything isn&rsquo;t loaded with the page, there is some work done with flags/functions knowledge grabbed from analysis made with r2 and a layer to handle the communication with r2 and the dedicated web worker to let the main thread ready.</p>
+<p>As user, you can improve the knowledge of the currently displayed data. This UI require to know about flags and functions to show useful reflinks. So, don&rsquo;t hesitate to press <em>process analysis</em> in the panel top bar and chose whatever suit you:</p>
+<p><img src="/blog/images/webui_analysis.png" alt="Analysis dialog"></p>
+<p>Also, if the line allows you to process some operations, the UI will suggest you with the contextual menu to apply some commands on it (still in progress). You can currently try the following:</p>
+<p><img src="/blog/images/webui_contextmenu.png" alt="Contextual menu"></p>
+<p>In the same logic as the browser, there is also a feature to follow your jumps. The navigation bar, or seek history allows you to know where you were and going back and forth between the addresses.</p>
+<p><img src="/blog/images/webui_navbar.png" alt="Nav bar"></p>
+<p>These features should help to make the UI better. Don&rsquo;t hesistate to give us feedback about it!</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fwebui-m-disasm%2f - Disassembly%20functionnalities%20inside%20Web%20UI%20%2fm by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

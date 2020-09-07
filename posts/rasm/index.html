@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Using RAsm</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Using RAsm" />
+<meta property="og:description" content="RAsm Recently I have noticed that many people gets saturated by the amount of stuff r2 can do and most users end up not learning anything.
+So that&rsquo;s why I am going to start writing a series of blog posts showing one feature at a time, making it as simple as possible.
+What&rsquo;s rasm? The &lsquo;r&rsquo; in r_asm stands for radare, and it&rsquo;s one of the several libraries shipped with radare2." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/rasm/" />
+<meta property="article:published_time" content="2016-04-26T11:47:13+02:00" />
+<meta property="article:modified_time" content="2016-04-26T11:47:13+02:00" />
+
+
+<meta itemprop="name" content="Using RAsm">
+<meta itemprop="description" content="RAsm Recently I have noticed that many people gets saturated by the amount of stuff r2 can do and most users end up not learning anything.
+So that&rsquo;s why I am going to start writing a series of blog posts showing one feature at a time, making it as simple as possible.
+What&rsquo;s rasm? The &lsquo;r&rsquo; in r_asm stands for radare, and it&rsquo;s one of the several libraries shipped with radare2.">
+<meta itemprop="datePublished" content="2016-04-26T11:47:13+02:00" />
+<meta itemprop="dateModified" content="2016-04-26T11:47:13+02:00" />
+<meta itemprop="wordCount" content="1399">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Using RAsm"/>
+<meta name="twitter:description" content="RAsm Recently I have noticed that many people gets saturated by the amount of stuff r2 can do and most users end up not learning anything.
+So that&rsquo;s why I am going to start writing a series of blog posts showing one feature at a time, making it as simple as possible.
+What&rsquo;s rasm? The &lsquo;r&rsquo; in r_asm stands for radare, and it&rsquo;s one of the several libraries shipped with radare2."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Using RAsm</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 26, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="rasm">RAsm</h1>
+<p>Recently I have noticed that many people gets saturated by the amount of stuff r2 can do and most users end up not learning anything.</p>
+<p>So that&rsquo;s why I am going to start writing a series of blog posts showing one feature at a time, making it as simple as possible.</p>
+<h2 id="whats-rasm">What&rsquo;s rasm?</h2>
+<p>The &lsquo;r&rsquo; in <code>r_asm</code> stands for radare, and it&rsquo;s one of the several libraries shipped with radare2.</p>
+<p>As long as it&rsquo;s been designed with modularity in mind, you can use any of the r2 libraries by separate without having to ship or link with the entire framework.</p>
+<p>The <strong>RAsm</strong> API is described in the <a href="http://radare.org/vdoc/libr/Radare.RAsm.html">vapi docs</a> but you may find the <em>real</em> one in <a href="https://github.com/radare/radare2/blob/master/libr/include/r_asm.h">the .h file</a></p>
+<h2 id="pluggable">Pluggable</h2>
+<p>Thanks to the modular design, every library shipped in r2 can be extended with plugins.</p>
+<p>The plugins can be statically linked inside the library at compile time or loaded from separate shared libraries (dll, dylib, so) when placed in some directories or loaded with the r2 plugin API.</p>
+<p>We will not go that far for now, but we must learn that every program in r2 handles the <code>-L</code> flag in order to enumerate all the related plugins:</p>
+<ul>
+<li><strong>r2 -L</strong> : list <strong>IO</strong> plugins</li>
+<li><strong>rasm2 -L</strong> : list <strong>ASM/ANAL</strong> plugins</li>
+<li><strong>rabin2 -L</strong> : list <strong>RBIN</strong> plugins</li>
+<li><strong>rahash2 -L</strong> : list <strong>CRYPTO/HASH</strong> plugins</li>
+<li>&hellip;</li>
+</ul>
+<p>Here&rsquo;s the current output for <code>rasm2 -L</code>, which shows the following:</p>
+<ul>
+<li><strong>a</strong> : capable to assemble (ollyasm, custom, ..)</li>
+<li><strong>d</strong> : disassemble (using capstone, gnu, custom, ..)</li>
+<li><strong>A</strong> : analyze (associated r_anal plugin)</li>
+<li><strong>e</strong> : emulate (provides ESIL)</li>
+</ul>
+<pre><code>$ rasm2 -L
+_dAe  8 16       6502        LGPL3   6502/NES/C64/Tamagotchi/T-1000 CPU
+_dA_  8          8051        PD      8051 Intel CPU
+_dA_  16 32      arc         GPL3    Argonaut RISC Core
+a___  16 32 64   arm.as      LGPL3   as ARM Assembler (use ARM_AS environment)
+adAe  16 32 64   arm         BSD     Capstone ARM disassembler
+_dA_  16 32 64   arm.gnu     GPL3    Acorn RISC Machine CPU
+_d__  16 32      arm.winedbg LGPL2   WineDBG's ARM disassembler
+adAe  8 16       avr         GPL     AVR Atmel
+adAe  16 32 64   bf          LGPL3   Brainfuck
+_dA_  16         cr16        LGPL3   cr16 disassembly plugin
+_dA_  32         cris        GPL3    Axis Communications 32-bit embedded processor
+_dA_  16         csr         PD      Cambridge Silicon Radio (CSR)
+adA_  32 64      dalvik      LGPL3   AndroidVM Dalvik
+ad__  16         dcpu16      PD      Mojang's DCPU-16
+_dA_  32 64      ebc         LGPL3   EFI Bytecode
+adAe  16         gb          LGPL3   GameBoy(TM) (z80-like)
+_dAe  16         h8300       LGPL3   H8/300 disassembly plugin
+_d__  32         hppa        GPL3    HP PA-RISC
+_dAe             i4004       LGPL3   Intel 4004 microprocessor
+_dA_  8          i8080       BSD     Intel 8080 CPU
+adA_  32         java        Apache  Java bytecode
+_d__  32         lanai       GPL3    LANAI
+_d__  8          lh5801      LGPL3   SHARP LH5801 disassembler
+_d__  32         lm32        BSD     disassembly plugin for Lattice Micro 32 ISA
+_dA_  16 32      m68k        BSD     Motorola 68000
+_dA_  32         m68k.cs     BSD     Capstone M68K disassembler
+_dA_  32         malbolge    LGPL3   Malbolge Ternary VM
+_d__  16         mcs96       LGPL3   condrets car
+adAe  16 32 64   mips        BSD     Capstone MIPS disassembler
+adAe  32 64      mips.gnu    GPL3    MIPS CPU
+_dA_  16         msp430      LGPL3   msp430 disassembly plugin
+_dA_  32         nios2       GPL3    NIOS II Embedded Processor
+_dAe  8          pic18c      LGPL3   pic18c disassembler
+_dA_  32 64      ppc         BSD     Capstone PowerPC disassembler
+_dA_  32 64      ppc.gnu     GPL3    PowerPC
+ad__             rar         LGPL3   RAR VM
+_dA_  32 64      riscv       GPL     RISC-V
+_dA_  32         sh          GPL3    SuperH-4 CPU
+_dA_  8 16       snes        LGPL3   SuperNES CPU
+_dAe  32 64      sparc       BSD     Capstone SPARC disassembler
+_dA_  32 64      sparc.gnu   GPL3    Scalable Processor Architecture
+_d__  16         spc700      LGPL3   spc700, snes' sound-chip
+_d__  32         sysz        BSD     SystemZ CPU disassembler
+_dA_  32         tms320      LGPLv3  TMS320 DSP family
+_d__  32         tricore     GPL3    Siemens TriCore CPU
+_dAe  32         v810        LGPL3   V810 disassembly plugin
+_dA_  32         v850        LGPL3   v850 disassembly plugin
+_dAe  8 32       vax         GPL     VAX
+_dA_  32         ws          LGPL3   Whitespace esotheric VM
+a___  16 32 64   x86.as      LGPL3   Intel X86 GNU Assembler
+_dAe  16 32 64   x86         BSD     Capstone X86 disassembler
+a___  16 32 64   x86.nasm    LGPL3   X86 nasm assembler
+a___  16 32 64   x86.nz      LGPL3   x86 handmade assembler
+ad__  32         x86.olly    GPL2    OllyDBG X86 disassembler
+a___  32         x86.tab     LGPL3   x86 table lookup assembler
+_dAe  16 32 64   x86.udis    BSD     udis86 x86-16,32,64
+_dA_  32         xcore       BSD     Capstone XCore disassembler
+_dAe  32         xtensa      GPL3    XTensa CPU
+adA_  8          z80         NC-GPL2 Zilog Z80
+_d__  8          z80.cr      LGPL    Zilog Z80
+_d__  32         swf         LGPL3   SWF
+_d__  32         propeller   LGPL3   propeller disassembly plugin
+</code></pre><h2 id="what-can-rasm-do-for-me">What can RAsm do for me?</h2>
+<p>Using <code>rasm2</code> we can directly use that functionality and be able to assemble and disassemble code from the commandline.</p>
+<p>We can provide different options to it, which defaults to the current system ones:</p>
+<ul>
+<li><strong>-a</strong> : specify plugin arch name  (arm, x86, mips, &hellip;)</li>
+<li><strong>-b</strong> : specify bits (16, 32, 64) (<em>arm-16 is thumb</em>)</li>
+<li><strong>-o</strong> : offset where this instruction is</li>
+<li><strong>-s</strong> : change syntax for ATT, MASM, INTEL, ..</li>
+<li><strong>-e</strong> : swap endian (for bi-endian archs)</li>
+</ul>
+<p>By default <code>rasm2</code> will assemble the argument passed, but using the <strong>-d</strong> switch it will expect an hexpair and give back the disassembled instruction for the selected architecture.</p>
+<p>Rasm2 is not just an instruction assembler/disassembler. It can also handle source files like <code>nasm</code> or <code>gas</code> do. As well as disassemble raw files without parsing binary headers using the <strong>-f</strong> option.</p>
+<h2 id="commandline">Commandline</h2>
+<p>Let&rsquo;s see how this thing works:</p>
+<pre><code>$ rasm2 -a x86 -b 32 &quot;mov eax, 33&quot;
+b821000000
+$ rasm2 -a x86 -b 32 -d b821000000
+mov eax, 33
+</code></pre><p>In case the default assembler doesn&rsquo;t supports a specific instruction we can switch to another one:</p>
+<pre><code>$ rasm2 -L | grep x86 | grep ^a
+a___  16 32 64   x86.as      LGPL3   Intel X86 GNU Assembler
+a___  16 32 64   x86.nasm    LGPL3   X86 nasm assembler
+a___  16 32 64   x86.nz      LGPL3   x86 handmade assembler
+ad__  32         x86.olly    GPL2    OllyDBG X86 disassembler
+a___  32         x86.tab     LGPL3   x86 table lookup assembler
+</code></pre><p>like this:</p>
+<pre><code>$ rasm2 -a x86 -b32 'jbe 33'
+Cannot assemble 'jbe 33' at line 3
+
+$ rasm2 -a x86.nasm -b32 'jbe 33'
+0f861b000000
+</code></pre><h2 id="using-the-api">Using the API</h2>
+<p>As long as this functionality is implemented in a library we can just use the API from C, C++, or any of the languages supported by <a href="https://github.com/radare/radare2-bindings">radare2-bindings</a>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;r_asm.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+	RAsmOp op <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>};
+	RAsm <span style="color:#f92672">*</span>a <span style="color:#f92672">=</span> r_asm_new ();
+	r_asm_use (a, <span style="color:#e6db74">&#34;x86&#34;</span>);
+	r_asm_set_bits (a, <span style="color:#ae81ff">32</span>);
+	r_asm_set_pc (a, <span style="color:#ae81ff">0x80000</span>);
+	r_asm_disassemble (a, <span style="color:#f92672">&amp;</span>op, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x90</span><span style="color:#e6db74">&#34;</span>, <span style="color:#ae81ff">1</span>);
+	printf (<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, op.buf_asm);
+	r_asm_free (a);
+	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><p>The latest version of r2 supports a simplified API which can be used like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;r_asm.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+	RAsm <span style="color:#f92672">*</span>a <span style="color:#f92672">=</span> r_asm_new ();
+	r_asm_set_arch (a, <span style="color:#e6db74">&#34;x86&#34;</span>, <span style="color:#ae81ff">32</span>);
+	
+	<span style="color:#75715e">/* assemble */</span>
+	<span style="color:#66d9ef">int</span> i, buflen;
+	ut8 <span style="color:#f92672">*</span>buf <span style="color:#f92672">=</span> r_asm_from_string (a, <span style="color:#ae81ff">0x4000</span>, <span style="color:#e6db74">&#34;nop&#34;</span>, <span style="color:#f92672">&amp;</span>buflen);
+	<span style="color:#66d9ef">if</span> (buf) {
+		<span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> buflen; i<span style="color:#f92672">++</span>) {
+			printf (<span style="color:#e6db74">&#34;%02x&#34;</span>, buf[i]);
+		}
+		printf (<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+	}
+	
+	<span style="color:#75715e">/* disassemble */</span>
+	<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>code <span style="color:#f92672">=</span> r_asm_to_string (a, <span style="color:#ae81ff">0x4000</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x90\x90</span><span style="color:#e6db74">&#34;</span>, <span style="color:#ae81ff">2</span>);
+	<span style="color:#66d9ef">if</span> (code) {
+		printf (<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, code);
+		free (code);
+	}
+	r_asm_free (a);
+}
+</code></pre></div><h2 id="scripting">Scripting</h2>
+<p>The <a href="https://github.com/radare/radare2-bindings">radare2-bindings</a> repository provides several bindings for a long list of programming languages.</p>
+<p>Those bindings are automatically generated by <a href="https://github.com/radare/valabind">valabind</a>, which parses the VAPI api description files and generates the wrapper code for Python, NodeJS, Ruby, C#, &hellip;</p>
+<p>Check out the examples under the <code>t/</code> subdirectories to find out examples like this Python one:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> r2.r_asm <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ass</span>(a, arch, op):
+	<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;OPCODE: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>op
+	a<span style="color:#f92672">.</span>use (arch)
+	<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;ARCH: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>arch
+	code <span style="color:#f92672">=</span> a<span style="color:#f92672">.</span>massemble (op)
+	<span style="color:#66d9ef">if</span> code <span style="color:#f92672">is</span> None:
+		<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;HEX: Cannot assemble opcode&#34;</span>
+	<span style="color:#66d9ef">else</span>:
+		<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;HEX: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>code<span style="color:#f92672">.</span>buf_hex
+
+a <span style="color:#f92672">=</span> RAsm()
+ass (a, <span style="color:#e6db74">&#39;x86.olly&#39;</span>, <span style="color:#e6db74">&#39;mov eax, 33&#39;</span>)
+ass (a, <span style="color:#e6db74">&#39;java&#39;</span>, <span style="color:#e6db74">&#39;bipush 33&#39;</span>)
+</code></pre></div><h2 id="r2pipe">R2Pipe</h2>
+<p>R2Pipe provides a simple <code>command</code> -&gt; <code>result</code> interface to talk to <strong>radare2</strong>, this eases the integration of radare2 into several other programs, without depending on a local installation of r2 because r2pipe can speak to <code>http</code>, <code>pipes</code> and other channels.</p>
+<p>For this we must use the proper r2 commands:</p>
+<ul>
+<li><strong>pa</strong> assemble code inline</li>
+<li><strong>pad</strong> disassemble code inline</li>
+</ul>
+<pre><code>[0x00000000]&gt; pa nop
+90
+[0x00000000]&gt; pad 90
+nop
+</code></pre><p>We can also temporary change the arch/bits setup using the <code>@</code> operator like this (see <code>?@?</code> output for more help):</p>
+<pre><code>[0x00000000]&gt; pad 0d20a0e3 @a:arm:16
+movs r0, 0xd
+b 0x746
+</code></pre><p>And merge this stuff into something like this nodejs script:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#e6db74">&#39;use strict&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">r2pipe</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;r2pipe&#39;</span>)
+<span style="color:#a6e22e">r2pipe</span>.<span style="color:#a6e22e">connect</span>(<span style="color:#e6db74">&#39;http://cloud.radare.org/cmd&#39;</span>, (<span style="color:#a6e22e">r2p</span>) {
+	<span style="color:#a6e22e">r2p</span>.<span style="color:#a6e22e">cmd</span>(<span style="color:#e6db74">&#34;pad 90@a:x86:32&#34;</span>, (<span style="color:#a6e22e">res</span>)=&gt; {
+		<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;0x90 for x86:32 means:&#39;</span>, <span style="color:#a6e22e">res</span>);
+	})
+})
+
+</code></pre></div><h2 id="conclusions">Conclusions</h2>
+<p>Radare2 provides multiple functionalities splitted into separate libraries, which at the same time are extended by plugins (for r_asm using capstone, keystone, nasm, GNU binutils, ..).</p>
+<p>This functionality is accessible thru the r2 commandline, the rasm2 program and using the C API.</p>
+<p><a href="https://twitter.com/trufae">&ndash;pancake</a></p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2frasm%2f - Using%20RAsm by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

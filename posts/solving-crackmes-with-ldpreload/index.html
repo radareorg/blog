@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Solving crackmes with LDPRELOAD</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Solving crackmes with LDPRELOAD" />
+<meta property="og:description" content="This is a translation of this article.
+One of the most common technics used in UNIX for analyzing and modifying a program consists in preloading a library to make the dynamic linker priorize the functions in there before the ones coming from external libraries.
+In fact, in iOS, the whole MobileSubstrate thing and the Flex app are based on this concept to extend and modify the functionalities of the applications in a very simple way." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/solving-crackmes-with-ldpreload/" />
+<meta property="article:published_time" content="2014-09-16T15:40:28+02:00" />
+<meta property="article:modified_time" content="2014-09-16T15:40:28+02:00" />
+
+
+<meta itemprop="name" content="Solving crackmes with LDPRELOAD">
+<meta itemprop="description" content="This is a translation of this article.
+One of the most common technics used in UNIX for analyzing and modifying a program consists in preloading a library to make the dynamic linker priorize the functions in there before the ones coming from external libraries.
+In fact, in iOS, the whole MobileSubstrate thing and the Flex app are based on this concept to extend and modify the functionalities of the applications in a very simple way.">
+<meta itemprop="datePublished" content="2014-09-16T15:40:28+02:00" />
+<meta itemprop="dateModified" content="2014-09-16T15:40:28+02:00" />
+<meta itemprop="wordCount" content="988">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Solving crackmes with LDPRELOAD"/>
+<meta name="twitter:description" content="This is a translation of this article.
+One of the most common technics used in UNIX for analyzing and modifying a program consists in preloading a library to make the dynamic linker priorize the functions in there before the ones coming from external libraries.
+In fact, in iOS, the whole MobileSubstrate thing and the Flex app are based on this concept to extend and modify the functionalities of the applications in a very simple way."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Solving crackmes with LDPRELOAD</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        September 16, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>This is a translation of <a href="http://www.securitybydefault.com/2014/09/solucionando-crackmes-precargando.html">this</a> article.</p>
+<p>One of the most common technics used in UNIX for analyzing and modifying a program consists in preloading a library to make the dynamic linker priorize the functions in there before the ones coming from external libraries.</p>
+<p>In fact, in iOS, the whole <a href="http://iphonedevwiki.net/index.php/MobileSubstrate">MobileSubstrate</a> thing and the <a href="https://www.adobe.com/products/flex.html">Flex app</a> are based on this concept to extend and modify the functionalities of the applications in a very simple way.</p>
+<p>The procedure requires defining an environment variable (<code>LD_PRELOAD</code> or <code>DYLD_INSERT_LIBRARIES</code> in iOS/OSX). It is then parsed by the <a href="https://en.wikipedia.org/wiki/Dynamic_linker">dynamic linker</a> (ld.so or dyld) which will load the library allowing us to:</p>
+<ul>
+<li>inspect function parameters and contents</li>
+<li>change the return value of a function</li>
+<li>extend its functionalities</li>
+<li>replace the implementation</li>
+<li>dump backtraces</li>
+<li>&hellip;</li>
+</ul>
+<p>To show up this theory I wrote a small crackme:</p>
+<pre><code> I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDxzdHJpbmcuaD4KCgppbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpIHsKCWNoYXIgKnBhc3MgPSAoY2hhciAqKWFyZ3ZbMF07CglpZiAoYXJnYzwyKSB7CgkJcHJpbnRmICgiR2ltbWUgYW4gYXJnXG4iKTsKCQlyZXR1cm4gMTsKCX0KCWlmICghc3RyY21wICgiYSIsICJiIikpIHsKCQlwcmludGYgKCJBcmUgeW91IHRyaWNraW5nIG1lP1xuIik7CgkJcmV0dXJuIDE7Cgl9CglpZiAoIXN0cmNtcCAoYXJndlsxXSwgcGFzcykpIHsKCQlwcmludGYgKCJZb3Ugd2luIVxuIik7CgkJcmV0dXJuIDA7Cgl9CglwcmludGYgKCJXcm9uZ1xuIik7CglyZXR1cm4gMTsKfQo=
+</code></pre>
+<p>The disasm of that crackme in OSX looks like this:</p>
+<p><img src="http://radare.org/img/post/dis-text.png" alt=""></p>
+<p>Injecting libraries is only possible on non-static, non-suided executables. This can be checked with <code>ls</code> and <code>rabin2</code>:</p>
+<pre><code>$ isSuid() { ls -l $1 |awk '{print $1}' | grep -q s &amp;&amp; echo YES || echo NO; }
+$ isStatic() { rabin2 -I $1 | grep ^static | grep -q true &amp;&amp; echo YES || echo NO; }
+
+$ isSuid ./a.out
+NO
+
+$ isStatic ./a.out
+NO
+</code></pre>
+<p>We&rsquo;re lucky! This crackme that executable is fine to continue our explanations ;)</p>
+<p>At this point we must know which symbols and libraries do the program import or use. For that we will use <code>rabin2</code>, a program that comes with <code>radare2</code> and will allow us to inspect and extract information from binaries, mostly executable programs and libraries.</p>
+<pre><code>$ rabin2 -qi a.out
+printf
+strcmp
+dyld_stub_binder
+
+$ rabin2 -ql a.out
+/usr/lib/libSystem.B.dylib
+</code></pre>
+<p>Fine, looks like the executable is using <code>printf</code> and <code>strcmp</code>. We can asume that the program is using strcmp to verify the password provided by the user. So we will write a small library that will override the return value of it whatever which parameters it takes.</p>
+<pre><code>$ cat mylib.c
+int strcmp(char *a, char *b) { return 0; }
+$ gcc -fPIC -shared mylib.c -o mylib.dylib
+
+$ rarun2 program=./a.out preload=mylib.dylib arg1=something
+Are you tricking me?
+</code></pre>
+<p>If we change the return value, the crackme will detect it, because at first is doing an always-false conditional that will spot the hooker.</p>
+<p>So, we need to create a condition or filter to make it return 0 only when called from the password check &lsquo;call&rsquo;.</p>
+<p>In this example we decided to reimplement <code>strcmp</code> to avoid making the example more complex and avoid explaining/depending on lazy binding and rtld-next features.</p>
+<p>I wrote this (arch/compiler-specific) macro to retrieve the address of the caller.</p>
+<pre><code>#define GETCALLER(x,y)\
+	void *x = (void*)*(&amp;x+2+y);
+
+int strcmp (char *a, char *b) {
+	GETCALLER(caller, 2+1); // 2 args + 1 import redirect
+	if (caller == 0x100000ee7) {
+		write (1, &quot;INT\n&quot;, 4);
+		return 0;
+	}
+	int al = strlen (a);
+	if (al != strlen (b))
+    	return 1;
+	return memcmp (a, b, al);
+}
+</code></pre><p>The magic number 0x100000ee7 is the address of the next instruction after the <code>call strcmp</code> of the caller that we want to intercept, we takes this address because is the one stored in the stack.</p>
+<p><img src="http://radare.org/img/post/strcmp.png" alt=""></p>
+<p>We compile the library and execute the crackme with rarun2 to make him define the environment and inject the library in the program via LD_PRELOAD method or DYLD_LIBRARY_INSERT depending if running on Linux/BSD or OSX.</p>
+<pre><code>$ gcc -shared -fPIC mylib.c -o mylib.dylib
+$ rarun2 program=./a.out preload=mylib.dylib arg1=something
+You Win!
+</code></pre>
+<p>It&rsquo;s important to say that preloading a library allow us to introduce hooks on the calls to external libraries. This is.. we can&rsquo;t hook internal program calls.. or we do?</p>
+<p>In the case of having the possibility to modify the program we can patch the calls to the function we want to hook to an external simbol in the PLT, and then let our LD_PRELOAD implementation decide which caller is accessing the hook and perform a redirect to the original destination.</p>
+<p>This way we can hook internal or external function calls without having to reallocate the executable program.</p>
+<p>Let&rsquo;s make an example to make it clear:</p>
+<pre><code>$ cat test.c
+int test(char *a) {
+    printf (&quot;Testing arguments.. &quot;);
+    if (!strcmp (a, &quot;foo&quot;)) {
+        printf (&quot;LE WIN!\n&quot;);
+        return 0;
+    }
+    printf (&quot;FAILE!\n&quot;);
+    return 1;
+}
+int main(int argc, char **argv) {
+    return test (argv[0]);
+}
+</code></pre>
+<p>We build and disassemble the program</p>
+<pre><code>$ gcc test.c
+$ r2 -Aqc 'pD $SS @ $S' a.out
+</code></pre>
+<p><img src="http://radare.org/img/post/dis-text2.png" alt=""></p>
+<p>As we can see, the <code>sym._text</code> is defined at <code>0x100000e90</code>. If we want to reimplement that function with an external one we will need to find a target import and write our call proxy in there, deciding which action take depending on the address of the caller. Import symbols are placed in the process memory and are overwriten by the dynamic linker to set the address of the mapped address of the library in memory.</p>
+<pre><code>$ rabin2 -i a.out
+[Imports]
+ordinal=000 plt=0x100000f38 bind=NONE type=FUNC name=printf
+ordinal=001 plt=0x100000f3e bind=NONE type=FUNC name=strcmp
+ordinal=002 plt=0x000000000 bind=NONE type=FUNC name=dyld_stub_binder
+
+3 imports
+
+$ rabin2 -s a.out | grep imp.
+vaddr=0x100000f38 paddr=0x00000f38 ord=003 fwd=NONE sz=0 bind=LOCAL type=FUNC name=imp.printf
+vaddr=0x100000f3e paddr=0x00000f3e ord=004 fwd=NONE sz=0 bind=LOCAL type=FUNC name=imp.strcmp
+</code></pre>
+<p>Once we get the address of the imports we can proceed to patch the program:</p>
+<pre><code>$ r2 -qc 'wa jmp 0x100000f38 @ 0x100000e90' -w a.out
+</code></pre>
+<p>If we disassemble <code>sym._test</code> now, we can observe a call to <code>sym.imp.printf</code>:</p>
+<p><img src="http://radare.org/img/post/dis-pd.png" alt="patched code"></p>
+<p>If we run the program now we will be able to see the expected password, because we are displaying the argument passed to <code>strcmp</code></p>
+<pre><code>$ ./a.out
+./a.out
+</code></pre>
+<p>And then we run the original crackme with the correct password to verify:</p>
+<pre><code>$ ./a.out.orig ./a.out.orig
+LE WIN!
+</code></pre>
+<p>For this example we didnt felt the need to investigate much further, but this PoC clearly shows how to use r2 to inject <em>LDPRELOADed</em> libraries and how to patch executables. And mixing this with a carefully written library we can trace internal api calls or reimplement them on the outside.</p>
+<p>&ndash;pancake</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fsolving-crackmes-with-ldpreload%2f - Solving%20crackmes%20with%20LDPRELOAD by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

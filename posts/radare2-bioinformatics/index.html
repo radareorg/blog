@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Radare2 and bioinformatics: a good match?</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Radare2 and bioinformatics: a good match?" />
+<meta property="og:description" content="Intro Ahead of this years&rsquo; radarecon, pancake nudged me into discussion we both have about how software reverse engineering and bioinformatics compare and might complement each other, if at all. Inspired by Bunnie Huang&rsquo;s writeups on (computational) biology as a living example of a cross-domain polymath, I&rsquo;ll attempt to write down some thoughts and pointers on how radare could be used (or not) in bioinformatics and hopefully manage expectations on what&rsquo;s possible today." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/radare2-bioinformatics/" />
+<meta property="article:published_time" content="2018-08-31T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-08-31T00:00:00+00:00" />
+
+
+<meta itemprop="name" content="Radare2 and bioinformatics: a good match?">
+<meta itemprop="description" content="Intro Ahead of this years&rsquo; radarecon, pancake nudged me into discussion we both have about how software reverse engineering and bioinformatics compare and might complement each other, if at all. Inspired by Bunnie Huang&rsquo;s writeups on (computational) biology as a living example of a cross-domain polymath, I&rsquo;ll attempt to write down some thoughts and pointers on how radare could be used (or not) in bioinformatics and hopefully manage expectations on what&rsquo;s possible today.">
+<meta itemprop="datePublished" content="2018-08-31T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2018-08-31T00:00:00+00:00" />
+<meta itemprop="wordCount" content="832">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Radare2 and bioinformatics: a good match?"/>
+<meta name="twitter:description" content="Intro Ahead of this years&rsquo; radarecon, pancake nudged me into discussion we both have about how software reverse engineering and bioinformatics compare and might complement each other, if at all. Inspired by Bunnie Huang&rsquo;s writeups on (computational) biology as a living example of a cross-domain polymath, I&rsquo;ll attempt to write down some thoughts and pointers on how radare could be used (or not) in bioinformatics and hopefully manage expectations on what&rsquo;s possible today."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Radare2 and bioinformatics: a good match?</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 31, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h2 id="intro">Intro</h2>
+<p>Ahead of this <a href="https://rada.re/con/2018/">years&rsquo; radarecon</a>, pancake nudged me into discussion we both have about how <a href="https://www.reddit.com/r/reverseengineering">software reverse engineering</a> and bioinformatics compare and might complement each other, if at all. Inspired by <a href="https://www.bunniestudios.com/blog/?cat=16">Bunnie Huang&rsquo;s writeups</a> on (computational) biology as a living example of a cross-domain polymath, I&rsquo;ll attempt to write down some thoughts and <strong>pointers on how radare could be used (or not) in bioinformatics</strong> and hopefully manage expectations on what&rsquo;s possible today.</p>
+<p>For starters, back in 2015, the simple <a href="https://www.illumina.com/informatics/sequencing-data-analysis/sequence-file-formats.html">Illumina BCL file format</a> got included in <a href="https://github.com/radare/radare2-extras">radare-extras</a>. As I was providing some specs and explaning <a href="https://en.wikipedia.org/wiki/DNA_sequencing">how DNA sequencing worked</a> in general, <a href="https://github.com/radare/radare2-extras/blob/master/bcl/core_bcl.c">pancake quickly put together a radare plugin</a> for this fairly straightforward file format.</p>
+<p><img src="/blog/images/bcl_format_tldr_csr4.jpg" alt="BCL format"></p>
+<p>Then fast forward into 2018, <a href="https://github.com/radare/radare2-extras/issues/165">radare seems to want more</a>. Here comes the crux of the matter:</p>
+<blockquote>
+<p><strong>Since DNA and ASM are just code running on different architectures, we can reuse the same radare2 reversing workflow right? RIGHT?</strong></p>
+</blockquote>
+<p>Are they?</p>
+<p>Before jumping into sleepless nights of unstoppable implementation, please take the time to read two fun papers touching both domains of reverse engineering and biology. They <strong>reveal how different (or similar) electronics manufacturing and biology can be</strong>.</p>
+<p>As stated in <a href="https://www.cell.com/cancer-cell/abstract/S1535-6108(02)00133-2?code=cell-site">biologists trying to figure out a radio</a> paper:</p>
+<blockquote>
+<p>&ldquo;(&hellip;) the commonality of the language allows engineers to identify
+familiar patterns or modules (a trigger, an amplifier, etc.) in a
+diagram of an unfamiliar device&rdquo;</p>
+</blockquote>
+<p>Food for thought: <strong>how &ldquo;unfamiliar&rdquo; of a &ldquo;device&rdquo; is biology itself</strong> versus human-<strong>manufactured</strong> consumer wares?</p>
+<p>In another, more recent, neuroscinece paper, <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005268">&ldquo;Could a Neuroscientist Understand a Microprocessor?&quot;</a>, some insights come up:</p>
+<blockquote>
+<p>Much has been written about the differences between computation in silico and computation in vivo (&hellip;) the stochasticity, redundancy, and robustness present in biological systems seems dramatically different from that of a microprocessor. But there are many parallels we can draw between the two types of systems.</p>
+</blockquote>
+<p>Bottom line is, they are definitely different yet similar in <strong>some</strong> instances. Without getting overwhelmed by the huge, sometimes messy, amount of domain-specific knowledge to digest, <strong>how can we score &ldquo;quick wins&rdquo; for radare2</strong> if an implementation under radare-extras starts to happen?</p>
+<p>Observing bioinformatics <a href="https://rse.ac.uk/">from the RSE perspective</a>, I see great contributions that could happen in three areas:</p>
+<ol>
+<li>EBA: Exploratory Bioinformatics Analysis.</li>
+<li>Scientific algorithm optimization and security.</li>
+<li>Outreach.</li>
+</ol>
+<h2 id="radare2-tldr-for-bioinformaticians">Radare2 TL;DR for bioinformaticians</h2>
+<p>Here&rsquo;s some explanation on <a href="https://radare.gitbooks.io/radare2book/content/">how radare works from a user perspective</a>. If you barely recall what assembly was from school, <a href="https://twitter.com/azeria_labs">I&rsquo;ll leave you in good hands</a> to catch up with <a href="https://azeria-labs.com/writing-arm-assembly-part-1/">ARM assembly here</a></p>
+<p>Also, some relatively recent UI eyecandy from <a href="https://github.com/radareorg/cutter">Cutter</a>:</p>
+<p><img src="https://raw.githubusercontent.com/radareorg/cutter/master/docs/screenshot.png" alt="Cutter radare2"></p>
+<p>Often touted as &ldquo;steep learning curve&rdquo; framework due to its commands, radare2 has been misunderstood for years, since in reality, keybindings allow for distraction-free <strong>fast iteration</strong> during binary analysis.</p>
+<h2 id="bioinfomatics-tldr-for-radare2-developers">Bioinfomatics TL;DR for radare2 developers</h2>
+<p>If you are a r2 developer, those are the formats radare would need to understand and implement to be minimally interesting for our biologist neighbors (optional ones, inside parenthesis):</p>
+<blockquote>
+<p><a href="https://samtools.github.io/hts-specs/SAMv1.pdf">SAM and BAM</a>, (<a href="https://bioinformatics-workbook.readthedocs.io/en/latest/introduction/fileFormats/">FASTA, FASTQ, VCF</a>, <a href="http://www.internationalgenome.org/faq/what-are-cram-files">CRAM</a>, <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty608/5051198">Crumble</a>)</p>
+</blockquote>
+<p>Now, one could go <strong>the hardcore pancake/Feynman <a href="https://github.com/brentp">(brentp?)</a> way</strong> and implement file parsers from scratch <strong>or</strong> use some third party library such as <a href="http://www.htslib.org/">htslib</a>.</p>
+<p>After basic read/write functionality is in place, I think that a potential first win would be to have the <a href="https://en.wikipedia.org/wiki/Midnight_Commander">&ldquo;Midnight Commander&rdquo;</a>-equivalent of radare4bio for curious and impatient bioinformaticians.</p>
+<p>There&rsquo;s great educational potential if this is implemented right since <strong>radare allows for fast VIM-like iteration and speed during complex analysis</strong>.</p>
+<p>For instance, being able to <strong>examine individual reads with VIM shortcuts</strong>, flip/cycle <a href="https://wiki.bits.vib.be/index.php/CIGAR">CIGAR encodings</a>, like with the radare2 bit editor:</p>
+<p><img src="/blog/images/r2_bit_editor.png" alt="radare2 bit editor"></p>
+<p>Group reads by some arbitrary criteria, subsample, filter them, write out, etc&hellip;</p>
+<p><strong>That is, FAST exploratory bioinformatics analysis (EBA) without the overhead of writing discrete commands or putting together <a href="https://www.commonwl.org/">workflows</a>, <a href="https://github.com/bcbio/bcbio-nextgen">pipelines</a> and/or lengthy documentation</strong></p>
+<h2 id="outro">Outro</h2>
+<ol>
+<li>
+<p>How would radare <strong>really help</strong> with &ldquo;biology reverse engineering&rdquo;?</p>
+</li>
+<li>
+<p>How can radare absorb those &ldquo;extras&rdquo; <a href="https://bioconda.github.io/">without introducing a vast dependency tree of bioinfo software</a>? Perhaps a <strong>clean-room implementation</strong> is still of interest nowadays?</p>
+</li>
+<li>
+<p>Would all that coding effort be worth it?</p>
+</li>
+</ol>
+<p>Those are open questions at the time of writing this, but here are some opportunities:</p>
+<p>When bioinformaticists analyze data (and are not waiting for big computations to complete), <strong>it is hugely helpful to iterate fast on a particular question</strong>. Keeping focus on the task at hand while answering questions fast and accurately is immensely valuable.</p>
+<p>Radare2 is well positioned in this regard, allowing for fast adhoc analysis for the reasons stated before (VIM-like blazing speed shortcuts, focus on speed).</p>
+<p>As <a href="http://mussol.org/2016/06/11/changing-career-paths/">a former colleague pointed out</a>, Bioformatics (<a href="https://www.nature.com/news/2010/101013/full/467775a.html">and scientific software in general</a>) is in dire <strong>need for optimization and good software engineering at several levels</strong>: Storage, data processing, security (<a href="https://dnasec.cs.washington.edu/dnasec.pdf">read this!</a>), good software design patterns, etc&hellip;</p>
+<p><strong>If all else fails, the outreach value of <a href="https://www.nature.com/articles/d41586-018-05769-8">getting reverse engineers poking into computational biology</a> is in itself, a huge win, IMHO.</strong></p>
+<p>If you are still reading this, I&rsquo;m honored :)</p>
+<p>Please ping me physically <a href="https://rada.re/con/2018/">during the radare2 2018 con</a> or via <a href="http://twitter.com/braincode">twitter <code>@braincode</code></a> if you want to have a chat about this and other random braindumplings.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fradare2-bioinformatics%2f - Radare2%20and%20bioinformatics%3a%20a%20good%20match%3f by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/background_tasks/">Background Tasks in radare2<aside class="dates">Jul 3 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

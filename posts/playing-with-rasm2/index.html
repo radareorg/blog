@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Playing with rasm2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Playing with rasm2" />
+<meta property="og:description" content="Radare2&rsquo;s assembler/disassembler is rasm2, and albeit being used internally, it is also a standalone binary that you can use.
+It can of course disassemble
+$ rasm2 -d 89d85d90 mov eax, ebx;pop ebp;nop but also assemble
+$ rasm2 &#39;mov eax, ebx;pop ebp;nop&#39; 89d85d90 Not only x86, but also mips
+$ rasm2 -a mips &#39;addiu a1, a2, 8&#39; 0800c524 $ rasm2 -a mips -d 0800c524 addiu a1, a2, 8 and many more. You can have the full list with rasm2 -L." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/playing-with-rasm2/" />
+<meta property="article:published_time" content="2014-05-02T12:43:49+02:00" />
+<meta property="article:modified_time" content="2014-05-02T12:43:49+02:00" />
+
+
+<meta itemprop="name" content="Playing with rasm2">
+<meta itemprop="description" content="Radare2&rsquo;s assembler/disassembler is rasm2, and albeit being used internally, it is also a standalone binary that you can use.
+It can of course disassemble
+$ rasm2 -d 89d85d90 mov eax, ebx;pop ebp;nop but also assemble
+$ rasm2 &#39;mov eax, ebx;pop ebp;nop&#39; 89d85d90 Not only x86, but also mips
+$ rasm2 -a mips &#39;addiu a1, a2, 8&#39; 0800c524 $ rasm2 -a mips -d 0800c524 addiu a1, a2, 8 and many more. You can have the full list with rasm2 -L.">
+<meta itemprop="datePublished" content="2014-05-02T12:43:49+02:00" />
+<meta itemprop="dateModified" content="2014-05-02T12:43:49+02:00" />
+<meta itemprop="wordCount" content="122">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Playing with rasm2"/>
+<meta name="twitter:description" content="Radare2&rsquo;s assembler/disassembler is rasm2, and albeit being used internally, it is also a standalone binary that you can use.
+It can of course disassemble
+$ rasm2 -d 89d85d90 mov eax, ebx;pop ebp;nop but also assemble
+$ rasm2 &#39;mov eax, ebx;pop ebp;nop&#39; 89d85d90 Not only x86, but also mips
+$ rasm2 -a mips &#39;addiu a1, a2, 8&#39; 0800c524 $ rasm2 -a mips -d 0800c524 addiu a1, a2, 8 and many more. You can have the full list with rasm2 -L."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Playing with rasm2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 2, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Radare2&rsquo;s assembler/disassembler is <code>rasm2</code>, and albeit being used internally, it is also a standalone binary that you can use.</p>
+<p>It can of course disassemble</p>
+<pre><code>$ rasm2 -d 89d85d90
+mov eax, ebx;pop ebp;nop
+</code></pre><p>but also assemble</p>
+<pre><code>$ rasm2 'mov eax, ebx;pop ebp;nop'
+89d85d90
+</code></pre><p>Not only x86, but also mips</p>
+<pre><code>$ rasm2 -a mips  'addiu a1, a2, 8'
+0800c524
+$ rasm2 -a mips -d 0800c524
+addiu a1, a2, 8
+</code></pre><p>and many more. You can have the full list with <code>rasm2 -L</code>.</p>
+<p>It can also describes all opcodes, in case you don&rsquo;t know them all.</p>
+<pre><code>$ rasm2 -w sqrtpd
+compute square roots of packed double-fp values
+</code></pre><p>There is a <a href="http://rada.re/rsoc">RSoC</a> task about adding a new architecture, and we are always looking for new related <a href="https://github.com/radare/radare2-regressions/tree/master/t.asm">unit-tests</a>.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fplaying-with-rasm2%2f - Playing%20with%20rasm2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

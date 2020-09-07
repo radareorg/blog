@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Exploring the database</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Exploring the database" />
+<meta property="og:description" content="We&rsquo;re currently trying to integrate sdb into radare2. This will greatly reduce code complexity, improve portability, and open the way to collaborative reversing.
+What is sdb ?  sdb is a simple string key/value database based on djb&rsquo;s cdb disk storage and supports JSON and arrays introspection.
+  There&rsquo;s also the sdbtypes: a vala library that implements several data structures on top of an sdb or a memcache instance." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/exploring-the-database/" />
+<meta property="article:published_time" content="2014-05-01T17:48:58+02:00" />
+<meta property="article:modified_time" content="2014-05-01T17:48:58+02:00" />
+
+
+<meta itemprop="name" content="Exploring the database">
+<meta itemprop="description" content="We&rsquo;re currently trying to integrate sdb into radare2. This will greatly reduce code complexity, improve portability, and open the way to collaborative reversing.
+What is sdb ?  sdb is a simple string key/value database based on djb&rsquo;s cdb disk storage and supports JSON and arrays introspection.
+  There&rsquo;s also the sdbtypes: a vala library that implements several data structures on top of an sdb or a memcache instance.">
+<meta itemprop="datePublished" content="2014-05-01T17:48:58+02:00" />
+<meta itemprop="dateModified" content="2014-05-01T17:48:58+02:00" />
+<meta itemprop="wordCount" content="304">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Exploring the database"/>
+<meta name="twitter:description" content="We&rsquo;re currently trying to integrate sdb into radare2. This will greatly reduce code complexity, improve portability, and open the way to collaborative reversing.
+What is sdb ?  sdb is a simple string key/value database based on djb&rsquo;s cdb disk storage and supports JSON and arrays introspection.
+  There&rsquo;s also the sdbtypes: a vala library that implements several data structures on top of an sdb or a memcache instance."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Exploring the database</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 1, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>We&rsquo;re currently trying to integrate <a href="https://github.com/radare/sdb">sdb</a> into radare2. This will greatly reduce code complexity, improve portability, and open the way to collaborative reversing.</p>
+<h2 id="what-is-sdb-">What is sdb ?</h2>
+<blockquote>
+<p>sdb is a simple string key/value database based on djb&rsquo;s cdb disk storage and supports JSON and arrays introspection.</p>
+</blockquote>
+<blockquote>
+<p>There&rsquo;s also the sdbtypes: a vala library that implements several data structures on top of an sdb or a memcache instance.</p>
+</blockquote>
+<p>It has:</p>
+<ul>
+<li>namespaces (multiple sdb paths)</li>
+<li>atomic database sync (never corrupted)</li>
+<li>bindings for vala, luvit, newlisp and nodejs</li>
+<li>commandline frontend for sdb databases</li>
+<li>memcache client and server with sdb backend</li>
+<li>arrays support (syntax sugar)</li>
+<li>json parser/getter</li>
+</ul>
+<h3 id="usage-example">Usage example</h3>
+<p>Let&rsquo;s create a database!</p>
+<pre><code>$ sdb d hello=world
+$ sdb d hello
+world
+</code></pre><p>Using arrays:</p>
+<pre><code>$ sdb - '[]list=1,2' '[0]list' '[0]list=foo' '[]list' '[+1]list=bar'
+1
+foo
+2
+foo
+fuck
+2
+</code></pre><p>Let&rsquo;s play with json:</p>
+<pre><code>$ sdb d g='{&quot;foo&quot;:1,&quot;bar&quot;:{&quot;cow&quot;:3}}'
+$ sdb d g?bar.cow
+3
+$ sdb - user='{&quot;id&quot;:123}' user?id=99 user?id
+99
+</code></pre><p>Using the command line without any disk database:</p>
+<pre><code>$ sdb - foo=bar foo a=3 +a -a
+bar
+4
+3
+
+$ sdb -
+foo=bar
+foo
+bar
+a=3
++a
+4
+-a
+3
+</code></pre><p>Remove the database</p>
+<pre><code>$ rm -f d
+
+</code></pre><h2 id="so-what-">So what ?</h2>
+<p>So, you can now do this inside your radare2 sessions!</p>
+<p>Let&rsquo;s take a simple binary, and check what is already <em>sdbized</em>.</p>
+<pre><code>$ cat test.c
+int main(){
+	puts(&quot;Hello world\n&quot;);
+}
+$ gcc test.c -o test
+</code></pre><pre><code>$ r2 -A ./test
+[0x08048320]&gt; k **
+bin
+anal
+syscall
+debug
+</code></pre><pre><code>[0x08048320]&gt; k bin/**
+fd.6
+[0x08048320]&gt; k bin/fd.6/*
+archs=0:0:x86:32
+</code></pre><p>The file corresponding to the sixth file descriptor is a x86_32 binary.</p>
+<pre><code>[0x08048320]&gt; k anal/meta/*
+meta.s.0x80484d0=12,SGVsbG8gd29ybGQ=
+[...]
+[0x08048320]&gt; ?b64- SGVsbG8gd29ybGQ=
+Hello world
+</code></pre><p>Strings are stored encoded in <a href="https://tools.ietf.org/html/rfc4648">base64</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Feel free to explore, modify, play, save, replay and trash the database.</p>
+<p>Also, if you want to help to integrate sdb more tightly, go check the <a href="https://github.com/radare/radare2/issues?labels=sdbtization&amp;page=1&amp;state=open">related issues</a>.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fexploring-the-database%2f - Exploring%20the%20database by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

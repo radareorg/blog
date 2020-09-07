@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC&#39;18 Final: Type inference</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC&#39;18 Final: Type inference" />
+<meta property="og:description" content="GSoC has almost been finished. I would like to summarize my work done so far this summer.
+The goal of this task was to integrate types handling into the radare2 analysis loop, including automatic inference and suggestions.
+Example  C - source code  #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt; void main() { int length, length2; char *final; char *s1 = &#34;Hello&#34;; char *s2 = &#34; r2-folks&#34;; length = strlen (s1); length2 = strlen (s2); }  Before my work  / (fcn) sym." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/type_inference/" />
+<meta property="article:published_time" content="2018-08-12T01:45:16+02:00" />
+<meta property="article:modified_time" content="2018-08-12T01:45:16+02:00" />
+
+
+<meta itemprop="name" content="GSoC&#39;18 Final: Type inference">
+<meta itemprop="description" content="GSoC has almost been finished. I would like to summarize my work done so far this summer.
+The goal of this task was to integrate types handling into the radare2 analysis loop, including automatic inference and suggestions.
+Example  C - source code  #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt; void main() { int length, length2; char *final; char *s1 = &#34;Hello&#34;; char *s2 = &#34; r2-folks&#34;; length = strlen (s1); length2 = strlen (s2); }  Before my work  / (fcn) sym.">
+<meta itemprop="datePublished" content="2018-08-12T01:45:16+02:00" />
+<meta itemprop="dateModified" content="2018-08-12T01:45:16+02:00" />
+<meta itemprop="wordCount" content="873">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC&#39;18 Final: Type inference"/>
+<meta name="twitter:description" content="GSoC has almost been finished. I would like to summarize my work done so far this summer.
+The goal of this task was to integrate types handling into the radare2 analysis loop, including automatic inference and suggestions.
+Example  C - source code  #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt; void main() { int length, length2; char *final; char *s1 = &#34;Hello&#34;; char *s2 = &#34; r2-folks&#34;; length = strlen (s1); length2 = strlen (s2); }  Before my work  / (fcn) sym."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC&#39;18 Final: Type inference</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 12, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>GSoC has almost been finished. I would like to summarize <a href="https://github.com/radare/radare2/commits?author=sivaramaaa">my work</a> done so far this summer.</p>
+<p>The goal of this task was to integrate types handling into the radare2 analysis loop, including automatic inference and suggestions.</p>
+<h3 id="example">Example</h3>
+<ul>
+<li>C - source code</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#66d9ef">int</span> length, length2;
+    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>final;
+    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>s1 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Hello&#34;</span>;
+    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>s2 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34; r2-folks&#34;</span>;
+
+    length <span style="color:#f92672">=</span> strlen (s1);
+    length2 <span style="color:#f92672">=</span> strlen (s2);
+}
+</code></pre></div><ul>
+<li>Before my work</li>
+</ul>
+<pre><code>/ (fcn) sym.main 157
+|   sym.main ();
+|           ; var int local_20h @ rbp-0x20
+|           ; var int local_1ch @ rbp-0x1c
+|           ; var int local_18h @ rbp-0x18
+|           ; var int local_10h @ rbp-0x10
+|           ; var int local_8h @ rbp-0x8
+|           ; DATA XREF from entry0 (0x6bd)
+|           0x000007aa      55             push rbp
+|           0x000007ab      4889e5         mov rbp, rsp
+|           0x000007ae      4883ec20       sub rsp, 0x20
+|           0x000007b2      488d051b0100.  lea rax, str.Hello          ; 0x8d4 ; &quot;Hello&quot;
+|           0x000007b9      488945e8       mov qword [local_18h], rax
+|           0x000007bd      488d05160100.  lea rax, str.r2_folks       ; 0x8da ; &quot; r2-folks&quot;
+|           0x000007c4      488945f0       mov qword [local_10h], rax
+|           0x000007c8      488b45e8       mov rax, qword [local_18h]
+|           0x000007cc      4889c7         mov rdi, rax
+|           0x000007cf      e88cfeffff     call sym.imp.strlen         ; size_t strlen(const char *s)
+|           0x000007d4      8945e0         mov dword [local_20h], eax
+|           0x000007d7      488b45f0       mov rax, qword [local_10h]
+|           0x000007db      4889c7         mov rdi, rax
+|           0x000007de      e87dfeffff     call sym.imp.strlen         ; size_t strlen(const char *s)
+</code></pre><ul>
+<li>After</li>
+</ul>
+<pre><code>/ (fcn) sym.main 157
+|   sym.main (int argc, char **argv, char **envp);
+|           ; var size_t local_20h @ rbp-0x20
+|           ; var size_t size @ rbp-0x1c
+|           ; var char *src @ rbp-0x18
+|           ; var char *s2 @ rbp-0x10
+|           ; var char *dest @ rbp-0x8
+|           ; DATA XREF from entry0 (0x6bd)
+|           0x000007aa      55             push rbp
+|           0x000007ab      4889e5         mov rbp, rsp
+|           0x000007ae      4883ec20       sub rsp, 0x20
+|           0x000007b2      488d051b0100.  lea rax, str.Hello          ; 0x8d4 ; &quot;Hello&quot;
+|           0x000007b9      488945e8       mov qword [src], rax
+|           0x000007bd      488d05160100.  lea rax, str.r2_folks       ; 0x8da ; &quot; r2-folks&quot;
+|           0x000007c4      488945f0       mov qword [s2], rax
+|           0x000007c8      488b45e8       mov rax, qword [src]
+|           0x000007cc      4889c7         mov rdi, rax                ; const char *s
+|           0x000007cf      e88cfeffff     call sym.imp.strlen         ; size_t strlen(const char *s)
+|           0x000007d4      8945e0         mov dword [local_20h], eax
+|           0x000007d7      488b45f0       mov rax, qword [s2]
+|           0x000007db      4889c7         mov rdi, rax                ; const char *s
+|           0x000007de      e87dfeffff     call sym.imp.strlen         ; size_t strlen(const char *s)
+</code></pre><h3 id="implementation">Implementation</h3>
+<p>The type inference is well integrated with command <code>afta</code> and mainly implemented using these techniques :</p>
+<ul>
+<li>Function signature</li>
+</ul>
+<p>The arguments type and return type of known library functions are stored in sdb (you can inspect it using <code>k</code> comands), so whenever we hit a known function call while performing analysis, we extract that info and propagate that in both forward and backward manner. This step contributes the major portion of the type inference</p>
+<ul>
+<li>Instruction access pattern</li>
+</ul>
+<ol>
+<li>Strings</li>
+</ol>
+<pre><code>lea rax, str.Hello
+mov qword [local_30h], rax
+</code></pre><p>When we have a load instruction with an address of string flagspace and then followed mov instruction having
+a local variable as it&rsquo;s destination and string address as it&rsquo;s source, we can infer the type of local variable as <code>char *</code></p>
+<ol start="2">
+<li>Signed and Unsigned</li>
+</ol>
+<pre><code>/ (fcn) main 202
+|           ; var signed int local_34h @ rbp-0x34
+|           ; var signed int local_30h @ rbp-0x30
+|           ; var unsigned int local_28h @ rbp-0x28
+|           0x000007a8      8945d0         mov dword [local_30h], eax
+|       ,=&lt; 0x000007ab      eb43           jmp 0x7f0
+|    :|:|   0x000007cd      8b45dc         mov eax, dword [local_24h]
+|    :|:|   0x000007d0      3b45cc         cmp eax, dword [local_34h]
+|   ,=====&lt; 0x000007d3      7e06           jle 0x7db
+</code></pre><p>Instructions like <code>ja, jae, jb, jbe, je,jne</code> are typed as unsigned</p>
+<p>Instructions like <code>jge, jnl, jng, jnge</code> are typed as signed</p>
+<ol start="3">
+<li>Pointer operation</li>
+</ol>
+<pre><code>mov rax, qword [ptr]
+mov rax, qword [rax]
+mov rdi, rax                ; char *s
+call sym.imp.sprintf        ; int sprintf(char *s, const char *format, ...)
+</code></pre><p>Here we can see that rax contains address of local var (ptr), which is the dereferenced once and value is stored in rax, using info from <code>sprintf</code> we can infer that rax contains address of string, so from instruction access pattern we could infer that local var (ptr) is double pointer i.e <code>char **</code></p>
+<ol start="4">
+<li>Format string</li>
+</ol>
+<pre><code>; var char *local_18h @ rbp-0x18
+mov rax, qword [local_18h]
+mov rsi, rax
+lea rdi, str.msg_:__s       ; 0x84f ; &quot;msg : %s\n&quot;
+call sym.imp.printf
+</code></pre><p>So whenever we encounter functions like printf/ sprintf, we try to parse it&rsquo;s format string and extract format char and then use that to infer corresponding variable&rsquo;s type.</p>
+<p>The format specifications are extracted from <code>anal/d/spec.sdb</code>. You could create a new profile for specifying the set of format chars depending upon different libraries/operating systems/programming languages like this :</p>
+<pre><code>win=spec
+spec.win.u32=unsigned int
+</code></pre><p>Then change your default specification to newly created one using this config variable <code>e anal.spec = win</code></p>
+<h3 id="future-improvements">Future improvements</h3>
+<h4 id="constrained-types">Constrained types</h4>
+<p>The idea here is to implement something like this :</p>
+<pre><code>var int local_20h {0..10 | 30..40}
+var char* local_30h {&lt; 100}
+</code></pre><p>This is also related to Radeco issues:</p>
+<ul>
+<li>Simple Type System in IR <a href="https://github.com/radareorg/radeco-lib/issues/118">#118</a></li>
+<li>Use Chalk engine for solving constraints and as a decision engine <a href="https://github.com/radareorg/radeco-lib/issues/182">#182</a></li>
+</ul>
+<h4 id="further-analysis">Further analysis</h4>
+<ul>
+<li>
+<p>Getting the function&rsquo;s argument values for each xrefs-to it <a href="https://github.com/radare/radare2/issues/10783">#10783</a></p>
+</li>
+<li>
+<p>Extract demangled parameter types and return type function args <a href="https://github.com/radare/radare2/issues/4756">#4756</a></p>
+</li>
+</ul>
+<h4 id="dwarfpdb-integration">DWARF/PDB integration</h4>
+<p>Load data types/structs from DWARF <a href="https://github.com/radare/radare2/issues/741">#741</a></p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2ftype_inference%2f - GSoC%2718%20Final%3a%20Type%20inference by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/background_tasks/">Background Tasks in radare2<aside class="dates">Jul 3 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

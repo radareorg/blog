@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Radare 0.10.2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Radare 0.10.2" />
+<meta property="og:description" content="radare2 0.10.2 - Release Notes Codename: Panamake
+As usual, some numbers first:
+Contributors: 48 Commits: 480 Issues: 135 Grep stats: * Fixes: 269 * Add: 107 * Enhance: 7 * New: 7 * Esil: 18 * Anal: 36 * Leak: 15 Contributor commit counter: (sys/pie.sh)
+$ sys/pie.sh 0.10.1 | sort -un | tail -n 13 1	Adrien Garin 2	Adr1 3	Kitsu 4	Darredevil 5	Anders Kaare 6	Aneesh Dogra 7	Evan Shaw 8	Jeffrey Crowell 12	Maijin 16	Anton Kochkov 36	oddcoder 46	Álvaro Felipe Melchor 237	pancake Special thanks from pancake to:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/radare-0-10-2/" />
+<meta property="article:published_time" content="2016-04-11T23:30:07+01:00" />
+<meta property="article:modified_time" content="2016-04-11T23:30:07+01:00" />
+
+
+<meta itemprop="name" content="Radare 0.10.2">
+<meta itemprop="description" content="radare2 0.10.2 - Release Notes Codename: Panamake
+As usual, some numbers first:
+Contributors: 48 Commits: 480 Issues: 135 Grep stats: * Fixes: 269 * Add: 107 * Enhance: 7 * New: 7 * Esil: 18 * Anal: 36 * Leak: 15 Contributor commit counter: (sys/pie.sh)
+$ sys/pie.sh 0.10.1 | sort -un | tail -n 13 1	Adrien Garin 2	Adr1 3	Kitsu 4	Darredevil 5	Anders Kaare 6	Aneesh Dogra 7	Evan Shaw 8	Jeffrey Crowell 12	Maijin 16	Anton Kochkov 36	oddcoder 46	Álvaro Felipe Melchor 237	pancake Special thanks from pancake to:">
+<meta itemprop="datePublished" content="2016-04-11T23:30:07+01:00" />
+<meta itemprop="dateModified" content="2016-04-11T23:30:07+01:00" />
+<meta itemprop="wordCount" content="881">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Radare 0.10.2"/>
+<meta name="twitter:description" content="radare2 0.10.2 - Release Notes Codename: Panamake
+As usual, some numbers first:
+Contributors: 48 Commits: 480 Issues: 135 Grep stats: * Fixes: 269 * Add: 107 * Enhance: 7 * New: 7 * Esil: 18 * Anal: 36 * Leak: 15 Contributor commit counter: (sys/pie.sh)
+$ sys/pie.sh 0.10.1 | sort -un | tail -n 13 1	Adrien Garin 2	Adr1 3	Kitsu 4	Darredevil 5	Anders Kaare 6	Aneesh Dogra 7	Evan Shaw 8	Jeffrey Crowell 12	Maijin 16	Anton Kochkov 36	oddcoder 46	Álvaro Felipe Melchor 237	pancake Special thanks from pancake to:"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Radare 0.10.2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 11, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="radare2-0102---release-notes">radare2 0.10.2 - Release Notes</h1>
+<p>Codename: Panamake</p>
+<p>As usual, some numbers first:</p>
+<pre><code>Contributors: 48
+Commits: 480
+Issues: 135
+
+Grep stats:
+* Fixes: 269
+* Add: 107
+* Enhance: 7
+* New: 7
+* Esil: 18
+* Anal: 36
+* Leak: 15
+</code></pre><p>Contributor commit counter: (sys/pie.sh)</p>
+<pre><code>$ sys/pie.sh 0.10.1 | sort -un | tail -n 13
+1	Adrien Garin
+2	Adr1
+3	Kitsu
+4	Darredevil
+5	Anders Kaare
+6	Aneesh Dogra
+7	Evan Shaw
+8	Jeffrey Crowell
+12	Maijin
+16	Anton Kochkov
+36	oddcoder
+46	Álvaro Felipe Melchor
+237	pancake
+</code></pre><p>Special thanks from pancake to:</p>
+<ul>
+<li><a href="https://twitter.com/revskills">@revskills</a> for the massive fuzzing</li>
+<li><a href="http://radare.org/gsoc">Google</a> for the GSoC</li>
+<li><a href="https://twitter.com/ghostbar">Ghostbar</a> for being the new Debian maintainer and update r2 packages</li>
+<li><a href="https://twitter.com/nibble_ds">Nibble</a> for coming back</li>
+<li><a href="https://alvarofe.github.io/">Alvaro Felipe Melchor</a> for the elf relocs, dyldcache and the massive bugfixing.</li>
+<li>oddcoder for being the most active student</li>
+<li>Daniel Dominguez for the initial coredump support</li>
+</ul>
+<p>This release is much bigger than we ever thought. Thanks to Google and GSoC applications process we&rsquo;ve got an honest amount of a students&rsquo; contributions, who implemented a few file formats, improved analysis and fixed a bunch of issues.</p>
+<h2 id="highlights">Highlights</h2>
+<ul>
+<li>Add <code>r2 -d</code> and <code>-R</code> shortcuts to simplify loading rarun2 profiles and using remote debugging plugins</li>
+<li>Support for cryptography (blowfish, rc2, rc4, aes, xor, ror, rol)
+<ul>
+<li><code>woE</code>/<code>woD</code></li>
+<li><code>rabin2 -E</code></li>
+<li>Adding <code>wo*y</code> commands using clipboard instead of [val]</li>
+</ul>
+</li>
+<li>Better PE and ELF parsers</li>
+<li>New easter-egg!</li>
+<li>dyldcache extractor is working again</li>
+<li>Support for <a href="https://en.wikipedia.org/wiki/Bochs">BOCHS</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Core_dump">Coredump</a> support for iOS and OSX</li>
+<li>New fileformats, namely Python bytecode and Flash files</li>
+<li>Improved analysis and emulation thanks to ESIL on x86, ARM and MIPS</li>
+<li>New <code>make menu</code> to choose plugins to build</li>
+<li>Add <code>?E</code> clippy echo and use it in ????</li>
+<li>xrefs and types are now properly saved/restored from projects</li>
+</ul>
+<h2 id="new-r2pm-packages">New R2PM packages</h2>
+<ul>
+<li>ramoji2</li>
+<li>www-t and www-p</li>
+<li>syms2elf</li>
+</ul>
+<h2 id="better-disassembly">Better Disassembly</h2>
+<ul>
+<li>Add <code>asm.spacy</code> and <code>asm.flgoff</code></li>
+<li><em>noreturn</em> function database is much more reliable now</li>
+<li>Summary mode (<code>pds</code>)</li>
+<li>Press <code>R</code> in visual to rotate on the color themes. (see <code>scr.randpal</code>)</li>
+<li>Fix some <code>asm.spacy</code> and <code>asm.flgoff</code> glitches</li>
+<li>Add <code>ecn</code> and use it from VR with <code>scr.randpal</code></li>
+<li><code>asm.fcnsign</code> is now working for non-windows binaries</li>
+<li><code>asm.(symbol|section)[.col]</code></li>
+<li>Added m68k parse pseudo plugin and enhance the arm one</li>
+<li>Fix ROR/ROL ESIL expressions for x86-64 capstone</li>
+<li>Honor <code>fcn.fcnlines</code> in fcnvarlist</li>
+</ul>
+<h2 id="webui">WebUI</h2>
+<ul>
+<li>WebUI moved to a separate repository.</li>
+<li>some of them accessible via r2pm (<code>r2pm -i www-t www-m</code>)</li>
+<li>use <a href="http://gruntjs.com/">Grunt</a>, update all dependencies, indent code, minify, ..</li>
+<li>Fixed some XSS vulns</li>
+<li>Added <code>http.referer</code> checks to fix CSRF vuln</li>
+</ul>
+<h2 id="architectures">Architectures</h2>
+<ul>
+<li>z80: better analysis</li>
+<li>SNES: better analysis too and support 16-bit immediate operands</li>
+<li>m68k: fixed bugs and improved analysis. honor asm.cpu</li>
+<li>ARM (better analysis and emulation, handle IT)
+<ul>
+<li>Honor ARM conditional bits to skip bxeq lr and such</li>
+<li>Better Thumb support</li>
+<li>Assemble <code>blx</code> for arm32 and thumb</li>
+</ul>
+</li>
+<li>New plugins!
+<ul>
+<li>Adding initial support for PIC18C diassembler</li>
+<li>python bytecode disassembler</li>
+<li>Flash bytecode disassembler</li>
+</ul>
+</li>
+</ul>
+<h2 id="file-formats">File formats</h2>
+<ul>
+<li>PE parser is much better now! (version info + handling even more fucked&rsquo;up PEs)</li>
+<li>Support Swift-Demangle</li>
+<li>JSON output for classes+ methods</li>
+<li>Add support for parsing TLS and add TLS callback addresses to the list of entry points</li>
+<li>Extracting iOS&rsquo;s dyldcache is working again (thanks @alvaro_fe)</li>
+<li>*.pyc file format</li>
+<li>*.swf file format</li>
+<li>Better parsing of PE and ELF files</li>
+<li>Add versioninfo support for PE and ELF</li>
+<li>Fix #2780 havecode field</li>
+</ul>
+<h2 id="graphs">Graphs</h2>
+<ul>
+<li>Disassemble first basic block in callgraphs</li>
+<li>Summary graph (af;VVP&rsquo;)</li>
+<li>Add graph.gv variables to set custom graphviz styles</li>
+<li>Fix #4374 - ags command to show simplified flowgraph</li>
+</ul>
+<h2 id="bindiffing">Bindiffing</h2>
+<ul>
+<li><code>radiff2 -C</code> does not analyze by default, mimics <code>r2 -A</code></li>
+<li>Does not diff strings because they are not functions</li>
+<li>Increase memory limit for code diffing</li>
+</ul>
+<h2 id="analysis">Analysis</h2>
+<ul>
+<li>Colorful entropy bars</li>
+<li>file.analyze is only running when the binary contains code</li>
+<li>new <code>aex</code> command to emulate an hexpair of native code</li>
+<li>huge improvements for x86 and arm</li>
+<li>Set anal.autoname by default for now</li>
+<li>Adding verbosity in <code>aaa</code></li>
+<li>Improve mips string reference detection with ESIL</li>
+<li>Honor anal.strings in <code>aae</code></li>
+<li>Fix <code>aap</code> for static and make it work in debugger</li>
+<li>Find more string references for MIPS and remove some false positives.</li>
+<li>ROP search find honor search.align and detects more cases</li>
+<li>Do not autoname functions by default. Add e anal.autoname</li>
+<li>analysis is deeper than ever: new <code>aaaa</code> command</li>
+<li><code>aai</code> command to show analysis statistics info</li>
+<li><code>aav</code> command to show all references for section/map</li>
+<li>added lodsb,stosb and did some rep cosmetic to esil x86</li>
+<li>Initial support for unions</li>
+<li>Redesign the <code>t</code> command and add a lot of tests (@oddcoder)</li>
+<li>Initialize BP register in aeim (handy for arm)</li>
+</ul>
+<h2 id="debugging">Debugging</h2>
+<ul>
+<li>New bochs plugin works on Linux, Mac and Windows.</li>
+<li>Coredump generation for Mach0 binaries on iOS and OSX</li>
+<li>MACH0 Coredump loading</li>
+<li><code>r2 -d gdb://</code> no need for <code>-D gdb</code></li>
+<li>Added drw/arw command</li>
+<li>Add r2 -R as alias for dbg.profile</li>
+<li>Alias <code>doo</code> for <code>ood</code> command</li>
+</ul>
+<h2 id="ios">iOS</h2>
+<ul>
+<li>Implement <a href="http://en.pangu.io/">ios9 pangu&rsquo;s tfp0</a> in the debugger</li>
+<li>dyldcache extract</li>
+<li>coredump generation and loading</li>
+<li>Support swift-demangle if found in $PATH</li>
+</ul>
+<h2 id="various-changes">Various changes</h2>
+<ul>
+<li>New r2r program in <code>radare2-regressions</code> repo</li>
+<li>Work in progress support for <a href="https://en.wikipedia.org/wiki/SquashFS">squashfs</a></li>
+<li>An <code>aaaaaa</code> command</li>
+<li>Add <code>r_lang_rust</code></li>
+<li>Implement <code>rasm2 -A</code> to replace <code>ranal2</code></li>
+<li><code>rax2 -B</code> and <code>-b</code></li>
+<li>Handle <code>~/.config/radare2/radare2rc.d</code></li>
+</ul>
+<h2 id="commands">Commands</h2>
+<ul>
+<li>Extending <code>wo*</code> commands to use clipboard</li>
+<li><code>Ps</code> and <code>PS</code> commands to save project</li>
+<li>Implement <code>Cz</code> like <code>Cs</code> with automatic length detection</li>
+<li>Implement new commands: <code>yl</code>, <code>yw</code>, <code>ywx</code>, <code>wz</code></li>
+<li>Implement <code>ys</code> to show clipboard as string</li>
+<li>Honor <code>q</code> in scripts to stop interpreter</li>
+<li>Add rarun2 execve to avoid posix_spawn</li>
+</ul>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fradare-0-10-2%2f - Radare%200.10.2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

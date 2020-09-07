@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>YARA support</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="YARA support" />
+<meta property="og:description" content="We now have (experimental) YARA support inside radare2.
+If you are building from the latest git, you just have to install libyara, no need to recompile anything.
+[0x00000000]&gt; yara Yara plugin | add [path] : add yara rules | clear : clear all rules | help : show this help | list : list all rules | scan : scan the current file [0x00000000]&gt; Since you may not already have some rules, we bundled some defaults ones, for packers and crypto primitives." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/yara-support/" />
+<meta property="article:published_time" content="2014-04-30T23:30:45+02:00" />
+<meta property="article:modified_time" content="2014-04-30T23:30:45+02:00" />
+
+
+<meta itemprop="name" content="YARA support">
+<meta itemprop="description" content="We now have (experimental) YARA support inside radare2.
+If you are building from the latest git, you just have to install libyara, no need to recompile anything.
+[0x00000000]&gt; yara Yara plugin | add [path] : add yara rules | clear : clear all rules | help : show this help | list : list all rules | scan : scan the current file [0x00000000]&gt; Since you may not already have some rules, we bundled some defaults ones, for packers and crypto primitives.">
+<meta itemprop="datePublished" content="2014-04-30T23:30:45+02:00" />
+<meta itemprop="dateModified" content="2014-04-30T23:30:45+02:00" />
+<meta itemprop="wordCount" content="82">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="YARA support"/>
+<meta name="twitter:description" content="We now have (experimental) YARA support inside radare2.
+If you are building from the latest git, you just have to install libyara, no need to recompile anything.
+[0x00000000]&gt; yara Yara plugin | add [path] : add yara rules | clear : clear all rules | help : show this help | list : list all rules | scan : scan the current file [0x00000000]&gt; Since you may not already have some rules, we bundled some defaults ones, for packers and crypto primitives."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>YARA support</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 30, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>We now have (experimental) <a href="https://plusvic.github.io/yara/">YARA</a> support inside radare2.</p>
+<p>If you are building from the latest git, you just have to install <code>libyara</code>, no need to recompile anything.</p>
+<pre><code>[0x00000000]&gt; yara
+Yara plugin
+| add [path] : add yara rules
+| clear      : clear all rules
+| help       : show this help
+| list       : list all rules
+| scan       : scan the current file
+[0x00000000]&gt; 
+</code></pre><p>Since you may not already have some rules, we bundled some defaults ones, for packers and <a href="https://github.com/Phoul/yara_rules">crypto primitives</a>.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fyara-support%2f - YARA%20support by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

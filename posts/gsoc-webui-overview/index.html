@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC WebUI overview</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC WebUI overview" />
+<meta property="og:description" content="by https://twitter.com/GautierGC
+April 22th, my GSoC proposal for the radare web UI [was accepted] https://summerofcode.withgoogle.com/organizations/4965722304282624/#5484657504157696. Until today, I&rsquo;ve made the UI progressed. The purpose of this article isn&rsquo;t to close this chapter but to relate what I&rsquo;ve done and share my experience about this Google Summer of Code.
+I would like to make a short overview of what I&rsquo;ve done, a big picture of what I improved during the last months." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/gsoc-webui-overview/" />
+<meta property="article:published_time" content="2016-08-20T17:40:41+01:00" />
+<meta property="article:modified_time" content="2016-08-20T17:40:41+01:00" />
+
+
+<meta itemprop="name" content="GSoC WebUI overview">
+<meta itemprop="description" content="by https://twitter.com/GautierGC
+April 22th, my GSoC proposal for the radare web UI [was accepted] https://summerofcode.withgoogle.com/organizations/4965722304282624/#5484657504157696. Until today, I&rsquo;ve made the UI progressed. The purpose of this article isn&rsquo;t to close this chapter but to relate what I&rsquo;ve done and share my experience about this Google Summer of Code.
+I would like to make a short overview of what I&rsquo;ve done, a big picture of what I improved during the last months.">
+<meta itemprop="datePublished" content="2016-08-20T17:40:41+01:00" />
+<meta itemprop="dateModified" content="2016-08-20T17:40:41+01:00" />
+<meta itemprop="wordCount" content="1511">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC WebUI overview"/>
+<meta name="twitter:description" content="by https://twitter.com/GautierGC
+April 22th, my GSoC proposal for the radare web UI [was accepted] https://summerofcode.withgoogle.com/organizations/4965722304282624/#5484657504157696. Until today, I&rsquo;ve made the UI progressed. The purpose of this article isn&rsquo;t to close this chapter but to relate what I&rsquo;ve done and share my experience about this Google Summer of Code.
+I would like to make a short overview of what I&rsquo;ve done, a big picture of what I improved during the last months."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC WebUI overview</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 20, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>by <a href="https://twitter.com/GautierGC">https://twitter.com/GautierGC</a></p>
+<p>April 22th, my GSoC proposal for the radare web UI [was accepted] <a href="https://summerofcode.withgoogle.com/organizations/4965722304282624/#5484657504157696">https://summerofcode.withgoogle.com/organizations/4965722304282624/#5484657504157696</a>. Until today, I&rsquo;ve made the UI progressed. The purpose of this article isn&rsquo;t to close this chapter but to relate what I&rsquo;ve done and share my experience about this Google Summer of Code.</p>
+<p>I would like to make a short overview of what I&rsquo;ve done, a big picture of what I improved during the last months. More details are available on my <a href="https://blog.gautiercolajanni.fr/gsoc/">GSoC related posts</a>. The official beginning (coding part), has started May 23th and will end August 23th.</p>
+<h2 id="proposal-period">Proposal period</h2>
+<p>When I started to take a look to this project. There were a lot of code duplication due to the lack of dependency management. As you may know in his <a href="https://github.com/radare/radare2-webui">current repository</a>, radare count 4 UIs. I&rsquo;ve managed to centralize dependencies into one place and add bower and gulp to manage external dependencies.</p>
+<h2 id="community-bonding-period">Community bonding period</h2>
+<p>During this part, I&rsquo;ve continued to improve the management of the repository through several ways. This period, about 1 month, has allowed me to normalize some items:</p>
+<ul>
+<li>adding last dependencies (fonts) to gulp</li>
+<li>adding code climate badge to visualize code quality</li>
+<li>cleaning the repository from unused files</li>
+<li>updating the r2pm update process (the distribution has changed)</li>
+<li>adding: README, CONTRIBUTING and LICENCES files</li>
+</ul>
+<p>With better dependency management, we can now easily what we are using and update them. Adding clode climate has allowed us to visualize where were the bad things and determine a regular check style for the whole repository. The new r2pm package allows us more flexibility. Finally, the files about README, CONTRIBUTING and LICENCES allows users and contributors to know a little better how does radare Web UI&rsquo;s are working.</p>
+<h2 id="main-part">Main part</h2>
+<p>From my point of view, there were no transition between the previous part the main coding part. I was into the project, ready to dive into the code base that I&rsquo;ve discovered during the previous weeks.</p>
+<p>End of may, I was finalizing how the UIs would be distributed and how I and every contributor would be able to make them work. We were moving from a simple makefile to a more complete dependency mangement tool who now support: external libraries, packaging (releases), development time through a watcher and a livereload plugin. Then, I&rsquo;ve started to make <em>true</em> code. In the following description, I will not talk about <em>small fixes</em> but more about new functionnalities or major rework.</p>
+<p>So, <strong>first task</strong>: the autocompletion module into the main search field (top right corner). I&rsquo;ve made a simple form with a dropdown to allow the user to visualize the different options. The purpose isn&rsquo;t to complete the request but to select the element where you want to go. It&rsquo;s generic enough to be bound to another field and be fed with another r2 command.</p>
+<p><strong>Second task</strong>, more about network error that we can encounter between r2 and the UI. We are able to indicate to the user that something has gone wrong and, at the same time, allowing the user to retry. For this part, we used a <em>callback</em> plugged into <code>lib/r2.js</code> to open a dialog. I&rsquo;ve made the choice to use the native dialog from HTML5 standard. Not well supported by every browser, it&rsquo;s currently backed up by a polyfill.</p>
+<p>Then, I&rsquo;ve started the <strong>third task</strong> about the presentation of big tables. Or more generic, how to present a big amount of sortable data. Here, I&rsquo;ve made the choice to use this tool: <a href="http://datatables.net/">DataTable</a>. Fit perfectly the needs: sorting and filtering data. One small problem: integration with <a href="https://getmdl.io/">MDL</a> is not perfect. Globally, the integration into the current Web UI was pretty easy with very few rework, just an adapter to bind data to this tool. All tables are currently handled by this tool.</p>
+<p>Next step involved the improvement of the status bar. It was my <strong>fourth task</strong>. It&rsquo;s actually pending, <em>work in progress</em>, there were several attempts to make it usable, fully integrated with the rest of the UI. It will need some rework to include all the tools we want to see into this bar and make it more context-aware.</p>
+<p>I&rsquo;ve got a blank period during the <strong>fifth task</strong>, I had some exams and homework to deliver to my school. I, then, pushed a very specific improvement to this current UI: the ability to split the screen without <em>iframe</em>. It allows us to keep the same context and open the possibility to a composable UI. We consider the previously called <em>panels</em> as <em>widgets</em>. There is still work to do to make it more stable and to allow future usage but it currently permits to split the screen vertically. There were several challenges due to refreshing functions defined more global than required and how <a href="https://getmdl.io/">MDL</a> was using the <em>flexbox</em> capacity.</p>
+<p>The <strong>sixth task</strong> was, in time invested into, the biggest. I&rsquo;ve made a new implementation the previous hexeditor without the formating help of r2. It took me nearly one month to develop this but it includes a lot of new functionnalities. A lot of them were reused into the disassembly panel (seventh task). The main sub-tasks are the following:</p>
+<ul>
+<li>infinite scrolling</li>
+<li>(partial) selection</li>
+<li>dedicated contextual menu</li>
+<li>flag positionnement and colorization</li>
+<li>inline edition (ascii or pairs)</li>
+<li>export selection with r2 processing</li>
+</ul>
+<p>I&rsquo;ve also encountered some performances issues with this panel. Fetching data is something that happen synchronously and the first processing take also some time. Since browsers aren&rsquo;t able to isolate background processing into an other thread, I&rsquo;ve made use of Web Workers to be able to make some processing in the background and let the main thread available for user&rsquo;s actions. You can read the <a href="https://blog.gautiercolajanni.fr/gsoc/r2/2016/07/15/webwokers-hexdump.html">dedicated article</a> for more details.</p>
+<p>For the <strong>seventh task</strong>, I&rsquo;ve made a rewriting of the disassembly panel by using the previous tools. I&rsquo;ve started to clean them and refactored some of them to be more suitable for this task. The rewriting is also important but I&rsquo;m using more content from r2 and I reused some components I&rsquo;ve developped for the hexdump editor. Currently, the disassembly panel handle:</p>
+<ul>
+<li>infinite scrolling based on flag/functions knowledge</li>
+<li>dedicated contextual menu</li>
+<li>apply commands and retrieve result through dialog</li>
+</ul>
+<p>And then, I&rsquo;ve reached the end of this GSoC. My <strong>last tasks</strong> were some issues referenced into the repository and bug fixes spotted into the panels. It includes some small improvement like highlighting the currently seeked line into disassembly or merging the header panel into the overview panel using tabs.</p>
+<h2 id="original-plan-deviation">Original plan deviation</h2>
+<p>From my point of view, I didn&rsquo;t miss the main objective of my proposal: make the UI better. But, I can&rsquo;t deny I&rsquo;m far away the initial proposal I&rsquo;ve made.</p>
+<p>I&rsquo;ve defined some major goals: search function, hexdump, disasm, keyboard shortcut, dual panel, graph module, interactivity through T command and scripting area. From this point of view, I haven&rsquo;t filled out all those tasks. I think I&rsquo;ve been a bit too optimistic when I&rsquo;ve placed them into my schedule. For example, I&rsquo;ve considered that the hexdump should have taken me one week, then I spent one month.</p>
+<p>So, if somebody would have to complete this proposal, he/she should take care of:</p>
+<ul>
+<li>color theme customization</li>
+<li>configuration of global keybinding</li>
+<li>improve vertical dual-panel with horizontal split (or more)</li>
+<li>incorporate and make accessible a better graph module</li>
+<li>add interactivity through T command</li>
+<li>improve the scripting area</li>
+<li>improve debugger interface (breakpoints, backtracking, etc.)</li>
+</ul>
+<p>It&rsquo;s not exhaustive, I think the most important here is to make something usable and used by the community more than a copy of the CLI.</p>
+<h2 id="future">Future</h2>
+<p>This experience was very interesting and I don&rsquo;t want to stop here. There is plenty of work to do to improve this UI. It will be tough to raise this UI to the command line level and I don&rsquo;t think it&rsquo;s the right way to build a great UI. We will need feedback from the community to focus on the most used features and the one that miss the most.</p>
+<p>In september, I&rsquo;m beginning an internship but I don&rsquo;t want to let this project alone. I will have less time to work on it but I&rsquo;m very interested to make it evolve.</p>
+<p>I will have the time to take a step back, visualize in which direction the UI is going, what users wants. There is also some technical challenges, how to handle the <em>big ball of mud</em>, improve modularity, reusability and continue to consider performances and usability issues.</p>
+<h2 id="last-words">Last words</h2>
+<p>The Google Summer of Code is a great experience. The radare team has really been present to help me implement what I had committed myself and had helped me to obtain the right informations to interface the UI with r2 despite my lack of knowledge about this tool.</p>
+<p>I would like to thanks my mentors <a href="https://twitter.com/alvaro_fe">Álvaro Felipe</a> and <a href="https://twitter.com/trufae">pancake</a> for their help during my GSoC, but also <a href="https://twitter.com/Maijin212">Maijin</a> and <a href="https://twitter.com/akochkov">Anton Kochkov</a> for their time and their knowledge about r2. It was a big opportunity for me and I hope that my work will help the r2 community. In every case, I will keep following this project and continue to contribute.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgsoc-webui-overview%2f - GSoC%20WebUI%20overview by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>The GSoC is Over!</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="The GSoC is Over!" />
+<meta property="og:description" content="Good news everyone! Our first time participation in the Google Summer of Code, thanks to our previous and current experience of the hosting of the Radare Summer of Code, was a great success. It wouldn&rsquo;t have been possible without the help of the great Solar Designer, who took us under Openwall&rsquo;s project umbrella for the GSoC.
+We had two GSoC students successfully complete tasks related to Radeco, our new, work in progress, decompiler." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/the-gsoc-is-over/" />
+<meta property="article:published_time" content="2015-08-25T13:13:29+02:00" />
+<meta property="article:modified_time" content="2015-08-25T13:13:29+02:00" />
+
+
+<meta itemprop="name" content="The GSoC is Over!">
+<meta itemprop="description" content="Good news everyone! Our first time participation in the Google Summer of Code, thanks to our previous and current experience of the hosting of the Radare Summer of Code, was a great success. It wouldn&rsquo;t have been possible without the help of the great Solar Designer, who took us under Openwall&rsquo;s project umbrella for the GSoC.
+We had two GSoC students successfully complete tasks related to Radeco, our new, work in progress, decompiler.">
+<meta itemprop="datePublished" content="2015-08-25T13:13:29+02:00" />
+<meta itemprop="dateModified" content="2015-08-25T13:13:29+02:00" />
+<meta itemprop="wordCount" content="292">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="The GSoC is Over!"/>
+<meta name="twitter:description" content="Good news everyone! Our first time participation in the Google Summer of Code, thanks to our previous and current experience of the hosting of the Radare Summer of Code, was a great success. It wouldn&rsquo;t have been possible without the help of the great Solar Designer, who took us under Openwall&rsquo;s project umbrella for the GSoC.
+We had two GSoC students successfully complete tasks related to Radeco, our new, work in progress, decompiler."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>The GSoC is Over!</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 25, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Good news everyone! Our first time participation in the <a href="https://developers.google.com/open-source/gsoc/">Google Summer of Code</a>, thanks to our previous and current experience of the hosting of the Radare Summer of Code, was a <strong>great success</strong>. It wouldn&rsquo;t have been possible without the help of the great <a href="https://en.wikipedia.org/wiki/Solar_Designer">Solar Designer</a>, who took us under <a href="http://openwall.com/">Openwall</a>&rsquo;s project umbrella for the GSoC.</p>
+<p>We had two GSoC students successfully complete tasks related to <a href="https://github.com/radare/radeco">Radeco</a>, our new, work in progress, <strong>decompiler</strong>.</p>
+<p>Our students have done an amazing job, learning radare, learning <a href="https://www.rust-lang.org/">Rust</a>, and becoming important parts of the radare community.</p>
+<p>At first, we should note that they have actively participated in the deep research of the existing decompilers, papers about <a href="https://en.wikipedia.org/wiki/Static_single_assignment_form">SSA</a> and decompilation process and even some books. This allowed them to dig into this area of knowledge and design a brand new graph-based intermediated representation, which took all the best from the various practical and academical ILs/IRs.</p>
+<p>At second, they were able to learn new language Rust quite fast, and unleash the whole power of the types checking to make their life easier and (sometimes) improve the types system/algorithms itself.</p>
+<p>By the end of the summer, they have written a combined total of almost 7,000 lines of rust to create utilities for converting ESIL to a new SSA IL called RadecoIR, complete with constant propagation, dead code elimination, and soon, some great pseudo-c output!</p>
+<p>We&rsquo;d like to thank Google&rsquo;s Open Source Programs for hosting the GSoC, Openwall (especially solardiz) for accepting us as a subproject, mentors xvilka and crowell, pancake for constantly providing support, and of course our students <a href="http://sushant94.me/">sushant94</a> and <a href="https://github.com/dkreuter">dkreuter</a> for making this possible.</p>
+<p>If you have the chance, give <a href="https://github.com/radare/radeco">radeco</a> a try, we&rsquo;d love to see your bug reports, suggestions, and especially your pull requests ;D</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fthe-gsoc-is-over%2f - The%20GSoC%20is%20Over%21 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

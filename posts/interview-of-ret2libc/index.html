@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Interview of ret2libc</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Interview of ret2libc" />
+<meta property="og:description" content="Almost one month since our last article, time flees. This article is an interview of a new contributor, that greatly enhanced one of the most visually impressive feature of radare2, the one that our propaganda departmentcontributors loves to show at conferences!
+ Who are you ?   Hi, I&rsquo;m ret2libc, I was an IDA addicted and this is my 10thday that I don&rsquo;t use IDA.
+  Hi ret2libc   Just joking, I still use IDA, but I&rsquo;d really love to switch in the future, when r2 will be good enough." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/interview-of-ret2libc/" />
+<meta property="article:published_time" content="2015-07-16T11:53:57+02:00" />
+<meta property="article:modified_time" content="2015-07-16T11:53:57+02:00" />
+
+
+<meta itemprop="name" content="Interview of ret2libc">
+<meta itemprop="description" content="Almost one month since our last article, time flees. This article is an interview of a new contributor, that greatly enhanced one of the most visually impressive feature of radare2, the one that our propaganda departmentcontributors loves to show at conferences!
+ Who are you ?   Hi, I&rsquo;m ret2libc, I was an IDA addicted and this is my 10thday that I don&rsquo;t use IDA.
+  Hi ret2libc   Just joking, I still use IDA, but I&rsquo;d really love to switch in the future, when r2 will be good enough.">
+<meta itemprop="datePublished" content="2015-07-16T11:53:57+02:00" />
+<meta itemprop="dateModified" content="2015-07-16T11:53:57+02:00" />
+<meta itemprop="wordCount" content="721">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Interview of ret2libc"/>
+<meta name="twitter:description" content="Almost one month since our last article, time flees. This article is an interview of a new contributor, that greatly enhanced one of the most visually impressive feature of radare2, the one that our propaganda departmentcontributors loves to show at conferences!
+ Who are you ?   Hi, I&rsquo;m ret2libc, I was an IDA addicted and this is my 10thday that I don&rsquo;t use IDA.
+  Hi ret2libc   Just joking, I still use IDA, but I&rsquo;d really love to switch in the future, when r2 will be good enough."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Interview of ret2libc</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        July 16, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Almost one month since our last article, time flees. This article is an interview of a <em>new</em> contributor, that greatly enhanced one of the most visually impressive feature of radare2, the one that our <!-- raw HTML omitted -->propaganda department<!-- raw HTML omitted --> contributors loves to show at conferences!</p>
+<ul>
+<li>Who are you ?</li>
+</ul>
+<blockquote>
+<p>Hi, I&rsquo;m <a href="https://github.com/ret2libc">ret2libc</a>, I was an IDA addicted and this is my 10<!-- raw HTML omitted -->th<!-- raw HTML omitted --> day that I don&rsquo;t use IDA.</p>
+</blockquote>
+<ul>
+<li>Hi ret2libc</li>
+</ul>
+<blockquote>
+<p>Just joking, I still use IDA, but I&rsquo;d really love to switch in the future, when r2 will be good enough. I am a Computer Science student, I like security related stuff, RE, malwares and&hellip; CTFs!</p>
+</blockquote>
+<ul>
+<li>Why contributing to radare2 ?</li>
+</ul>
+<blockquote>
+<p>Just use IDA instead, like everyone else.</p>
+</blockquote>
+<blockquote>
+<p>Well, there are just plenty of bugs to fix and it&rsquo;s really fun. r2 is not perfect (yet), but it&rsquo;s an opportunity to be involved in a very good project and full of <!-- raw HTML omitted -->anal<!-- raw HTML omitted --> nice people. Also, I was really annoyed by the fact that I have to switch to Windows or a Windows VM everytime I just want to analyze a binary, even a simple one.</p>
+</blockquote>
+<blockquote>
+<p>Instead r2 works almost everywhere, I just need my terminal. It&rsquo;s free, it&rsquo;s cool and it can be a good enough tool to work with binaries from some CTF.</p>
+</blockquote>
+<blockquote>
+<p>So, let&rsquo;s try it, but&hellip; wait, there&rsquo;s only plain disassembly here, where is my graph?? Ok, <code>VV</code> and, well, I&rsquo;ve found what I wanted to improve ;)</p>
+</blockquote>
+<ul>
+<li>You have fixed a big pile of bugs regarding graphs, that&rsquo;s pretty impressive. Do you have a strong background in programming/maths ?</li>
+</ul>
+<blockquote>
+<p>Let&rsquo;s say I have a background in programming/maths. As I mentioned, I&rsquo;m a Computer Science student.</p>
+</blockquote>
+<ul>
+<li>Why the graph?</li>
+</ul>
+<blockquote>
+<p>I think it&rsquo;s one of the fundamental feature a disassembler should have. It makes you understand at a glance what&rsquo;s going on in a program and many times it&rsquo;s the only thing I need from IDA.</p>
+</blockquote>
+<ul>
+<li>What are you currently implementing ? <a href="https://twitter.com/r2gif/status/621291945365667840">Someone</a> told me about colours in graphs.</li>
+</ul>
+<blockquote>
+<p>I&rsquo;ve just finished implementing an algorithm to have a better layout for the nodes of the ASCII-Art graph, so that you won&rsquo;t have anymore (at least, you shouldn&rsquo;t) overlapping nodes or nodes placed in really wrong positions. Don&rsquo;t expect IDA&rsquo;s graph, but it&rsquo;s already something ;)</p>
+</blockquote>
+<blockquote>
+<p>Since, at the moment, you can only see one function in the ASCII-Art graph, currently I&rsquo;m implementing a way to move between called functions and go back and forth between them, without having to leave the graph mode. Something like what you get in Visual Mode with <code>[0-9]</code> shortcuts (<a href="https://github.com/radare/radare2/issues/2907">#2907</a>).</p>
+</blockquote>
+<blockquote>
+<p>For the colours in graph, I think you will have to wait a little bit. In the meantime, if you feel brave you can start to use &lsquo;VV!&rsquo;, but don&rsquo;t say I didn&rsquo;t warn you.</p>
+</blockquote>
+<ul>
+<li>What is the plan for the next months ? Are you going to continue to work on r2 ?</li>
+</ul>
+<blockquote>
+<p>Of course I will continue contributing to r2, in my spare time! I&rsquo;m planning to focus on graph, as I&rsquo;ve done lately. In particular I think you will see:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><a href="https://github.com/radare/radare2/issues/2907">issue #2907</a> fixed: move between called functions with [0-9] keys</li>
+<li>enhancement in the edges layout. They are a real mess at the moment and for a good enough graph it&rsquo;s one of the fundamental thing that has to be fixed.</li>
+<li>mouse support for node selection</li>
+<li>last, and also least <em>:P</em>, you will see colored disassembly in the graph, unless someone else want to implement it before me (you are welcome!!)</li>
+<li>a lot of other cool stuff, but that&rsquo;s another story and everything else really depends on having a good and strong starting point.</li>
+</ul>
+</blockquote>
+<ul>
+<li>What about, a GUI ?</li>
+</ul>
+<blockquote>
+<p>What? GUI? Pff, we just have the terminal :)</p>
+</blockquote>
+<blockquote>
+<p>Really, I&rsquo;d really like to see a cool GUI for r2, but don&rsquo;t count on me.</p>
+</blockquote>
+<ul>
+<li>Most hated/lover feature of r2 ?</li>
+</ul>
+<blockquote>
+<ul>
+<li>Most hated feature: <code>anal.hasnext</code> set to true as default!</li>
+<li>Most loved feature: ASCII-Art graph, of course ;)</li>
+</ul>
+</blockquote>
+<ul>
+<li>Advices for new contributors and users ?</li>
+</ul>
+<blockquote>
+<p>Contributors, just focus on something you&rsquo;d like to be present in r2 and implement it, maintain it and add tests!!</p>
+</blockquote>
+<blockquote>
+<p>Users, keep using IDA, unless you want to take the red pill and see how deep the rabbit-hole goes ;)</p>
+</blockquote>
+<ul>
+<li>Last word ?</li>
+</ul>
+<blockquote>
+<p>Maybe we will see r2 1.0 in the future! VVRRRRRRRRRRRRRRRRRRR</p>
+</blockquote>
+<ul>
+<li>Screenshots ?</li>
+</ul>
+<p><img src="/blog/images/full.png" alt="Graph example">
+<em>Example of graph</em></p>
+<p><img src="/blog/images/disasm.png" alt="Disasm in graph">
+<em>Disassembly in graph, without colours (yet)</em></p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2finterview-of-ret2libc%2f - Interview%20of%20ret2libc by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

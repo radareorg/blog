@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Update From the GSoC</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Update From the GSoC" />
+<meta property="og:description" content="As you know, we have 2 students working on r2 for the Google Summer of Code!
+As we&rsquo;re 3 weeks into the Summer, here&rsquo;s what one of our student, sushant94 has to say about what he&rsquo;s been working on!
+It&rsquo;s been three weeks into GSoC and I&rsquo;m having an amazing time. I am working along side dkreuter and been learning tons from him too!
+Here is the repository where you can track our progress and also give us suggestions :)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/update-from-the-gsoc/" />
+<meta property="article:published_time" content="2015-06-15T21:36:21+02:00" />
+<meta property="article:modified_time" content="2015-06-15T21:36:21+02:00" />
+
+
+<meta itemprop="name" content="Update From the GSoC">
+<meta itemprop="description" content="As you know, we have 2 students working on r2 for the Google Summer of Code!
+As we&rsquo;re 3 weeks into the Summer, here&rsquo;s what one of our student, sushant94 has to say about what he&rsquo;s been working on!
+It&rsquo;s been three weeks into GSoC and I&rsquo;m having an amazing time. I am working along side dkreuter and been learning tons from him too!
+Here is the repository where you can track our progress and also give us suggestions :)">
+<meta itemprop="datePublished" content="2015-06-15T21:36:21+02:00" />
+<meta itemprop="dateModified" content="2015-06-15T21:36:21+02:00" />
+<meta itemprop="wordCount" content="568">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Update From the GSoC"/>
+<meta name="twitter:description" content="As you know, we have 2 students working on r2 for the Google Summer of Code!
+As we&rsquo;re 3 weeks into the Summer, here&rsquo;s what one of our student, sushant94 has to say about what he&rsquo;s been working on!
+It&rsquo;s been three weeks into GSoC and I&rsquo;m having an amazing time. I am working along side dkreuter and been learning tons from him too!
+Here is the repository where you can track our progress and also give us suggestions :)"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Update From the GSoC</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        June 15, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>As you know, we have 2 students working on r2 for the <a href="https://developers.google.com/open-source/soc/">Google Summer of Code</a>!</p>
+<p>As we&rsquo;re 3 weeks into the Summer, here&rsquo;s what one of our student, <a href="https://github.com/sushant94">sushant94</a> has to say about what he&rsquo;s been working on!</p>
+<p><img src="/blog/images/gsoc2015-300x270.jpg" alt="GSoC logo"></p>
+<p>It&rsquo;s been three weeks into GSoC and I&rsquo;m having an amazing time. I am working along side <a href="https://twitter.com/dkreuter_">dkreuter</a> and been learning tons from him too!</p>
+<p><a href="https://github.com/radare/radeco">Here</a> is the repository where you can track our progress and also give us suggestions :)</p>
+<p>We chose <a href="http://www.rust-lang.org/">Rust</a> as our language for implementation. Though at first I was a bit scared of this choice, I quickly realized how great the language is! Rust has allowed be to far more productive, after of course my initial battles with the borrow checker.</p>
+<p>The zero-cost abstractions allowed by Rust has been a great so far!</p>
+<p>This is a quick roundup of what I&rsquo;ve been upto:</p>
+<ul>
+<li>Firstly, I got an <a href="https://github.com/radare/radare2/wiki/ESIL">ESIL</a> parser up and running. We use this parser to convert to an <a href="https://en.wikipedia.org/wiki/Intermediate_language">IR</a> which is easier to perform static analysis on. While the ESIL is amazing for emulation purposes, it&rsquo;s not so much for static analysis as it has a very large number of supported opcodes. The <em>RadecoIR</em> (name subject to change) is much more simplified in terms of the number of opcodes. Also, ESIL is primarily just strings (as suggested by its name &ldquo;Evaluable Strings Intermediate Language&rdquo;) which could be pretty hard to work with.</li>
+<li>The next step was to build a Control Flow Graph (<a href="https://en.wikipedia.org/wiki/Control_flow_graph">CFG</a>) out of the IR. Building a control flow graph will allow us to reason about the way the control flows in the program, and hence, helps us better understand the different programming constructs that go into making it. To make debugging and visualizations easier, I first went ahead and implemented a <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">dot</a> format emitter (ok, I admit it, I probably did this first as I felt it was more fun :P). Just a brief word about dot, dot is a graph description language which can be used an input to <a href="http://www.graphviz.org/">graphviz</a> to obtain visual representations of a graph. The current implementation is just a minimal dot format emitter and all the features of dot format are not fully supported. At this point, it still cannot be used on any generic graphs. I plan to expand this in the future to allow more features and work on generic graphs.</li>
+<li>The last part was making the CFG out of the emitted RadecoIR. This turned out to be pretty simple, however, there are still a ton of improvements to be made here :)</li>
+</ul>
+<p>Apart from Radeco itself, I also helped in making <a href="https://crates.io/crates/r2pipe">r2pipe.rs</a> which allows communication with radare2 over pipes. In the future, r2pipe.rs will be used to connect Radeco to radare2. R2Pipe.rs is great news if you&rsquo;re a rust person as you can now interact with radare2 and extend it to meet your needs!</p>
+<p>Check out the <a href="http://radare.github.io/r2pipe.rs/">documentation</a> if you&rsquo;re interested :)</p>
+<p>This is just a glimpse of what&rsquo;s in for the upcoming weeks:</p>
+<ul>
+<li>Integration with radare2.</li>
+<li>Write tests and documentation for all features. The limited documentation we currently have can be found <a href="http://radare.github.io/radeco">here</a>. This will be updated soon.</li>
+<li>Convert the IR into the <a href="https://en.wikipedia.org/wiki/Static_single_assignment_form">SSA</a> form.</li>
+<li>Write <a href="https://en.wikipedia.org/wiki/Data-flow_analysis">dataflow analysis</a> on the SSA form and also perform optimizations like:
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Dead_code_elimination">Dead code elimination</a>.</li>
+<li><a href="https://en.wikipedia.org/wiki/Constant_folding">Constant folding</a>.</li>
+<li><a href="https://en.wikipedia.org/?title=Constant_folding">Type propagation</a>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="bonus">Bonus:</h3>
+<p>Here is a small example of the CFG graph that we&rsquo;re currently about to generate</p>
+<p><img src="https://raw.githubusercontent.com/sushant94/sushant94.github.io/master/blog/images/cfg.png" alt="cfg"></p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fupdate-from-the-gsoc%2f - Update%20From%20the%20GSoC by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

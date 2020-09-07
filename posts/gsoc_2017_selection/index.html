@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC 2017 selection results</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC 2017 selection results" />
+<meta property="og:description" content="Google Summer of Code 2017 Good morning ladies and gentlemen! We&rsquo;re happy to present you our 3 students, who passed all the hurdles of GSoC&#39;17 selection and successfully shown their passion for radare2 development. Two projects are related to debugging capabilities of radare2 - both local and remote, and the 3rdone will improve the most wanted platform support - Windows.
+Here they are introducing themselves and their projects:
+Rkx1209 Hi. I&rsquo;m rkx1209 from Japan and I have been working on Timeless Debugging support for radare2&rsquo;s debugger." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/gsoc_2017_selection/" />
+<meta property="article:published_time" content="2017-05-15T02:45:16+02:00" />
+<meta property="article:modified_time" content="2017-05-15T02:45:16+02:00" />
+
+
+<meta itemprop="name" content="GSoC 2017 selection results">
+<meta itemprop="description" content="Google Summer of Code 2017 Good morning ladies and gentlemen! We&rsquo;re happy to present you our 3 students, who passed all the hurdles of GSoC&#39;17 selection and successfully shown their passion for radare2 development. Two projects are related to debugging capabilities of radare2 - both local and remote, and the 3rdone will improve the most wanted platform support - Windows.
+Here they are introducing themselves and their projects:
+Rkx1209 Hi. I&rsquo;m rkx1209 from Japan and I have been working on Timeless Debugging support for radare2&rsquo;s debugger.">
+<meta itemprop="datePublished" content="2017-05-15T02:45:16+02:00" />
+<meta itemprop="dateModified" content="2017-05-15T02:45:16+02:00" />
+<meta itemprop="wordCount" content="609">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC 2017 selection results"/>
+<meta name="twitter:description" content="Google Summer of Code 2017 Good morning ladies and gentlemen! We&rsquo;re happy to present you our 3 students, who passed all the hurdles of GSoC&#39;17 selection and successfully shown their passion for radare2 development. Two projects are related to debugging capabilities of radare2 - both local and remote, and the 3rdone will improve the most wanted platform support - Windows.
+Here they are introducing themselves and their projects:
+Rkx1209 Hi. I&rsquo;m rkx1209 from Japan and I have been working on Timeless Debugging support for radare2&rsquo;s debugger."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC 2017 selection results</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 15, 2017
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="google-summer-of-code-2017">Google Summer of Code 2017</h1>
+<p><img src="https://i.imgur.com/u6c06A9.png" alt=""></p>
+<p>Good morning ladies and gentlemen!
+We&rsquo;re happy to present you our 3 students, who passed all the hurdles of <a href="https://summerofcode.withgoogle.com/">GSoC'17</a> selection and successfully shown their passion for radare2 development. Two projects are related to debugging capabilities of radare2 - both local and remote, and the 3<!-- raw HTML omitted -->rd<!-- raw HTML omitted --> one will improve the most wanted platform support - Windows.</p>
+<p>Here they are introducing themselves and their projects:</p>
+<h1 id="rkx1209">Rkx1209</h1>
+<p>Hi. I&rsquo;m <a href="https://rkx1209.github.io/">rkx1209</a> from Japan and I have been working on <em>Timeless Debugging support</em> for radare2&rsquo;s debugger. Over the last couple of weeks I&rsquo;ve implemented two new commands <code>dsb</code> (debug step back) and <code>dts</code> (debug trace session). Thanks to those contributions, radare2 is now supporting native timeless debugging.
+You can use <code>dts</code> to save the program state at any moment and step one back by with <code>dsb</code> until the previously saved program state point. You can see a demo of this preliminary work <a href="https://asciinema.org/a/7i8rcl6eyu0xsuc249lzqhi4m">here</a>.
+Over the remaining duration of GSoC I&rsquo;m gonna do following tasks to improve current implementation.</p>
+<ol>
+<li>Implementing new diff style format of program snapshot for efficence</li>
+<li>Adding checkpoint system that automatically saves snapshots at some execution points</li>
+<li>Adding &lsquo;dcb&rsquo; (debug continue back) command.</li>
+<li>Implementing watchpoint function that is more efficent when it&rsquo;s used with back step commands.</li>
+</ol>
+<p>I&rsquo;ll also try to fix some issues of current implementation.(e.g. In Mac OS X, sometimes, <code>dts</code> crashes. )
+If you want to follow my progress, you can see it on my <a href="https://rkx1209.github.io/">blog</a>.</p>
+<p><img src="https://i.imgur.com/NgGi5yj.png" alt=""></p>
+<h1 id="xarkes">Xarkes</h1>
+<p>Hi, I&rsquo;m Antide from France, also known as <a href="https://twitter.com/xarkes_">xarkes</a>. I&rsquo;m a 20 years old IT student, currently 1st year in <a href="http://ensimag.grenoble-inp.fr">ENSIMAG</a> (Grenoble) Engineering School.
+For this Google Summer of Code, I&rsquo;ll be working on improving the support of radare2 under Windows. The first part of my GSoC will be dedicated to a proper building and testing for Windows environment using <a href="https://ci.appveyor.com/project/radare/radare2">AppVeyor</a>, to make development easier and more stable. During the second phase, I&rsquo;ll improve the support of PDB files, improve DLL files analysis, and debugging. Finally, I&rsquo;ll complete the WinDbg protocol support for radare2 and finish the current minidumps loader plugin.
+With all of this, radare2 should be more attractive for Windows users, in fact I already started working on making radare2 compatible with Visual Studio compiler, so it&rsquo;s easier for any Windows developer to contribute to it.</p>
+<p><img src="https://i.imgur.com/xaHKpgp.png" alt="">
+<img src="https://i.imgur.com/MYYzXPA.png" alt=""></p>
+<h1 id="srimanta-barua">Srimanta Barua</h1>
+<p>Hi, I&rsquo;m <a href="https://github.com/SrimantaBarua">Srimanta Barua</a>, a third year undergraduate student from India. I&rsquo;m relatively new to reverse engineering and radare2 is the first real tool I&rsquo;ve used (I can&rsquo;t afford to pay for an IDA license), so the love has stayed strong since. I&rsquo;ve contributed small bits of code over the last few months, primarily fixing bugs in analysis. My contributions can be found <a href="https://github.com/radare/radare2/pulls?q=is%3Apr+is%3Aclosed+author%3ASrimantaBarua">here</a>
+and <a href="https://github.com/radare/radare2-extras/pulls?q=is%3Apr+is%3Aclosed+author%3ASrimantaBarua">here</a>.
+An example here with my contribution of adding display of strings in disassembly of PIC binaries:</p>
+<p><img src="https://i.imgur.com/bvYq0Sa.png" alt=""></p>
+<p>For GSoC &lsquo;17, I will be working on a <a href="https://en.wikipedia.org/wiki/Gdbserver">gdbserver</a> implementation inside radare2, and simultaneously improving the gdb remote client. The core goals for the summer include support for basic debugging commands like break/continue/step, for x86/ARM/MIPS/PowerPC (at least), and being able to handle commands from r2/gdb/LLDB/IDA Pro.</p>
+<p>The interface for starting and using gdbserver inside r2 will work similar to that for RAP or HTTP. This project involves first extending the io_gdb plugin to support accept, listen and other calls, and different options for open. Then, I will work on extending the code for the gdb remote protocol.</p>
+<p>As an additional goal, I will be working on I/O caching to prevent multiple redundant reads. I&rsquo;ll also work on loading and rebasing symbols to honor the remote memory maps. I&rsquo;ll also take up other issues on the r2 repository.</p>
+<p>It promises to be a good summer.</p>
+<p><img src="https://i.imgur.com/DHPNM3k.png" alt=""></p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgsoc_2017_selection%2f - GSoC%202017%20selection%20results by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Radare2 and Capstone</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Radare2 and Capstone" />
+<meta property="og:description" content="Radare2 and Capstone This blogpost is the response to an observable fact: People don&rsquo;t know that Radare2 is using Capstone/Keystone/Unicorn.
+This is also a blogpost to address the numerous comparisons done online to these two different components.
+Defining the tools   Capstone is a multi-architecture disassembly framework
+  Keystone is a multi-architecture assembler framework
+  Unicorn Engine is a multi-architecture CPU emulator framework
+  Radare2 is a reverse engineering framework, it includes, in addition to other functionality: multi-architecture disassembly, assembly, and CPU emulation." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/radare2-capstone/" />
+<meta property="article:published_time" content="2017-03-09T18:30:00+01:00" />
+<meta property="article:modified_time" content="2017-03-09T18:30:00+01:00" />
+
+
+<meta itemprop="name" content="Radare2 and Capstone">
+<meta itemprop="description" content="Radare2 and Capstone This blogpost is the response to an observable fact: People don&rsquo;t know that Radare2 is using Capstone/Keystone/Unicorn.
+This is also a blogpost to address the numerous comparisons done online to these two different components.
+Defining the tools   Capstone is a multi-architecture disassembly framework
+  Keystone is a multi-architecture assembler framework
+  Unicorn Engine is a multi-architecture CPU emulator framework
+  Radare2 is a reverse engineering framework, it includes, in addition to other functionality: multi-architecture disassembly, assembly, and CPU emulation.">
+<meta itemprop="datePublished" content="2017-03-09T18:30:00+01:00" />
+<meta itemprop="dateModified" content="2017-03-09T18:30:00+01:00" />
+<meta itemprop="wordCount" content="574">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Radare2 and Capstone"/>
+<meta name="twitter:description" content="Radare2 and Capstone This blogpost is the response to an observable fact: People don&rsquo;t know that Radare2 is using Capstone/Keystone/Unicorn.
+This is also a blogpost to address the numerous comparisons done online to these two different components.
+Defining the tools   Capstone is a multi-architecture disassembly framework
+  Keystone is a multi-architecture assembler framework
+  Unicorn Engine is a multi-architecture CPU emulator framework
+  Radare2 is a reverse engineering framework, it includes, in addition to other functionality: multi-architecture disassembly, assembly, and CPU emulation."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Radare2 and Capstone</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        March 9, 2017
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="radare2-and-capstone">Radare2 and Capstone</h1>
+<p>This blogpost is the response to an observable fact: <strong>People don&rsquo;t know that Radare2 is using Capstone/Keystone/Unicorn</strong>.</p>
+<p>This is also a blogpost to address the numerous comparisons done online to these two different components.</p>
+<h1 id="defining-the-tools">Defining the tools</h1>
+<ul>
+<li>
+<p><strong>Capstone</strong> is a multi-architecture disassembly framework</p>
+</li>
+<li>
+<p><strong>Keystone</strong> is a multi-architecture assembler framework</p>
+</li>
+<li>
+<p><strong>Unicorn Engine</strong> is a multi-architecture CPU emulator framework</p>
+</li>
+<li>
+<p><strong>Radare2</strong> is a reverse engineering framework, it includes, in addition to other functionality: multi-architecture disassembly, assembly, and CPU emulation.</p>
+</li>
+</ul>
+<p>Radare2 is using <strong>Capstone</strong> <em>as its default disassembler since <strong>2014</strong></em> for arm, m68k, MIPS, PowerPC, SPARC, X86 and XCore.</p>
+<p><strong>Radare2</strong> also allows you to use other disassembly engines such as udis for x86 or gnu implementation for arm, MIPS, PowerPC and SPARC.</p>
+<p><strong>Radare2</strong> also contains many other architectures that are not supported by Capstone, such as 6502, VAX, RISC-V&hellip; (Full list can be obtained using <code>rasm2 -L</code>)</p>
+<p>You can use <strong>Keystone</strong> within <strong>Radare2</strong> by installing the Keystone plugin via r2pm, the radare2 package manager.</p>
+<p><code>$&gt; r2pm -i keystone-lib &amp;&amp; r2pm -i keystone</code></p>
+<p>Similarly you can use Unicorn Engine within Radare2 by installing the Unicorn Engine plugin via r2pm:</p>
+<p><code>$&gt; r2pm -i unicorn-lib &amp;&amp; r2pm -i unicorn</code></p>
+<p><img src="https://pbs.twimg.com/media/CNVxHanWIAA5WeL.png" alt="unicorn Engine in radare2"></p>
+<p>Both of these integrations were available prior to the public release of Keystone and Unicorn Engine.</p>
+<h2 id="why-the-current-comparisons-between-radare2-and-capstone-are-idiotic">Why the current comparisons between Radare2 and Capstone are idiotic</h2>
+<p>So now here are two questions you should ask yourself:</p>
+<ul>
+<li>Would you compare a set of wheels with a car ?</li>
+<li>Would you compare a library with the software that uses it ?</li>
+</ul>
+<p>This is how these dumb comparisons would actually look like given all those elements:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Radare2</th>
+<th>Capstone</th>
+<th>Keystone</th>
+<th>Unicorn-Engine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multi-architecture disassembly framework</td>
+<td>YES</td>
+<td>YES</td>
+<td>NO</td>
+<td>NO</td>
+</tr>
+<tr>
+<td>Multi-architecture assembler framework</td>
+<td>YES</td>
+<td>NO</td>
+<td>YES</td>
+<td>NO</td>
+</tr>
+<tr>
+<td>multi-architecture CPU emulator framework</td>
+<td>YES</td>
+<td>NO</td>
+<td>NO</td>
+<td>YES</td>
+</tr>
+</tbody>
+</table>
+<p>As one can notice, this has zero value, and therefore should not be done</p>
+<h2 id="api">API</h2>
+<p>One of the comparisons that is often done is between the APIs. Without referring to the previous paragraph.</p>
+<p>For this example I am going to show the Capstone API vs R_asm as already presented <a href="http://radare.today/posts/rasm/">here</a> vs R2pipe which is the recommended way to script radare2.</p>
+<h3 id="r_asm">R_ASM</h3>
+<h4 id="installation">Installation</h4>
+<p><code>r2pm -i r2api-python</code> (Other language available see <a href="https://github.com/radare/radare2-bindings">here</a>)</p>
+<h4 id="usage">Usage</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> r2.r_asm <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ass</span>(a, arch, op):
+    <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;OPCODE: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>op
+    a<span style="color:#f92672">.</span>use (arch)
+    <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;ARCH: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>arch
+    code <span style="color:#f92672">=</span> a<span style="color:#f92672">.</span>massemble (op)
+    <span style="color:#66d9ef">if</span> code <span style="color:#f92672">is</span> None:
+        <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;HEX: Cannot assemble opcode&#34;</span>
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;HEX: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>code<span style="color:#f92672">.</span>buf_hex
+
+a <span style="color:#f92672">=</span> RAsm()
+ass (a, <span style="color:#e6db74">&#39;x86.olly&#39;</span>, <span style="color:#e6db74">&#39;mov eax, 33&#39;</span>)
+ass (a, <span style="color:#e6db74">&#39;java&#39;</span>, <span style="color:#e6db74">&#39;bipush 33&#39;</span>)
+</code></pre></div><h3 id="r2pipe">R2Pipe</h3>
+<h4 id="installation-1">Installation</h4>
+<p><code>r2pm -i r2pipe-py</code> or <code>pip install r2pipe</code> (Other language available see <a href="https://github.com/radare/radare2-r2pipe">here</a>)</p>
+<h4 id="usage-1">Usage</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> r2pipe
+
+r2 <span style="color:#f92672">=</span> r2pipe<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#34;-&#34;</span>)
+r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#34;e asm.arch=x86&#34;</span>)
+r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#34;e asm.bits=64&#34;</span>)
+nopHex <span style="color:#f92672">=</span> r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#34;pa nop&#34;</span>)
+nopCode <span style="color:#f92672">=</span> r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#34;pad 90&#34;</span>)
+r2<span style="color:#f92672">.</span>quit()
+</code></pre></div><h3 id="capstone-api">Capstone API</h3>
+<h4 id="installation-2">Installation</h4>
+<p><code>pip install capstone</code></p>
+<p>(you will need keystone for assembly too)</p>
+<h4 id="usage-2">Usage</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> capstone <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+CODE <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x55\x48\x8b\x05\xb8\x13\x00\x00</span><span style="color:#e6db74">&#34;</span>
+
+md <span style="color:#f92672">=</span> Cs(CS_ARCH_X86, CS_MODE_64)
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> md<span style="color:#f92672">.</span>disasm(CODE, <span style="color:#ae81ff">0x1000</span>):
+     <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span>(i<span style="color:#f92672">.</span>mnemonic, i<span style="color:#f92672">.</span>op_str))
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>Comparisons between radare2 and Capstone do not make sense.</p>
+<p><strong>So stop doing it.</strong></p>
+<p>Secondly why use radare2 for analysis and Capstone API for scripting when you can use radare2 for both tasks without any effort.</p>
+<p>The APIs, though different, produce the same results as expected. Radare2 will have the advantage though, as additional functionalities such as analysis (cross-references) and debugging for example can be applied to the data coming from Capstone. Additionally, radare2 also provides an embedded disassembler.</p>
+<p>It makes more sense to compare radare2&rsquo;s ESIL engine to the Unicorn Engine, or Udis to Capstone.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fradare2-capstone%2f - Radare2%20and%20Capstone by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

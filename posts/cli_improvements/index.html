@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC 2018 Final: Console Interface Improvementes</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC 2018 Final: Console Interface Improvementes" />
+<meta property="og:description" content="Introduction Hi, I&rsquo;m cyanpencil and I was selected for the Console Interface Improvement task for the 2018 edition of the GSoC.
+I had a lot of fun spending this summer coding for radare. I learned so many things, and had an amazing experience overall. I am very grateful to my mentors, Xvilka, Pancake and Maijin, they were always present and closely followed me during the entire summer.
+My task was to improve some aspects of the terminal interface of radare2." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/cli_improvements/" />
+<meta property="article:published_time" content="2018-08-19T08:27:46+02:00" />
+<meta property="article:modified_time" content="2018-08-19T08:27:46+02:00" />
+
+
+<meta itemprop="name" content="GSoC 2018 Final: Console Interface Improvementes">
+<meta itemprop="description" content="Introduction Hi, I&rsquo;m cyanpencil and I was selected for the Console Interface Improvement task for the 2018 edition of the GSoC.
+I had a lot of fun spending this summer coding for radare. I learned so many things, and had an amazing experience overall. I am very grateful to my mentors, Xvilka, Pancake and Maijin, they were always present and closely followed me during the entire summer.
+My task was to improve some aspects of the terminal interface of radare2.">
+<meta itemprop="datePublished" content="2018-08-19T08:27:46+02:00" />
+<meta itemprop="dateModified" content="2018-08-19T08:27:46+02:00" />
+<meta itemprop="wordCount" content="643">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC 2018 Final: Console Interface Improvementes"/>
+<meta name="twitter:description" content="Introduction Hi, I&rsquo;m cyanpencil and I was selected for the Console Interface Improvement task for the 2018 edition of the GSoC.
+I had a lot of fun spending this summer coding for radare. I learned so many things, and had an amazing experience overall. I am very grateful to my mentors, Xvilka, Pancake and Maijin, they were always present and closely followed me during the entire summer.
+My task was to improve some aspects of the terminal interface of radare2."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC 2018 Final: Console Interface Improvementes</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 19, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h2 id="introduction">Introduction</h2>
+<p>Hi, I&rsquo;m <a href="https://www.github.com/cyanpencil">cyanpencil</a> and I was selected for the Console Interface Improvement task for the 2018 edition of the GSoC.</p>
+<p>I had a lot of fun spending this summer coding for <a href="https://www.github.com/radare/radare2">radare</a>. I learned so many things, and had an amazing experience overall. I am very grateful to my mentors, <a href="https://www.github.com/xvilka">Xvilka</a>, <a href="https://www.github.com/radare">Pancake</a> and <a href="https://www.github.com/Maijin">Maijin</a>, they were always present and closely followed me during the entire summer.</p>
+<p>My task was to improve some aspects of the terminal interface of radare2. <a href="http://rada.re/gsoc/2018/ideas.html#title_2">Here</a> you can find a more detailed description of the GSoC task. Unfortunately I didn&rsquo;t manage to complete all the subtasks listed in the project idea; However, I also took care of many things that were not included in the original task. There is still a huge amount of work to do: radare2 is still not very much user friendly, but it&rsquo;s definitely getting better with time.</p>
+<hr>
+<h3 id="improvements-of-the-graph-drawing-commands-ag">Improvements of the graph drawing commands (ag*)</h3>
+<p>The commands for drawing graphs in radare2 (all those starting with <code>ag</code>) had a bit confusing syntax. Even when consulting the help (<code>ag?</code>), it was not exactly clear what graph a certain command would draw and how. I implemented a new syntax for those commands (<code>ag&lt;graph type&gt;&lt;output format&gt;</code>) and made sure to support every type / format combination.</p>
+<p>Here&rsquo;s the new <code>ag?</code> help that summarizes my changes:</p>
+<pre><code>[0x00005000]&gt; ag?
+|Usage: ag&lt;graphtype&gt;&lt;format&gt; [addr]
+| Graph commands:
+| aga[format]             Data references graph
+| agA[format]             Global data references graph
+| agc[format]             Function callgraph
+| agC[format]             Global callgraph
+| agd[format] [fcn addr]  Diff graph
+| agf[format]             Basic blocks function graph
+| agi[format]             Imports graph
+| agr[format]             References graph
+| agR[format]             Global references graph
+| agx[format]             Cross references graph
+| agg[format]             Custom graph
+| ag-                     Clear the custom graph
+| agn[?] title body       Add a node to the custom graph
+| age[?] title1 title2    Add an edge to the custom graph
+|
+| Output formats:
+| &lt;blank&gt;                 Ascii art
+| *                       r2 commands
+| d                       Graphviz dot
+| g                       Graph Modelling Language (gml)
+| j                       json ('J' for formatted disassembly)
+| k                       SDB key-value
+| t                       Tiny ascii art
+| v                       Interactive ascii art
+| w [path]                Write to path or display graph image (see graph.gv.format and graph.web)
+</code></pre><h3 id="graph-jumptables">Graph Jumptables</h3>
+<p>Jumptables were creating a lot of trouble in ascii-art graphs, and most of the times the resulting layout was broken. See <a href="https://github.com/radare/radare2/issues/10275">this issue</a> to see what were the problems.
+I tried my best to make the layout better, and this is what I came out with:</p>
+<p><img src="/blog/images/gso2018-graph-jmptable.png" alt="">
+<em>Graph view of a switch statement</em></p>
+<p>However, there are still some problems to fix with graph edges (in particular, there are a bit too many overlaps).</p>
+<hr>
+<h3 id="utf-8-support-in-canvas">UTF-8 support in canvas</h3>
+<p><code>RConsCanvas</code>, radare2&rsquo;s own way of drawing complex interfaces in the terminal, had some glitches with UTF-8 characters because it didn&rsquo;t take into account the different byte-length of those special characters. Implementing the support for UTF-8 took quite a lot of time because it meant rewriting many things from scratch and because I had to keep intact the support for ANSI escape codes.
+But I&rsquo;m pretty happy with the result, as now with UTF-8 we can create even more beautiful interfaces:</p>
+<p><img src="/blog/images/gsoc2018-utf8-panels.png" alt="">
+<em>Here&rsquo;s a screen of the &ldquo;panels&rdquo; view with some comments in arabic and braille</em></p>
+<hr>
+<h3 id="autocompletion-widget-in-visual-offset-prompt">Autocompletion widget in visual offset prompt</h3>
+<p>Radare2 already had autocompletion in the visual offset prompt, which worked similarly to bash&rsquo;s autocompletion. My job was to make it more visually appealing by implementing something similar to the autocompletion inside (terminal) vim, where an interactive widget appears under the cursor. Here&rsquo;s the result:</p>
+<p><img src="/blog/images/gsoc-2018-autocompletion-widget.gif" alt="">
+<em>A gif demonstrating the scrolling of the autocompletion widget while in visual offset prompt</em></p>
+<hr>
+<h3 id="other-fixes--contributions">Other fixes / contributions</h3>
+<p>My work included taking care of a lot of other small issues and minor graphical glitches.
+Here you can find every contribution I made in this summer:</p>
+<ul>
+<li>
+<p><a href="https://github.com/radare/radare2/pulls?page=3&amp;q=is%3Apr+is%3Amerged+is%3Apr+author%3Acyanpencil+created%3A2018-05-01..2018-08-14">List of merged pull requests</a></p>
+</li>
+<li>
+<p><a href="https://github.com/radare/radare2/commits?author=cyanpencil">List of commits</a></p>
+</li>
+</ul>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fcli_improvements%2f - GSoC%202018%20Final%3a%20Console%20Interface%20Improvementes by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/background_tasks/">Background Tasks in radare2<aside class="dates">Jul 3 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSOC, The last commit 213c6f</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSOC, The last commit 213c6f" />
+<meta property="og:description" content="It has been so long since I posted, the reason is that I have been quite busy with my GSOC timeline. Yes, I know I said I will write blogs once every week, but I learned the hard way how not to do such promises again ;).
+I guess it is time to summarize the whole 3 months work, but before I start, I would like to state that all my contributions are in basically 2 repositories: radare2 and radare2-regression, you can find my contributions here and here for both repositories." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/gsoc-the-last-commit-213c6f/" />
+<meta property="article:published_time" content="2016-08-25T13:13:29+02:00" />
+<meta property="article:modified_time" content="2016-08-25T13:13:29+02:00" />
+
+
+<meta itemprop="name" content="GSOC, The last commit 213c6f">
+<meta itemprop="description" content="It has been so long since I posted, the reason is that I have been quite busy with my GSOC timeline. Yes, I know I said I will write blogs once every week, but I learned the hard way how not to do such promises again ;).
+I guess it is time to summarize the whole 3 months work, but before I start, I would like to state that all my contributions are in basically 2 repositories: radare2 and radare2-regression, you can find my contributions here and here for both repositories.">
+<meta itemprop="datePublished" content="2016-08-25T13:13:29+02:00" />
+<meta itemprop="dateModified" content="2016-08-25T13:13:29+02:00" />
+<meta itemprop="wordCount" content="1628">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSOC, The last commit 213c6f"/>
+<meta name="twitter:description" content="It has been so long since I posted, the reason is that I have been quite busy with my GSOC timeline. Yes, I know I said I will write blogs once every week, but I learned the hard way how not to do such promises again ;).
+I guess it is time to summarize the whole 3 months work, but before I start, I would like to state that all my contributions are in basically 2 repositories: radare2 and radare2-regression, you can find my contributions here and here for both repositories."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSOC, The last commit 213c6f</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 25, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>It has been so long since I posted, the reason is that I have been quite busy with my <a href="https://summerofcode.withgoogle.com/projects/#4786903815553024">GSOC</a> timeline. Yes, I know I said I will write blogs once every week, but I learned the hard way how not to do such promises again ;).</p>
+<p>I guess it is time to summarize the whole 3 months work, but before I start, I would like to state that all my contributions are in basically 2 repositories: <a href="https://github.com/radare/radare2">radare2</a> and <a href="https://github.com/radare/radare2-regressions">radare2-regression</a>, you can find my contributions <a href="https://github.com/radare/radare2/commits?author=oddcoder">here</a> and <a href="https://github.com/radare/radare2-regressions/commits?author=oddcoder">here</a> for both repositories.</p>
+<p>So what I have done during the past three and a half months?</p>
+<h2 id="fixing-t-commands">Fixing <code>t</code> commands</h2>
+<p>These commands had lots of regressions inside, it is basically using interpreter based on <a href="http://bellard.org/tcc/">tcc</a> to convert C into <code>key=value</code> pairs, my work here was mainly fixing bugs related to querying and editing values in the key/value form. I didn&rsquo;t touch tcc code because it is big system on its own.</p>
+<h2 id="storing-formal-parameters-and-local-vars">Storing formal parameters and local vars</h2>
+<p>Before I started, r2 was only able to store local vars that are offseted from <code>ebp</code>, actually since ebp only existed in <code>x86</code> architecture, the approach never worked on other architectures like mips or arm. I added the support of 3 different local vars (locas) types  and formal arguments (args):</p>
+<ul>
+<li>Base pointer based args/locals.</li>
+<li>Stack pointer based args/locals.</li>
+<li>Register based args.</li>
+</ul>
+<p>Those are integrated completely into r2 and replaced the old implementation. They replace their offsets in disassembly, one also have the option to display their value while debugging or emulating, set their types etc&hellip; One limitation is that it will never work for custom stack configuration for example when using <code>eax</code> as base pointer and say <code>ecx</code> as stack pointer.</p>
+<h2 id="auto-detecting-formal-parameters-and-local-vars">Auto detecting formal parameters and local vars</h2>
+<p>Everything I implemented here have something to do with <a href="https://github.com/radare/radare2book/blob/master/esil.md">ESIL</a> one way or another. Actually ESIL is always meant to be emulated, by the time I was implementing this I&rsquo;ve never understood how emulation work, so I figured another hackish way that later on found to be much effective than emulation. I just did some kind of text matching on esil!, all additions or subtractions from base pointer, stack pointer will be noted argument or var, that is it. no memory tracing (as we will see in type matching) no check for traps or zero dereferencing, also no worries about code coverage.</p>
+<p>One of the limitations of this approach is that all detected locals /arguments will be of word size, don&rsquo;t confuse word here with Microsoft&rsquo;s own WORD, I mean the maximum amount of data a CPU can process at a time, so variables that are say struct will never be detected as a struct at this phase of analysis.</p>
+<h2 id="calling-convention-profiles">Calling convention profiles</h2>
+<p>The idea behind <a href="https://en.wikipedia.org/wiki/Calling_convention">calling convention</a> is that every architecture, or probably every compiler put set of rules that regulates the relation between the caller and callee functions. At first, all calling conventions were part of the source code, hardcoded in C, and doesn&rsquo;t include any helper APIs. Actually all of the available calling conventions were loaded for all architectures, the default one was <a href="https://msdn.microsoft.com/en-us/library/zkwh89ks.aspx">cdecl</a>, based on that some interesting behavior occurs like for example you may see a arm function that is claimed to be called by cdecl. Luckily enough nothing critical in the code base depended on calling conventions at that time.</p>
+<p>What I tried to achieve is to isolate code from data, make people able to contribute to calling conventions as data that doesn&rsquo;t require knowledge of r2 code base, load calling conventions for each architecture on its own so no cdecl on mips arch, etc. I have full description of how to create calling conventions profile for your arch and how to integrate them into r2 so they load automatically <a href="https://github.com/radare/radare2/blob/0.10.5/doc/calling-conventions.md">here</a>.</p>
+<h2 id="type-matching">Type Matching</h2>
+<p>To be honest, this is considered the most challenging part for me in the whole GSOC experience, far until that moment I had no idea how does esil works, (remember, I always avoided using it for emulation). I needed some advanced features in esil that I was never sure whether it existed in first place or not, such as viewing memory register accesses, undo last (N) step into commands. I also had a wrong understanding of emulation, that it will always be as perfect as a debugger, and I learned that it is not the hard way. Actually ESIL is very very accurate on its own, but before the target function is emulated, program loader does lots of magic that ESIL never do. Emulating function calls was the worst part actually instruction pointer always ended to be <code>0x0</code> which is really really bad. Luckily with huge amount of help from my mentors all those issues were solved, I was so lucky that at least one other student in <a href="http://radare.org/r/rsoc.html">RSOC</a>(radare2 own version of GSOC) had the same problem, and we cooperated on figuring out what to do. And it is solved to some extent.</p>
+<p>At this point what I was going to do is to merge all what I did before (all together) + help of esil to obtain type information about arguments passed to each standard function. Function names, arguments and calling conventions are taken from types databases, description of the target calling convention is taken from calling convention databases, memory/registers accesses are taken from ESIL emulation of the function, all together will help identifying which instruction is passing argument to the callee function. More over if that instruction holds an arg/local for the caller it will be given the same type of the that argument of the callee.</p>
+<p>Everything sounds sweet, except for the fact that emulation will always follow always one path, so full code coverage wont be achieved in case if their is conditions or loops in functions which (almost every function do have), This is the basic limitation of that approach to match types for standard functions.</p>
+<h2 id="what-is-next">What is next</h2>
+<p>I got lots of plans for what to do next since GSoC is over. I loved r2 as both developer and user so I will stick to it. Plus it is one of my priorities to make that project suit my needs. At least because it wont be very convenient to buy something like the $4.7K IDA Pro just to play around with it. Most probably I will apply for next year GSoC as mentor for radare2, assuming I will be ready for that by 2017 spring.</p>
+<p>For sure what I will be working on for now is documenting types, since <code>tcc</code> needs lots of work till it generate the desired sdb key/value pairs, people need to know how to use create those databases manually without grepping through code base. Since I cant create all the databases my self I need help from others so this will be priority one.</p>
+<p>Also I&rsquo;ve started to work on some of the Equation group leaked malware, which is arrived in time. It will be a good exercise for me and wont disturb me from contributing to radare2, because they will expose a treasure trove of bugs everywhere (I already found one).</p>
+<p>As I said before, type matching lacks 100% code coverage, so I need to solve this problem as well. The apparent solution will be to use symbolic execution engine. I learned that <a href="https://github.com/radare/radeco-lib">radeco-lib</a> have that capabilities (or can be easily implemented there). That will require learning rust and getting familiar with radeco-lib codebase. But that certainly worth the effort!</p>
+<p>Building metamorphic engine for radare2. I don&rsquo;t even know in details what that is but it got some nice article on Wikipedia and new python repository that was hosted on github, plus it help me to understand how to work with malware that deploy that kind of technique deeply.</p>
+<p>Contribute to radeco: one of my mentors recommended that to me. It sounds like a great idea, since radeco needs a lots of work plus I enjoy doing new things regularly.</p>
+<p>Helping ESIL to emulate loaders: for this I will need to be file format ninja to understand how loaders work (most likely I will work on elf files).</p>
+<p>Adding support for TIL files: those files are used by IDA to store data types information for major compiler and APIs this will be way helpful for IDA users who are moving to r2.</p>
+<h2 id="for-next-year-students">For next year students</h2>
+<p>I have learned a lot from previous students/mentors hints. And as a GSoC participant duty, I should give next generation of students some kind of advice, so they never get surprised. That feedback wouldn&rsquo;t differ a lot from what others would tell, write code a lot, keep strong bonds with your mentor, etc&hellip; But their is one thing that no one ever mentioned and I learned it by doing.</p>
+<p>Although Google allows you to apply for more than one organization, it is much more useful to just apply for one and focus on contributing to that one as much as you can. Applying for more than one organization will be sort of distraction in my opinion. If this is your first time in open source projects, things will look too complex for a while. Actually it will be long period where you are just astonished how things got done. If you have that feeling probably you are on the right track. All what you need is some self confidence, patience, read as much of the newsletters or IRC logs or whatever available, ask questions, don&rsquo;t get embarrassed by asking stupid question - after all you will get the answer.</p>
+<p>One last advice, stick to your project as long as you can after GSoC, probably this is the one main target of GSOC, to get students introduced to open source projects. If you haven&rsquo;t done that - shame on you :P.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgsoc-the-last-commit-213c6f%2f - GSOC%2c%20The%20last%20commit%20213c6f by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

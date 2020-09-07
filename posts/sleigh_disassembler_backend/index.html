@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC 2020: SLEIGH Disassembler Backend</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC 2020: SLEIGH Disassembler Backend" />
+<meta property="og:description" content="Introduction Hello all, I&rsquo;m Jiaxiang Zhou from China. I was lucky to be selected as a participant of Radare2 project this year. My main work was to integrate SLEIGH as a disassembly backend into Radare2. r2ghidra-dec was my main working repository, aiming to delivering Ghidra&rsquo;s decompiler to Radare2. It could be renamed as r2ghidra since it would become not only a decompiler but a complete bridge between Radare2 and Ghidra after this project." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/" />
+<meta property="article:published_time" content="2020-09-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-09-06T00:00:00+00:00" />
+
+
+<meta itemprop="name" content="GSoC 2020: SLEIGH Disassembler Backend">
+<meta itemprop="description" content="Introduction Hello all, I&rsquo;m Jiaxiang Zhou from China. I was lucky to be selected as a participant of Radare2 project this year. My main work was to integrate SLEIGH as a disassembly backend into Radare2. r2ghidra-dec was my main working repository, aiming to delivering Ghidra&rsquo;s decompiler to Radare2. It could be renamed as r2ghidra since it would become not only a decompiler but a complete bridge between Radare2 and Ghidra after this project.">
+<meta itemprop="datePublished" content="2020-09-06T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-09-06T00:00:00+00:00" />
+<meta itemprop="wordCount" content="741">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC 2020: SLEIGH Disassembler Backend"/>
+<meta name="twitter:description" content="Introduction Hello all, I&rsquo;m Jiaxiang Zhou from China. I was lucky to be selected as a participant of Radare2 project this year. My main work was to integrate SLEIGH as a disassembly backend into Radare2. r2ghidra-dec was my main working repository, aiming to delivering Ghidra&rsquo;s decompiler to Radare2. It could be renamed as r2ghidra since it would become not only a decompiler but a complete bridge between Radare2 and Ghidra after this project."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC 2020: SLEIGH Disassembler Backend</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        September 6, 2020
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h2 id="introduction">Introduction</h2>
+<p>Hello all, I&rsquo;m <a href="https://github.com/FXTi">Jiaxiang Zhou</a> from China. I was lucky to be selected as a participant of Radare2 project this year. My main work was to  integrate SLEIGH as a disassembly backend into Radare2. <a href="https://github.com/radareorg/r2ghidra-dec">r2ghidra-dec</a> was my main working repository, aiming to delivering Ghidra&rsquo;s decompiler to Radare2. It could be renamed as <code>r2ghidra</code> since it would become not only a decompiler but a complete bridge between Radare2 and Ghidra after this project.</p>
+<p>Special thanks should be given to my mentors, <a href="https://github.com/thestr4ng3r">Florian Märkl</a>, <a href="https://github.com/wargio">Giovanni</a>, and <a href="https://github.com/XVilka">Anton</a>. Your patience and guidance are all well appreciated. I couldn&rsquo;t have completed this project without your support.</p>
+<p>Here&rsquo;s the <a href="https://blog.fxti.xyz/2020/08/31/GSoC2020-SLEIGH-Plugin/r2con2020-SDB.pdf">slides</a> made for r2con2020.</p>
+<h2 id="rasm-plugin">RAsm plugin</h2>
+<p>SLEIGH disassembler has been deeply embedded into C++ codebase of decompiler. So the solution is clear:</p>
+<h3 id="isolate-sleigh-from-c-codebase-of-ghidras-decompiler">Isolate SLEIGH from C++ codebase of Ghidra&rsquo;s decompiler</h3>
+<p>To get full access of <code>Sleigh</code> and low level spec file and interfaces, I implemented a class(<code>SleighAsm</code>) just like lite version of <code>Architecture</code> . This class will export P-codes and registers&rsquo; info parsed from spec file. It enable us to disassemble all valid instructions on demand:</p>
+<p><img src="https://blog.fxti.xyz/2020/08/31/GSoC2020-SLEIGH-Plugin/asm_ghidra.png" alt=""></p>
+<h2 id="ranal-plugin">RAnal plugin</h2>
+<p>SLEIGH will give out P-codes as IR to describe what instruction does. So I had to analysis on P-codes to extract control flow, type info. When it came to ESIL, things got more tricky because P-code&rsquo;s model and ESIL are different. What&rsquo;s more, P-codes support float number operation, which ESIL doesn&rsquo;t.</p>
+<h3 id="port-sleighinstructionprototype">Port SleighInstructionPrototype</h3>
+<p>Ghidra&rsquo;s C++ codebase concentrate on decompiler, so it focus on function-level analysis. There&rsquo;s classes like <code>Funcdata</code> to analysis intra-function flow. But instruction-level analysis tool only exists in JAVA codebase. So I had to port <code>SleighInstructionPrototype</code> from JAVA to C++. This enables control flow info extraction on <code>Constructors</code> (lower than P-code). This port work was tough to minimize the changes on original Ghidra codebase. And I eventually managed to port whole <code>SleighInstructionPrototype</code> with only two private fields exported!</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">diff <span style="color:#f92672">--</span>git a<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>context.hh b<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>context.hh
+index <span style="color:#ae81ff">3372e5</span>ac5.<span style="color:#ae81ff">.5</span>d2e108f7 <span style="color:#ae81ff">100644</span>
+<span style="color:#f92672">---</span> a<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>context.hh
+<span style="color:#f92672">+++</span> b<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>context.hh
+<span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">89</span>,<span style="color:#ae81ff">6</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">89</span>,<span style="color:#ae81ff">8</span> <span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+   ConstructState <span style="color:#f92672">*</span>base_state;
+   int4 alloc;                  <span style="color:#75715e">// Number of ConstructState&#39;s allocated
+</span><span style="color:#75715e"></span>   int4 delayslot;              <span style="color:#75715e">// delayslot depth
+</span><span style="color:#75715e"></span><span style="color:#f92672">+</span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+<span style="color:#f92672">+</span>  ConstructState <span style="color:#f92672">**</span>getBaseState(<span style="color:#66d9ef">void</span>) { <span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span>base_state; }
+ <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+   ParserContext(ContextCache <span style="color:#f92672">*</span>ccache);
+   <span style="color:#f92672">~</span>ParserContext(<span style="color:#66d9ef">void</span>) { <span style="color:#66d9ef">if</span> (context <span style="color:#f92672">!=</span> (uintm <span style="color:#f92672">*</span>)<span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">delete</span> [] context; }
+diff <span style="color:#f92672">--</span>git a<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>sleigh.hh b<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>sleigh.hh
+index <span style="color:#ae81ff">22</span>b9c7a21.<span style="color:#ae81ff">.5e6617</span>db8 <span style="color:#ae81ff">100644</span>
+<span style="color:#f92672">---</span> a<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>sleigh.hh
+<span style="color:#f92672">+++</span> b<span style="color:#f92672">/</span>Ghidra<span style="color:#f92672">/</span>Features<span style="color:#f92672">/</span>Decompiler<span style="color:#f92672">/</span>src<span style="color:#f92672">/</span>decompile<span style="color:#f92672">/</span>cpp<span style="color:#f92672">/</span>sleigh.hh
+<span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">113</span>,<span style="color:#ae81ff">6</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">113</span>,<span style="color:#ae81ff">7</span> <span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+   ParserContext <span style="color:#f92672">*</span>obtainContext(<span style="color:#66d9ef">const</span> Address <span style="color:#f92672">&amp;</span>addr,int4 state) <span style="color:#66d9ef">const</span>;
+   <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resolve</span>(ParserContext <span style="color:#f92672">&amp;</span>pos) <span style="color:#66d9ef">const</span>;
+   <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resolveHandles</span>(ParserContext <span style="color:#f92672">&amp;</span>pos) <span style="color:#66d9ef">const</span>;
+<span style="color:#f92672">+</span>  ContextCache <span style="color:#f92672">*</span>getContextCache(<span style="color:#66d9ef">void</span>) { <span style="color:#66d9ef">return</span> cache; }
+ <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+   Sleigh(LoadImage <span style="color:#f92672">*</span>ld,ContextDatabase <span style="color:#f92672">*</span>c_db);
+   <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Sleigh(<span style="color:#66d9ef">void</span>);
+</code></pre></div><p>And this is control flow extracted only from P-code results:</p>
+<p><img src="https://blog.fxti.xyz/2020/08/31/GSoC2020-SLEIGH-Plugin/control_flow.jpg" alt=""></p>
+<h3 id="p-code-to-esil-translation">P-code to ESIL translation</h3>
+<p>Ghidra&rsquo;s emulate system based on P-code is quite different from ESIL. First, it&rsquo;s not stack-based, and it can randomly access to any middle variables.</p>
+<p>Here&rsquo;s my design:</p>
+<ol>
+<li>
+<p>Add <code>PICK</code> to take values from stack to stack top</p>
+<p>I will leave middle variables intentionally on stack and retrieve them when this middle variable is needed.</p>
+</li>
+<li>
+<p>Add <code>GET</code> to retrieve register&rsquo;s value to stack</p>
+<p>Sometimes register&rsquo;s name is just one char, ESIL will confuse if it&rsquo;s compared with a number. Most importantly, I need <code>GET</code> to retrieve float number to stack without changing ESIL&rsquo;s original codes in Radare2.</p>
+</li>
+<li>
+<p>Override <code>=</code> to store value from stack back to register</p>
+<p>This is to pair with <code>GET</code> for float number handling. You will notice that all element except register(used as destination) are immediate value.</p>
+</li>
+<li>
+<p>Override <code>[4]</code> and <code>[8]</code> to read float number from memory</p>
+<p>When a float number is written into a register/memory location, I will record its register name/memory address to track until it&rsquo;s overwritten by anything except float number.</p>
+</li>
+<li>
+<p>Override <code>=[4]</code> and <code>=[8]</code> to store float number to memory</p>
+<p>As above.</p>
+</li>
+<li>
+<p>Add serials of float operation.</p>
+</li>
+</ol>
+<p>When real translation is running, plugin will employ a stack to emulate middle variables left on stack. This will help calculate offset of middle variables(unique varnodedata) used as argument of current P-code.</p>
+<p>Here&rsquo;s example:</p>
+<p><img src="https://blog.fxti.xyz/2020/08/31/GSoC2020-SLEIGH-Plugin/esil.png" alt=""></p>
+<h3 id="pattern-match-on-p-code-to-analysis-type-of-instruction">Pattern match on P-code to analysis type of instruction</h3>
+<p>SLEIGH only provide P-codes. But P-codes doesn&rsquo;t tell what the instruction is. And the multi-arch support of SLEIGH make thing even more complex.</p>
+<p>I made an <a href="https://github.com/radareorg/r2ghidra-dec/pull/120#issuecomment-673083656">overview</a> on all <code>R_ANAL_OP_TYPE_*</code> and summary their patterns. Hope to do the pattern match based on P-codes and know what type the instruction is. Sounds crazy, but I not only typed instructions successfully, I also managed to recover arguments of associated instructions!</p>
+<p>Here&rsquo;s example:</p>
+<p><img src="https://blog.fxti.xyz/2020/08/31/GSoC2020-SLEIGH-Plugin/type.png" alt=""></p>
+<h2 id="summary">Summary</h2>
+<p>RAsm and RAnal plugins are both workable. Ready to provide information recovered from Ghidra&rsquo;s SLEIGH disassembler.</p>
+<p><img src="https://blog.fxti.xyz/2020/08/31/GSoC2020-SLEIGH-Plugin/anal.png" alt=""></p>
+<p><img src="https://blog.fxti.xyz/2020/08/31/GSoC2020-SLEIGH-Plugin/flow.png" alt=""></p>
+<p>Related commits:</p>
+<p><a href="https://github.com/thestr4ng3r/ghidra/commit/50acb42da120072ce1c02a15004bc7e74a682599">https://github.com/thestr4ng3r/ghidra/commit/50acb42da120072ce1c02a15004bc7e74a682599</a></p>
+<p><a href="https://github.com/thestr4ng3r/ghidra/commit/7bde3b54b43230601363f89b0214ab4bdba8bf6f">https://github.com/thestr4ng3r/ghidra/commit/7bde3b54b43230601363f89b0214ab4bdba8bf6f</a></p>
+<p><a href="https://github.com/radareorg/r2ghidra-dec/commit/59473e5c53d8724cfee489968e0990a31396ef90">https://github.com/radareorg/r2ghidra-dec/commit/59473e5c53d8724cfee489968e0990a31396ef90</a></p>
+<p><a href="https://github.com/radareorg/r2ghidra/commit/e083b183c9954c899fd4f945547683689c9d00a4">https://github.com/radareorg/r2ghidra/commit/e083b183c9954c899fd4f945547683689c9d00a4</a></p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fsleigh_disassembler_backend%2f - GSoC%202020%3a%20SLEIGH%20Disassembler%20Backend by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/background_tasks/">Background Tasks in radare2<aside class="dates">Jul 3 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>RSoC 2019 Final: Console Interface Improvements</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="RSoC 2019 Final: Console Interface Improvements" />
+<meta property="og:description" content="RSoC 2019 Final: Console Interface Improvements Introduction: Hello all, I’m deepakchethan from India. I got to work on the console interface improvements for radare2 as a part of 2019’s edition of Radare Summer of Code. My main task was to improve the terminal interface of radare2. As a part of which I was tasked with completing 6 main tasks. I was unable to complete the table API myself, gladly pancake helped me with implementing the Table engine, while I worked on the integration and various improvements of it." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/" />
+<meta property="article:published_time" content="2019-10-01T14:10:05+05:30" />
+<meta property="article:modified_time" content="2019-10-01T14:10:05+05:30" />
+
+
+<meta itemprop="name" content="RSoC 2019 Final: Console Interface Improvements">
+<meta itemprop="description" content="RSoC 2019 Final: Console Interface Improvements Introduction: Hello all, I’m deepakchethan from India. I got to work on the console interface improvements for radare2 as a part of 2019’s edition of Radare Summer of Code. My main task was to improve the terminal interface of radare2. As a part of which I was tasked with completing 6 main tasks. I was unable to complete the table API myself, gladly pancake helped me with implementing the Table engine, while I worked on the integration and various improvements of it.">
+<meta itemprop="datePublished" content="2019-10-01T14:10:05+05:30" />
+<meta itemprop="dateModified" content="2019-10-01T14:10:05+05:30" />
+<meta itemprop="wordCount" content="496">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RSoC 2019 Final: Console Interface Improvements"/>
+<meta name="twitter:description" content="RSoC 2019 Final: Console Interface Improvements Introduction: Hello all, I’m deepakchethan from India. I got to work on the console interface improvements for radare2 as a part of 2019’s edition of Radare Summer of Code. My main task was to improve the terminal interface of radare2. As a part of which I was tasked with completing 6 main tasks. I was unable to complete the table API myself, gladly pancake helped me with implementing the Table engine, while I worked on the integration and various improvements of it."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>RSoC 2019 Final: Console Interface Improvements</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        October 1, 2019
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="rsoc-2019-final-console-interface-improvements">RSoC 2019 Final: Console Interface Improvements</h1>
+<h3 id="introduction">Introduction:</h3>
+<p>Hello all, I’m <a href="https://github.com/deepakchethan">deepakchethan</a> from India. I got to work on the <a href="https://www.radare.org/rsoc/2019/ideas.html#title_0">console interface improvements</a> for radare2 as a part of 2019’s edition of <a href="https://www.radare.org/rsoc/2019/ideas.htm">Radare Summer of Code</a>. My main task was to improve the terminal interface of radare2. As a part of which I was tasked with completing 6 main tasks. I was unable to complete the table API myself, gladly pancake helped me with implementing the Table engine, while I worked on the integration and various improvements of it. I learned a lot in the 3 months and am very grateful to my mentors Pancake and XVilka for being flexible and supportive in all aspects of the program.</p>
+<h3 id="task-1-generalize-the-code-of-popup-widget">Task 1: Generalize the code of popup widget:</h3>
+<p>Radare2 already had vim-like autocompletion in the visual offset prompt. My job was to generalize it and integrate it with the RCons. This feature can be enabled by setting <code>scr.prompt.popup</code>. It is still a little buggy but the result is as follows:</p>
+<p><img src="/blog/images/rsoc_popup.png" alt="popup"></p>
+<h3 id="task-2-improving-autocompletion-and-dietline-modes-viemacs-like-hotkeys">Task 2: Improving autocompletion and dietline modes (vi/emacs-like hotkeys)</h3>
+<p>Autocompletion was not supported for k and other mount based commands. I was tasked to add them. I also integrated dietline into <em>mount shell</em> (ms) and <em>HUD</em> mode.</p>
+<p><img src="/blog/images/rsoc_hud.png" alt="hud"></p>
+<p>I added the missing emacs hotkeys and added vi modes, which can be enabled by setting <code>scr.prompt.vi</code> to <code>true</code>. As a bonus if you set <code>scr.prompt.mode</code> to <code>true</code>, the color of the prompt changes based on the vi mode (control/insert). See the exact list of the hotkeys in <a href="https://radare.gitbooks.io/radare2book/content/basic_commands/dietline.html">Dietline</a> Radare2 book chapter.</p>
+<p><img src="/blog/images/rsoc_vi.png" alt="vi"></p>
+<p>I also added support for some bash commands like <code>uniq</code>, <code>sort</code>, <code>join</code>, etc.,</p>
+<h3 id="task-3-support-color-scheme-in-radiff2-graphs">Task 3: Support color-scheme in radiff2 graphs</h3>
+<p>My next task was to add support for ASCII/Unicode graphs for radiff2. But I noticed that the <code>agd</code>-based diff commands were not implemented in radare2. So I began with that, once it was complete, exporting them to radiff2 was relatively simple. Now, radiff2 supports all these graph outputs:</p>
+<ul>
+<li>ASCII or Unicode (UTF-8) art</li>
+<li>r2 commands</li>
+<li>Graphviz dot</li>
+<li>Graph Modelling Language (GML)</li>
+<li>JSON</li>
+<li>JSON with disasm</li>
+<li>SDB key-value</li>
+<li>Tiny ASCII/Unicode art</li>
+<li>Interactive ASCII/Unicode art</li>
+</ul>
+<p>The generated ASCII diff graph between true and false:</p>
+<p><img src="/blog/images/rsoc_radiff2_graph.png" alt="radiff"></p>
+<h3 id="task-4-further-improvements-for-utf-8-bidi">Task 4: Further improvements for UTF-8, BiDi:</h3>
+<p>All the reflines in disasm were of the same kind, which was a bit confusing. So I added different colors for up and down going reflines. The new look:</p>
+<p><img src="/blog/images/rsoc_refline.png" alt="refline"></p>
+<p>I also added UTF8 support for line graph commands like <code>p=</code> and <code>p==</code>.</p>
+<p><img src="/blog/images/rsoc_p=.png" alt="p=="></p>
+<h3 id="task-5-implement-table-commands-and-api-like-it-is-done-for-graphs">Task 5: Implement table commands and API (like it is done for graphs)</h3>
+<p>I was not able to implement the table API, but pancake did it. So I was tasked to add UTF-8 support and integrate the table API in the various commands that will benefit from the table representation. The <code>p-h</code> command integrated with the table API looks as follows:</p>
+<p><img src="/blog/images/rsoc_table.png" alt="Table"></p>
+<h3 id="task-6-various-bugfixes-and-improvements-for-visual-visual-panels-and-graph-modes">Task 6: Various bugfixes and improvements for visual, visual panels and graph modes</h3>
+<p>I fixed quite a bunch of bugs and all of these can be found <a href="https://github.com/radareorg/radare2/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+author%3Adeepakchethan+">here</a>.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2frsoc-2019-console-interface-improvement%2f - RSoC%202019%20Final%3a%20Console%20Interface%20Improvements by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/background_tasks/">Background Tasks in radare2<aside class="dates">Jul 3 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

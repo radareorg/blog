@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Emulating a simple bootloader</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Emulating a simple bootloader" />
+<meta property="og:description" content="Introduction Generally speaking, emulating a bootloader is simpler than it is for regular binaries, because they lack external libraries and usually have direct access to memory and hardware.
+In this case, the bootloader is a binary for x86 architecture which runs in 16-bits real mode using BIOS calls to perform its loading duties and textual input/output.
+The idea here is to emulate Cropta1 crackme using radare2 ESIL emulation, providing the needed BIOS via a trivial quick &amp; dirty python implementation of just what it&rsquo;s needed to run the crackme code." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/emulating-simple-bootloader/" />
+<meta property="article:published_time" content="2016-08-16T19:16:00+02:00" />
+<meta property="article:modified_time" content="2016-08-16T19:16:00+02:00" />
+
+
+<meta itemprop="name" content="Emulating a simple bootloader">
+<meta itemprop="description" content="Introduction Generally speaking, emulating a bootloader is simpler than it is for regular binaries, because they lack external libraries and usually have direct access to memory and hardware.
+In this case, the bootloader is a binary for x86 architecture which runs in 16-bits real mode using BIOS calls to perform its loading duties and textual input/output.
+The idea here is to emulate Cropta1 crackme using radare2 ESIL emulation, providing the needed BIOS via a trivial quick &amp; dirty python implementation of just what it&rsquo;s needed to run the crackme code.">
+<meta itemprop="datePublished" content="2016-08-16T19:16:00+02:00" />
+<meta itemprop="dateModified" content="2016-08-16T19:16:00+02:00" />
+<meta itemprop="wordCount" content="1851">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Emulating a simple bootloader"/>
+<meta name="twitter:description" content="Introduction Generally speaking, emulating a bootloader is simpler than it is for regular binaries, because they lack external libraries and usually have direct access to memory and hardware.
+In this case, the bootloader is a binary for x86 architecture which runs in 16-bits real mode using BIOS calls to perform its loading duties and textual input/output.
+The idea here is to emulate Cropta1 crackme using radare2 ESIL emulation, providing the needed BIOS via a trivial quick &amp; dirty python implementation of just what it&rsquo;s needed to run the crackme code."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Emulating a simple bootloader</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 16, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h2 id="introduction">Introduction</h2>
+<p>Generally speaking, emulating a bootloader is simpler than it is for regular binaries, because they lack external libraries and usually have direct access to memory and hardware.</p>
+<p>In this case, the bootloader is a binary for x86 architecture which runs in 16-bits real mode using <a href="http://www.ctyme.com/intr/int.htm">BIOS calls</a> to perform its loading duties and textual input/output.</p>
+<p>The idea here is to emulate <a href="http://crackmes.de/users/cropta/cropta_1/">Cropta1 crackme</a> using radare2 ESIL emulation, providing the needed BIOS via a trivial quick &amp; dirty python implementation of just what it&rsquo;s needed to run the crackme code.</p>
+<p>There are several ways to do it, I tried two of them and here is the story.</p>
+<h2 id="take-one-use-r2pipe">Take one, use r2pipe</h2>
+<p>Whenever i use r2pipe i feel home, moreover there&rsquo;s an example (in nodejs) of a similar case - <a href="https://github.com/radare/radare2-bindings/tree/master/r2pipe/nodejs/examples/syscall">the emulation of syscalls</a> - that&rsquo;s why it&rsquo;s the first thing i tried.</p>
+<p>My bios looked like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> r2pipe<span style="color:#f92672">,</span> sys<span style="color:#f92672">,</span> os
+
+r2 <span style="color:#f92672">=</span> r2pipe<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;#!pipe&#39;</span>)
+
+<span style="color:#75715e"># just the hdd params stolen from bochsrc</span>
+cylinders<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>
+heads<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>
+spt<span style="color:#f92672">=</span><span style="color:#ae81ff">63</span>
+bps<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span>
+
+<span style="color:#75715e"># function to read a key from stdin</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">wait_key</span>():
+	result <span style="color:#f92672">=</span> None
+	<span style="color:#66d9ef">if</span> os<span style="color:#f92672">.</span>name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;nt&#39;</span>:
+		<span style="color:#f92672">import</span> msvcrt
+		result <span style="color:#f92672">=</span> msvcrt<span style="color:#f92672">.</span>getch()
+	<span style="color:#66d9ef">else</span>:
+		<span style="color:#f92672">import</span> termios
+		fd <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>fileno()
+		oldterm <span style="color:#f92672">=</span> termios<span style="color:#f92672">.</span>tcgetattr(fd)
+		newattr <span style="color:#f92672">=</span> termios<span style="color:#f92672">.</span>tcgetattr(fd)
+		newattr[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> newattr[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">&amp;</span> <span style="color:#f92672">~</span>termios<span style="color:#f92672">.</span>ICANON <span style="color:#f92672">&amp;</span> <span style="color:#f92672">~</span>termios<span style="color:#f92672">.</span>ECHO
+		termios<span style="color:#f92672">.</span>tcsetattr(fd, termios<span style="color:#f92672">.</span>TCSANOW, newattr)
+		<span style="color:#66d9ef">try</span>:
+			result <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>read(<span style="color:#ae81ff">1</span>)
+		<span style="color:#66d9ef">except</span>:
+			<span style="color:#66d9ef">pass</span>
+		<span style="color:#66d9ef">finally</span>:
+			termios<span style="color:#f92672">.</span>tcsetattr(fd, termios<span style="color:#f92672">.</span>TCSAFLUSH, oldterm)
+		<span style="color:#66d9ef">return</span> result
+
+
+<span style="color:#75715e"># this handles the interrupts</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handle_intr</span>(intNum):
+	regs <span style="color:#f92672">=</span> r2<span style="color:#f92672">.</span>cmdj(<span style="color:#e6db74">&#39;arj&#39;</span>)
+
+	<span style="color:#75715e"># helper funcs to read/write hi and low parts of regs</span>
+	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xh</span>(regName, setValue <span style="color:#f92672">=</span> None):
+		val <span style="color:#f92672">=</span> regs[regName]
+		<span style="color:#66d9ef">if</span> setValue <span style="color:#f92672">==</span> None:
+			<span style="color:#66d9ef">return</span> (val <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xff00</span>)<span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">8</span>
+		<span style="color:#66d9ef">else</span>:
+			val <span style="color:#f92672">=</span> (val <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xff</span>) <span style="color:#f92672">|</span> ((setValue <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xff</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>)
+			r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar &#39;</span> <span style="color:#f92672">+</span> regName <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;=&#39;</span> <span style="color:#f92672">+</span> hex(val))
+			<span style="color:#66d9ef">return</span> val
+
+	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xl</span>(regName, setValue <span style="color:#f92672">=</span> None):
+		val <span style="color:#f92672">=</span> regs[regName]
+		<span style="color:#66d9ef">if</span> setValue <span style="color:#f92672">==</span> None:
+			<span style="color:#66d9ef">return</span> val <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xff</span>
+		<span style="color:#66d9ef">else</span>:
+			val <span style="color:#f92672">=</span> (val <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xff00</span>) <span style="color:#f92672">|</span> (setValue <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xff</span>)
+			r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar &#39;</span> <span style="color:#f92672">+</span> regName <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;=&#39;</span> <span style="color:#f92672">+</span> hex(val))
+			<span style="color:#66d9ef">return</span> val
+
+	<span style="color:#75715e"># command is in ah</span>
+	command <span style="color:#f92672">=</span> xh(<span style="color:#e6db74">&#39;ax&#39;</span>) 
+
+	<span style="color:#75715e"># read/write disk</span>
+	<span style="color:#66d9ef">if</span> intNum <span style="color:#f92672">==</span> <span style="color:#ae81ff">0x13</span>: 
+		<span style="color:#75715e"># read from disk to memory</span>
+		<span style="color:#66d9ef">if</span> command <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>:
+			<span style="color:#75715e"># al, number of sectors to read</span>
+			nSectors <span style="color:#f92672">=</span> xl(<span style="color:#e6db74">&#39;ax&#39;</span>)
+			
+			<span style="color:#75715e"># ch, cylinder</span>
+			cylinder <span style="color:#f92672">=</span> xh(<span style="color:#e6db74">&#39;cx&#39;</span>)
+			
+			<span style="color:#75715e"># cl, sector</span>
+			firstSector <span style="color:#f92672">=</span> xl(<span style="color:#e6db74">&#39;cx&#39;</span>)
+			
+			<span style="color:#75715e"># dh, head</span>
+			head <span style="color:#f92672">=</span> xh(<span style="color:#e6db74">&#39;dx&#39;</span>) 
+			
+			<span style="color:#75715e"># bx, buffer in memory</span>
+			destination <span style="color:#f92672">=</span> regs[<span style="color:#e6db74">&#39;bx&#39;</span>] <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffff</span>
+
+			<span style="color:#75715e"># hdd math</span>
+			source <span style="color:#f92672">=</span> (firstSector <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> (head <span style="color:#f92672">+</span> cylinder <span style="color:#f92672">*</span> heads) <span style="color:#f92672">*</span> spt ) <span style="color:#f92672">*</span> bps
+			length <span style="color:#f92672">=</span> nSectors <span style="color:#f92672">*</span> bps
+
+			<span style="color:#75715e"># do the actual writing in r2</span>
+			r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;e io.cache=true&#39;</span>)
+			r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;wd &#39;</span> <span style="color:#f92672">+</span> hex(source) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> hex(length) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; @ &#39;</span> <span style="color:#f92672">+</span> hex(destination))
+			
+			<span style="color:#75715e"># success -&gt; carry flag = 0</span>
+			r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar cf=0&#39;</span>)
+		
+		<span style="color:#75715e"># geometry query</span>
+		<span style="color:#66d9ef">elif</span> command <span style="color:#f92672">==</span> <span style="color:#ae81ff">8</span>: 
+			<span style="color:#75715e"># dl drive number</span>
+			driveNum <span style="color:#f92672">=</span> xl(<span style="color:#e6db74">&#39;dx&#39;</span>)
+			
+			<span style="color:#66d9ef">if</span> driveNum <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0x80</span>:
+				<span style="color:#75715e"># if not first drive, error -&gt; carry flag = 1</span>
+				r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar cf=1&#39;</span>)
+			<span style="color:#66d9ef">else</span>:
+				<span style="color:#75715e"># success, return geometry</span>
+				r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar cf=0&#39;</span>)
+				r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar ax=0&#39;</span>)
+				r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar dx=&#39;</span> <span style="color:#f92672">+</span> hex(((heads<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>) <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>))
+				r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar cx=&#39;</span> <span style="color:#f92672">+</span> hex(spt <span style="color:#f92672">|</span> (cylinders <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>)))
+
+	<span style="color:#75715e"># keyboard i/o</span>
+	<span style="color:#66d9ef">elif</span> intNum <span style="color:#f92672">==</span> <span style="color:#ae81ff">0x16</span>: 
+		<span style="color:#75715e"># read extended key</span>
+		<span style="color:#66d9ef">if</span> command <span style="color:#f92672">==</span> <span style="color:#ae81ff">0x10</span>:
+			result <span style="color:#f92672">=</span> ord(wait_key())
+			high <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+			<span style="color:#66d9ef">if</span> result <span style="color:#f92672">==</span> <span style="color:#ae81ff">10</span>:
+				high <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x1c</span>
+			<span style="color:#66d9ef">elif</span> result <span style="color:#f92672">==</span> <span style="color:#ae81ff">127</span>:
+				high <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xe</span>
+			r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;ar ax=&#39;</span> <span style="color:#f92672">+</span> hex(result <span style="color:#f92672">|</span> (high <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>)))
+
+	<span style="color:#75715e"># screen output</span>
+	<span style="color:#66d9ef">elif</span> intNum <span style="color:#f92672">==</span> <span style="color:#ae81ff">0x10</span>:
+		<span style="color:#75715e"># print char</span>
+		<span style="color:#66d9ef">if</span> command <span style="color:#f92672">==</span> <span style="color:#ae81ff">0xe</span>:
+			char <span style="color:#f92672">=</span> chr(xl(<span style="color:#e6db74">&#39;ax&#39;</span>))
+			sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(char)
+			sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>flush()
+
+<span style="color:#75715e"># call it, with parameter coming from r2</span>
+handle_intr(int(sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">0</span>))
+</code></pre></div><p>The above code is far from being a complete BIOS implementation, or even to be a correct subset: it&rsquo;s just what the crackme uses in its interesting part - the initial.</p>
+<p>Running this in radare2 is as easy as doing:</p>
+<pre><code class="language-r2" data-lang="r2">$ r2 -b 16 HardDisk
+ -- Choose your architecture by typing: 'e asm.arch=&lt;arch&gt;'
+[0000:0000]&gt; aei
+[0000:0000]&gt; aeim 0x2000 0xffff
+[0000:0000]&gt; aeip
+[0000:0000]&gt; e io.cache=true
+[0000:0000]&gt; &quot;e cmd.esil.intr=#!pipe python bios_pipe.py&quot;
+[0000:0000]&gt; e esil.gotolimit=0xffff
+[0000:0000]&gt; ! (sleep 30 &amp;&amp; killall -3 r2)&amp;
+[0000:0000]&gt; aec
+</code></pre><p>The following paragraph (Emulation setup) is an explosion of the above r2 commands with a lengthy explanation of each, feel free to skip it if the above r2 passage is obvious to you.</p>
+<h3 id="emulation-setup">Emulation setup</h3>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; aei
+</code></pre><p><code>aei</code> initializes the ESIL VM state (as stated in <code>ae?</code> help) which means if there was a previous ESIL context is destroyed here and a new ESIL stack gets deployed.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; aeim 0x2000 0xffff
+</code></pre><p><code>aeim</code> allocates the memory for mem read / write operations, basically needed for the stack pointer to point somewhere harmless.</p>
+<p>Here i&rsquo;m placing the start of it at address <code>0x2000</code> with a length of <code>0xffff</code> bytes. The value for the start value is exactly the size of the binary, so that memory writes will likely not overwrite the code.</p>
+<p>At the beginning of the bootloader code the stack pointer is placed at address <code>0x7c00</code>, so it can grow for <code>23552</code> bytes before potentially overlapping to the code. It may or may not be enough, hopefully it is for this simple case.</p>
+<p>In more complex cases of boot loader, maybe it&rsquo;s necessary to keep the memory in one file descriptor and the code in another. This is possible for example by using temporary file descriptor seeks in r2 read / write commands.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; aeip
+</code></pre><p>This will set the ESIL instruction pointer (and the IP alias register of the current architecture, as specified in the register profile of the anal plugin) to the current seek, namely <code>0</code>.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; e io.cache=true
+</code></pre><p>This let us write in the current session&rsquo;s memory without having r2 to write it back to the binary file.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; &quot;e cmd.esil.intr=#!pipe python bios_pipe.py&quot;
+</code></pre><p>This, in pseudo english, means: &ldquo;Every time there&rsquo;s an ESIL interrupt (<code>$</code> instruction), spawn this python script and pass it the number of the interrupt as argument&rdquo;. This will load and execute the bios depicted above.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; e esil.gotolimit=0xffff
+</code></pre><p>This one. It took me a couple of hours to figure out what that <code>ESIL infinite loop detected</code> error message did mean.</p>
+<p>The failing instruction was: <code>rep movsb byte es:[di], byte ptr [si]</code> which is known to be bounded by the <code>cx</code> value, which was itself conveniently set to the very finite value of <code>0x1e5</code> just few bytes above&hellip; so?</p>
+<p>It turns out that the <code>gotolimit</code> is the maximum allowed count of single ESIL instructions which can be executed in a statement - and that&rsquo;s great. In this case, the esil statement for the above failing instruction is:</p>
+<pre><code class="language-esil" data-lang="esil">cx,!,?{,BREAK,},si,[1],di,=[1],df,?{,1,si,-=,1,di,-=,},df,!,?{,1,si,+=,1,di,+=,},cx,--=,cx,?{,5,GOTO,}
+</code></pre><p>which is composed by <code>35</code> esil instructions, so doing the rough math <code>?v 35*0x1e5</code> = <code>0x424f</code> which is clearly greater than the default <code>esil.gotolimit = 0x00001000</code> even if we ignore the fact that the <code>GOTO</code> jumps to instruction 5 and not to the beginning of the statement.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; ! (sleep 30 &amp;&amp; killall -3 r2)&amp;
+</code></pre><p>At the end of the emulated code, the bootloader code enters an infinite loop. This is a dirty trick to schedule r2 quit at 30 seconds from now whatever happens (included that you may have closed an r2 session and opened another one in the meantime&hellip;).</p>
+<p>This particular one needs a posix shell to work.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; aec
+</code></pre><p>Starts the emulation until CTRL+C is pressed, if you have a chance to, if CTRL+C is honored by both radare2 and the spawned python code which may be running continuously at that time. Basically, in this case, it means run the emulation forever (due to the final infinite loop) or until r2 is killed by the dirty trick above.</p>
+<h3 id="cinema-of-take-one">Cinema of take one</h3>
+<p><a href="https://asciinema.org/a/88nezce35db4uo28qvlk4y5vc"><img src="https://asciinema.org/a/88nezce35db4uo28qvlk4y5vc.png" alt="asciicast"></a></p>
+<p>This demonstration shows all the above actually works, but - unless you&rsquo;re shooting an 1980s sci-fi B-movie - it&rsquo;s spectacularly slow for every real world use case.</p>
+<h2 id="take-two-using-r2lang--python-rcore-plugin">Take two, using r2lang + python RCore plugin</h2>
+<p>At that point, also after talking to pancake about this, there could be several reasons for it to be so slow, sorted by probability (more probable first):</p>
+<ul>
+<li>spawning python intepreter at each interrupt is slow</li>
+<li>my shitty python code is slow</li>
+<li>python in general is slow</li>
+<li>ESIL emulation is slow</li>
+</ul>
+<p>Starting to address the more probable issue, an alternative way to do this - while still using my python BIOS - is to define an RCore plugin which accepts a new &lsquo;bios&rsquo; command. In this way the python code is loaded only once and then at each interrupt the command itself gets executed, reusing the same python context.</p>
+<p>Here is the modifications to the python code above:</p>
+<p>1 - instead of importing <code>r2pipe</code>, let&rsquo;s import <code>r2lang</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> r2lang<span style="color:#f92672">,</span> sys<span style="color:#f92672">,</span> os<span style="color:#f92672">,</span> json
+r2 <span style="color:#f92672">=</span> r2lang
+</code></pre></div><p>2 - replace missing <code>cmdj</code> with native python <code>json.loads</code> in bios code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># this handles the interrupts</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handle_intr</span>(intNum):
+	regs <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;arj&#39;</span>))
+	<span style="color:#f92672">...</span>
+</code></pre></div><p>3 - register the core plugin:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bioscore</span>(a):
+	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_call</span>(s):
+		<span style="color:#66d9ef">if</span> s <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;bios&#34;</span>:
+			ip <span style="color:#f92672">=</span> int(r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#34;ar ip&#34;</span>),<span style="color:#ae81ff">0</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>
+			num <span style="color:#f92672">=</span> int(r2<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#34;?v $v@&#34;</span> <span style="color:#f92672">+</span> hex(ip)),<span style="color:#ae81ff">0</span>)
+			handle_intr(num)
+			<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+
+	<span style="color:#66d9ef">return</span> {
+		<span style="color:#e6db74">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;BiosCore&#34;</span>,
+		<span style="color:#e6db74">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;WTFPL&#34;</span>,
+		<span style="color:#e6db74">&#34;desc&#34;</span>: <span style="color:#e6db74">&#34;toy bios&#34;</span>,
+		<span style="color:#e6db74">&#34;call&#34;</span>: _call
+	}
+
+
+r2lang<span style="color:#f92672">.</span>plugin(<span style="color:#e6db74">&#34;core&#34;</span>, bioscore)
+</code></pre></div><p>The most evident issue so far is that the custom commands defined in RCore plugins don&rsquo;t accept parameters, therefore here is another dirty trick.</p>
+<p>In order to get the numeric value of the interrupt, i decided to use the <code>$v</code> variable which returns the immediate value of the instruction at the current seek. The problem here is that during emulation, the instruction pointer has been already incremented by the time the interrupt gets executed. So, assuming that x86 16-bit encoding of <code>INT XX</code> instructions is always 2 bytes long, i just subtracted <code>2</code> to current <code>ip</code> value in order to get the seek for the immediate value to extract.</p>
+<p>And again, the execution sequence:</p>
+<pre><code class="language-r2" data-lang="r2">$ r2 -i bios.py -b 16 HardDisk
+ -- You are probably using an old version of r2, go checkout the git!
+[0000:0000]&gt; aei
+[0000:0000]&gt; aeim 0x2000 0xffff
+[0000:0000]&gt; aeip
+[0000:0000]&gt; e io.cache=true
+[0000:0000]&gt; (orpo, bios)
+[0000:0000]&gt; &quot;e cmd.esil.intr=` `;.(orpo)&quot;
+[0000:0000]&gt; e esil.gotolimit=0xffff
+[0000:0000]&gt; ! (sleep 30 &amp;&amp; killall -3 r2)&amp;
+[0000:0000]&gt; aec
+</code></pre><h3 id="emulation-setup-differences">Emulation setup (differences)</h3>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; (orpo, bios)
+</code></pre><p>Again, custom commands do not accept parameters. More: if they&rsquo;re called with a parameter, they don&rsquo;t get executed at all.</p>
+<p>To overcome this limitation, i just defined a macro named <code>orpo</code>. In this way, the extra unusable parameter which r2 pass to the <code>intr</code> handler is just ignored and the custom command is called.</p>
+<p>&ndash;</p>
+<pre><code class="language-r2" data-lang="r2">[0000:0000]&gt; &quot;e cmd.esil.intr=` `;.(orpo)&quot;
+</code></pre><p>Here is the modified <code>intr</code> handler which in turn calls our macro, which in turn calls our custom command.</p>
+<p>Buried in the above command line there&rsquo;s also another mystery i lost an interesting hour to workaround. That space in backticks. By removing that, each char which is output from my BIOS command gets prepended by what it seems the output of a <code>printf(&quot;0x%x\n&quot;, somevalue);</code> buried somewhere along the r2 code path around the interrupt handling / r2lang io piping (i guess, but actually i was unable to find it).</p>
+<h3 id="cinema-of-take-two">Cinema of take two</h3>
+<p><a href="https://asciinema.org/a/6q6cvq2i1xdwsjrq2o5we4vad"><img src="https://asciinema.org/a/6q6cvq2i1xdwsjrq2o5we4vad.png" alt="asciicast"></a></p>
+<p>Hey! This time is faster. Still there&rsquo;s space for improvements, i guess it&rsquo;s possible to go down the list of slowdown probability unrolled above until rewriting the BIOS in C, for example. Honestly enough, though, the python RCore plugin seems pretty fast to me.</p>
+<p>(by mrmacete)</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2femulating-simple-bootloader%2f - Emulating%20a%20simple%20bootloader by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

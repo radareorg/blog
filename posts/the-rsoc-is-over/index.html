@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>The RSoC is over</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="The RSoC is over" />
+<meta property="og:description" content="October is over and we delayed a bit the end of the RSoC in order to get everything done for the release, and it seems that little happened as planned:
+The RSoC advertisement was a great opportunity to get new developers interested in contributing to the project, some of them even without joining the RSoC took some points that weren&rsquo;t requested and delivered them! That&rsquo;s pretty cool, because our two selected students disapeared during the summer." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/the-rsoc-is-over/" />
+<meta property="article:published_time" content="2014-11-17T08:20:09+01:00" />
+<meta property="article:modified_time" content="2014-11-17T08:20:09+01:00" />
+
+
+<meta itemprop="name" content="The RSoC is over">
+<meta itemprop="description" content="October is over and we delayed a bit the end of the RSoC in order to get everything done for the release, and it seems that little happened as planned:
+The RSoC advertisement was a great opportunity to get new developers interested in contributing to the project, some of them even without joining the RSoC took some points that weren&rsquo;t requested and delivered them! That&rsquo;s pretty cool, because our two selected students disapeared during the summer.">
+<meta itemprop="datePublished" content="2014-11-17T08:20:09+01:00" />
+<meta itemprop="dateModified" content="2014-11-17T08:20:09+01:00" />
+<meta itemprop="wordCount" content="462">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="The RSoC is over"/>
+<meta name="twitter:description" content="October is over and we delayed a bit the end of the RSoC in order to get everything done for the release, and it seems that little happened as planned:
+The RSoC advertisement was a great opportunity to get new developers interested in contributing to the project, some of them even without joining the RSoC took some points that weren&rsquo;t requested and delivered them! That&rsquo;s pretty cool, because our two selected students disapeared during the summer."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>The RSoC is over</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        November 17, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>October is over and we delayed a bit the end of the <a href="http://rada.re/rsoc/">RSoC</a> in order to get everything done for the <a href="http://radare.today/radare-0-9-8/">release</a>, and it seems that little happened as planned:</p>
+<p>The RSoC advertisement was a great opportunity to get new developers interested in contributing to the project, some of them even without joining the RSoC took some points that weren&rsquo;t requested and delivered them! That&rsquo;s pretty cool, because our two <em>selected students</em> disapeared during the summer.</p>
+<h2 id="abandonned-tasks">Abandonned tasks</h2>
+<p>We&rsquo;re a bit sad that the <a href="http://radare.today/exploring-the-database/">sdbization</a> task wasn&rsquo;t completed, since this would have been a huge improvement, both in term of performances and cool new features, like collaboration. Also, no one gave some love to the <a href="http://cloud.rada.re">web interface</a>, so it will still be an ugly PoC a bit longer.</p>
+<h2 id="complete-tasks">Complete tasks</h2>
+<p>Most of the tasks weren&rsquo;t completed on the test cases and documentation sides, but we hope to get things done in time for the <a href="https://github.com/radare/radare2/milestones/0.9.9">next release</a>, the 0.9.9.</p>
+<p>We&rsquo;d like to congratulate our 3 volunteers for their hard work and dedication. They were supposed to be the &lsquo;free&rsquo; team, but since our two <em>official</em> students left, we&rsquo;d like to pay them as if they were selected: We managed to get <strong>$2100</strong> in budget, so each of them will receive <strong>$700</strong>.</p>
+<h3 id="structures-support">Structures support</h3>
+<p><a href="http://libskia.so/">Skia</a> did great to implement structures support, a bit <em>à la</em> 010Editor.
+<img src="/blog/images/687474703a2f2f7777772e6c6962736b69612e736f2f7075622f72322532306c696e6b65642532306c6973742e706e67.png" alt="structure">
+Now with <code>r2 -nn</code> it is possible to analyze the file header structs using the <code>pf.</code>, <code>pxa</code> and other related commands.</p>
+<pre><code>$ r2 -nn /path/to/bin
+</code></pre><h3 id="flirt-and-yara-support">FLIRT and YARA support</h3>
+<p><a href="http://failhard.org/">jfrankowski</a> did a great RSoC, and improved <a href="https://plusvic.github.io/yara/">yara</a> support in radare2, and also added the <a href="https://www.hex-rays.com/products/ida/tech/flirt/in_depth.shtml">FLIRT</a> one! Currently, radare2 is only able to use existing signatures, but feel free to drop us a patch to build our own, using radare!</p>
+<p>Yara3 support is almost there, but we prefer to release for a welltested yara2 version and push the upgrade in 0.9.9.</p>
+<h3 id="pdb-support">PDB support</h3>
+<p><a href="https://github.com/inisider">inisider</a> implemented a standalone library to handle <a href="https://support.microsoft.com/kb/121366">PDB</a> files, and integrated it into radare2. You can now analyse/debug PE with much more ease.</p>
+<pre><code>&gt; .!rabin2 -rP test.pdb
+</code></pre><h3 id="esil">ESIL</h3>
+<p>Nobody took that task from the RSoC, but pancake and condret raised the bar and managed to get a working implementation of <a href="https://github.com/radare/radare2/wiki/ESIL">ESIL</a>, mainly tested on gameboy, brainfuck, x86 and mips. Also, pancake made a new search command to use esil expressions to perform complex conditional carving useful for forensics and data analysis.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>We enjoyed holding this first RSoC. We made some mikstakes, and learned a lot of things. If we won&rsquo;t get selected for a GSoC once again, be sure that the second RSoC will be better than the first one.</p>
+<p>We&rsquo;d like to thank everyone who attended, participated, donated, supported, helped, advertised, improved and tested things. Without you, the RSoC wouldn&rsquo;t have been so productive!</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fthe-rsoc-is-over%2f - The%20RSoC%20is%20over by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

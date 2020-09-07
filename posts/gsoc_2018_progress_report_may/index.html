@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC&#39;18 Progress Report - May</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC&#39;18 Progress Report - May" />
+<meta property="og:description" content="A few weeks passed but our students worked hard and achieved a tremendous results already. Lets see what they have to say about this:
+Cyanpencil&rsquo;s update Hi, I&rsquo;m cyanpencil, and in those initial three weeks of the GSoC 2018 I took care of the commands relative to graph drawing (all the commands starting with ag).
+Those commands were a bit confusing because each of them required a different syntax / used different config variables, resulting in a ag?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/gsoc_2018_progress_report_may/" />
+<meta property="article:published_time" content="2018-05-31T01:45:16+02:00" />
+<meta property="article:modified_time" content="2018-05-31T01:45:16+02:00" />
+
+
+<meta itemprop="name" content="GSoC&#39;18 Progress Report - May">
+<meta itemprop="description" content="A few weeks passed but our students worked hard and achieved a tremendous results already. Lets see what they have to say about this:
+Cyanpencil&rsquo;s update Hi, I&rsquo;m cyanpencil, and in those initial three weeks of the GSoC 2018 I took care of the commands relative to graph drawing (all the commands starting with ag).
+Those commands were a bit confusing because each of them required a different syntax / used different config variables, resulting in a ag?">
+<meta itemprop="datePublished" content="2018-05-31T01:45:16+02:00" />
+<meta itemprop="dateModified" content="2018-05-31T01:45:16+02:00" />
+<meta itemprop="wordCount" content="1152">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC&#39;18 Progress Report - May"/>
+<meta name="twitter:description" content="A few weeks passed but our students worked hard and achieved a tremendous results already. Lets see what they have to say about this:
+Cyanpencil&rsquo;s update Hi, I&rsquo;m cyanpencil, and in those initial three weeks of the GSoC 2018 I took care of the commands relative to graph drawing (all the commands starting with ag).
+Those commands were a bit confusing because each of them required a different syntax / used different config variables, resulting in a ag?"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC&#39;18 Progress Report - May</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 31, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <!-- raw HTML omitted -->
+<p>A few weeks passed but our students worked hard and achieved a tremendous results already. Lets see what they have to say about this:</p>
+<h2 id="cyanpencils-update">Cyanpencil&rsquo;s update</h2>
+<p>Hi, I&rsquo;m <a href="https://www.github.com/cyanpencil">cyanpencil</a>, and in those initial three weeks of the GSoC 2018 I took care of the commands relative to graph drawing (all the commands starting with <code>ag</code>).</p>
+<p>Those commands were a bit confusing because each of them required a different syntax / used different config variables, resulting in a <code>ag?</code> help are mixed and hard to understand.</p>
+<p>After some discussion with the rest of the community (special thanks to <a href="https://twitter.com/trufae">@pancake</a> and <a href="https://github.com/XVilka">@XVilka</a> who followed me closely during this process), we came up  with a standard syntax for this family of commands:</p>
+<p><strong><code>ag&lt;graph type&gt;&lt;output format&gt;</code></strong></p>
+<p>For example, if I now want to draw the callgraph in interactive ascii view, I just have to type <code>agcv</code>. For the callgraph in tiny ascii art, it&rsquo;s <code>agct</code>, etc..</p>
+<p>I also added a few new graph types (the import graph and the data graph) and worked hard to make all graph types compatible with every output format. (The only exception is the diff graph, that currently supports only <code>d</code> and <code>w</code> formats)</p>
+<p>During this process, I had to take care <a href="https://github.com/radare/radare2/issues/8385">of</a> <a href="https://github.com/radare/radare2/issues/9716">some</a> <a href="https://github.com/radare/radare2/issues/9962">issues</a> <a href="https://github.com/radare/radare2/issues/6220">related</a> <a href="https://github.com/radare/radare2/issues/9199">to</a> <a href="https://github.com/radare/radare2/issues/9867">graphs</a> as well.</p>
+<p>All of this resulted in a new, better <code>ag?</code> help that we hope clear even for the new users of r2:</p>
+<pre><code>|Usage: ag&lt;graphtype&gt;&lt;format&gt; [addr]
+| Graph commands:
+| agc[format] [fcn addr]  Function callgraph
+| agf[format] [fcn addr]  Basic blocks function graph
+| agx[format] [addr]      Cross references graph
+| agr[format] [fcn addr]  References graph
+| aga[format] [fcn addr]  Data references graph
+| agd[format] [fcn addr]  Diff graph
+| agi[format]             Imports graph
+| agC[format]             Global callgraph
+| agR[format]             Global references graph
+| agA[format]             Global data references graph
+| agg[format]             Custom graph
+| ag-                     Clear the custom graph
+| agn[?] title body       Add a node to the custom graph
+| age[?] title1 title2    Add an edge to the custom graph
+|
+| Output formats:
+| &lt;blank&gt;                 Ascii art
+| v                       Interactive ascii art
+| t                       Tiny ascii art
+| d                       Graphviz dot
+| j                       json ('J' for formatted disassembly)
+| g                       Graph Modelling Language (gml)
+| k                       SDB key-value
+| *                       r2 commands
+| w                       Web/image (see graph.extension and graph.web)
+</code></pre><h2 id="sivaramaaa">sivaramaaa</h2>
+<p>Here are the few highlights of my work for this month :</p>
+<h3 id="afta-optimization">afta optimization</h3>
+<p>I started first trying to optimize afta which was before emulating entire function, refactored it to buffer only a few instructions before call instruction and emulate it when we hit a known function call</p>
+<h3 id="improve-variable-recovery">Improve variable recovery</h3>
+<p>Previously function stack frame was calculated at the end of the analysis, this could be wrong since stack frame is not fixed, so I tweaked the analysis loop to fix this issue</p>
+<h3 id="working-with-types-commands">Working with types commands</h3>
+<ol>
+<li>Array of struct now works with ts command</li>
+</ol>
+<pre><code>[0x00000000]&gt; &quot;td struct foo { int a; int b; };&quot;
+[0x00000000]&gt; &quot;td struct bar { int x; struct foo y[2]; };&quot;
+[0x00000000]&gt; ts bar
+  pf d[2]? x (foo)y
+[0x00000000]&gt; .ts bar
+  x : 0x00000000 = 0
+  y :
+    [
+                  struct&lt;foo&gt;
+       a : 0x00000004 = 0
+       b : 0x00000008 = 0
+                  struct&lt;foo&gt;
+       a : 0x0000000c = 0
+       b : 0x00000010 = 0
+    ]
+</code></pre><ol start="2">
+<li>
+<p>Manage enum types properly - enum data type is now stored in sdb in a consistent way with rest of the type storage,</p>
+</li>
+<li>
+<p>Fix te to list all values of enum</p>
+</li>
+</ol>
+<pre><code>[0x00000000]&gt; &quot;td enum Foo {COW=1,BAR=2};&quot;
+[0x00000000]&gt; te Foo
+COW = 0x1
+BAR = 0x2
+</code></pre><ol start="4">
+<li>
+<p>Fixed struct offset for dst operand in ta</p>
+</li>
+<li>
+<p>Currently working on structure offset propagation, which requires a lot of change in opcode parser to support RAnalop.dst/src in all architectures, I am going to finish this soon and move onto Type Inference task!</p>
+</li>
+</ol>
+<h2 id="kriw">Kriw</h2>
+<p>I have implemented C-like internal representation so as to help decompilation process (e.g. structuring CFG). For this the <a href="https://github.com/radareorg/radeco-lib/pull/145">SimpleCAST</a> was implemented. Basically SimpleCAST is a CFG of C-like statements. For checking the correctness I wrote converter from SimpleCAST to existing CAST and unit tests for it.</p>
+<p>The next step was the <a href="https://github.com/radareorg/radeco-lib/pull/162">recovering statements from IR</a>, and prototyping it by implementing required functions and data strictures <a href="https://github.com/radareorg/radeco-lib/issues/156">read some papers</a>.</p>
+<p>For the next week I plan to work on those things:</p>
+<ul>
+<li>implement converter from IR to SimpleCAST
+<ul>
+<li>collect local variables of target function from r2api</li>
+<li>recover expressions from SSA</li>
+<li>recover statements (assignment, function call, goto, etc)</li>
+</ul>
+</li>
+<li>refine SimpleCAST</li>
+</ul>
+<h2 id="hmperson1">HMPerson1</h2>
+<p>The most important changes this week are the elimination of comments, <a href="https://github.com/radareorg/radeco-lib/pull/157">moving everything related to registers handling in edges</a> and <a href="https://github.com/radareorg/radeco-lib/pull/161">register API migration</a></p>
+<p>Apart from this I studied thoroughly the <a href="https://net.cs.uni-bonn.de/fileadmin/ag/martini/Staff/yakdan/dream_ndss2015.pdf">No More GOTOs</a> paper and extracted algorithm from it:</p>
+<ol>
+<li>perform DFS on CFG to find backedges; record post-order trace
+<ul>
+<li>record trace b/c we&rsquo;ll modify the CFG later</li>
+</ul>
+</li>
+<li>for each node $n$ in trace:
+<ol>
+<li>if no backedge points at $n$:
+<ol>
+<li>find set of nodes dominated by $n$</li>
+<li>if region has single successor $s$:
+<ol>
+<li>structure acyclic SESE region $(n,s)$</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>else: (loop)
+<ol>
+<li>compute initial loop nodes from given latching nodes</li>
+<li>find abnormal entries and &ldquo;funnel&rdquo; them into a single entry</li>
+<li>compute initial exit nodes $N_{succ} = \text{succ}(N_{loop}) \setminus N_{loop}$</li>
+<li>refine $N_{loop}$ and $N_{succ}$</li>
+<li>if $\left|N_{succ}\right| &gt; 0$:
+<ol>
+<li>if $\left|N_{succ}\right| = 1$:
+<ol>
+<li>${s} = N_{succ}$</li>
+</ol>
+</li>
+<li>else:
+<ol>
+<li>pick $s \in N_{succ}$ with the smallest post-order visit time</li>
+<li>&ldquo;funnel&rdquo; abnormal exits into $s$</li>
+</ol>
+</li>
+<li>replace all edges to $s$ with <code>break</code></li>
+</ol>
+</li>
+<li>insert a &ldquo;loop continue&rdquo; node $c$ (not in the paper but I can&rsquo;t think of any other way to do this)</li>
+<li>retarget each backedge to $c$</li>
+<li>structure acyclic SESE region $(n,c)$</li>
+<li>remove $c$</li>
+<li>put the AST node inside an infinite loop</li>
+<li>refine AST</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>As a requirement for this algorithm I did the initial preparations and <a href="https://github.com/radareorg/radeco-lib/pull/160">implemented</a>:</p>
+<ul>
+<li>Some graph algorithms and tests for them</li>
+<li>High-level structuring algorithm</li>
+<li>Basic acyclic region structuring (no refinements yet)</li>
+<li>Conditions are arena-allocated now to avoid excessive cloning</li>
+</ul>
+<p>My next plans are:</p>
+<ul>
+<li>Implement the parts involving loops</li>
+<li>Improve completeness and correctness; no refinements yet</li>
+<li>Write QuickCheck tests for the whole algorithm just to make sure it doesn&rsquo;t crash</li>
+</ul>
+<h2 id="mandlebro">mandlebro</h2>
+<p>During the first two weeks of GSOC, I worked on a couple of necessary features before starting working on the debugging aspects of <a href="https://github.com/radareorg/cutter">Cutter</a>:</p>
+<ul>
+<li><strong>independent seeks</strong>: this allows different widgets to have different seeks. Previously, all widgets would always be in sync with each other, and with the radare2 instance running in the background. Now, you can toggle if you would like your widget to be in sync with the other widgets.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/syncseek.gif" alt="indep_seek"></p>
+<ul>
+<li><strong>multiple widgets</strong>: this allows users to open more than one instance of the same widget. This means that you can now look at several  functions in graph/linear mode at the same time via the menu <code>Windows</code>-&gt;<code>Add extra...</code>:</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/crop_mult_widget.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/fcasal/fcasal.github.io/master/mult_graph_crop.png" alt=""></p>
+<p>Both these features were already <a href="https://github.com/radareorg/cutter/commit/0cea9e3287fa12a8a240834a7484c1a957f686c1">merged</a> and you can try them on the master branch of <a href="https://github.com/radareorg/cutter">Cutter</a>!</p>
+<p>Currently I am working on widgets that show debug information:</p>
+<ul>
+<li>value of registers</li>
+<li>stack addresses and telescoping</li>
+<li>backtrace information</li>
+<li>create a general debug window which integrates all these widgets</li>
+</ul>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgsoc_2018_progress_report_may%2f - GSoC%2718%20Progress%20Report%20-%20May by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

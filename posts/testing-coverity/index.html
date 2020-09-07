@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>x86 Capstone tests</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="x86 Capstone tests" />
+<meta property="og:description" content="As you may know, we are using the capstone as a disassembling engine for several architectures. We are even planning to use it as main engine and to ditch udis86. Since the x86 is one of the most common architecture, we want to be sure that the transition does&rsquo;t break anything.
+This is why our resident test writer maijin did the following things:
+ He added one thousand x86-related tests! Every test is now a one-liner, thanks to l0gic&rsquo;s refactoring." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/testing-coverity/" />
+<meta property="article:published_time" content="2014-05-06T15:14:16+02:00" />
+<meta property="article:modified_time" content="2014-05-06T15:14:16+02:00" />
+
+
+<meta itemprop="name" content="x86 Capstone tests">
+<meta itemprop="description" content="As you may know, we are using the capstone as a disassembling engine for several architectures. We are even planning to use it as main engine and to ditch udis86. Since the x86 is one of the most common architecture, we want to be sure that the transition does&rsquo;t break anything.
+This is why our resident test writer maijin did the following things:
+ He added one thousand x86-related tests! Every test is now a one-liner, thanks to l0gic&rsquo;s refactoring.">
+<meta itemprop="datePublished" content="2014-05-06T15:14:16+02:00" />
+<meta itemprop="dateModified" content="2014-05-06T15:14:16+02:00" />
+<meta itemprop="wordCount" content="159">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="x86 Capstone tests"/>
+<meta name="twitter:description" content="As you may know, we are using the capstone as a disassembling engine for several architectures. We are even planning to use it as main engine and to ditch udis86. Since the x86 is one of the most common architecture, we want to be sure that the transition does&rsquo;t break anything.
+This is why our resident test writer maijin did the following things:
+ He added one thousand x86-related tests! Every test is now a one-liner, thanks to l0gic&rsquo;s refactoring."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>x86 Capstone tests</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 6, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>As you may know, we are using the <a href="http://capstone-engine.org/">capstone</a> as a disassembling engine for several architectures. We are even planning to use it as main engine and to ditch <a href="https://github.com/vmt/udis86">udis86</a>.
+Since the x86 is one of the most common architecture, we want to be sure that the transition does&rsquo;t break anything.</p>
+<p>This is why our resident test writer <em>maijin</em> did the following things:</p>
+<ul>
+<li>He added <strong>one thousand</strong> x86-related tests!</li>
+<li>Every test is now a one-liner, thanks to <em>l0gic</em>&rsquo;s refactoring.</li>
+<li>New bugs were detected, and are now beeing fixed either by radare2,or directly by the Capstone team</li>
+</ul>
+<p>We would like to thank <a href="http://corkami.googlecode.com/svn-history/r79/trunk/misc/opcodes32.asm">corkami</a> because we borrowed some of his work, and of course the capstone team.</p>
+<h2 id="how-to-run-those-tests">How to run those tests?</h2>
+<p>Just type <code>make tests</code>; this will:</p>
+<ol>
+<li>Clone or update the <a href="https://github.com/radare/radare2-regressions">r2-regressions</a> repo.</li>
+<li>Launch the whole testsuite.
+You can also launch only the capstone one by typing <code>make capstone</code> inside the r2-regressions folder, or <code>make asm</code> for every asm ones.</li>
+</ol>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2ftesting-coverity%2f - x86%20Capstone%20tests by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

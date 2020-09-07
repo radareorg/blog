@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Radare 0.10.1</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Radare 0.10.1" />
+<meta property="og:description" content="radare2 0.10.1 - Release Notes Six weeks ago, when our great leader pancake announced &ldquo;a release every 6 weeks&rdquo;, everyone was a bit, well, surprised, but it seems that we did it.
+But first, some numbers:
+ Codename: solid chair society Weeks: 6 Commits: ~280 Issues Fixed: 50 Contributors: 38 New contributors: 10 New easter-eggs: 1  This 0.10.1 release pushes other updates for:
+ sdb acr radare2 radare2-bindings radare2-extras  Also binary builds for Windows and OSX are also available." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/radare-0-10-1/" />
+<meta property="article:published_time" content="2016-02-29T23:30:07+01:00" />
+<meta property="article:modified_time" content="2016-02-29T23:30:07+01:00" />
+
+
+<meta itemprop="name" content="Radare 0.10.1">
+<meta itemprop="description" content="radare2 0.10.1 - Release Notes Six weeks ago, when our great leader pancake announced &ldquo;a release every 6 weeks&rdquo;, everyone was a bit, well, surprised, but it seems that we did it.
+But first, some numbers:
+ Codename: solid chair society Weeks: 6 Commits: ~280 Issues Fixed: 50 Contributors: 38 New contributors: 10 New easter-eggs: 1  This 0.10.1 release pushes other updates for:
+ sdb acr radare2 radare2-bindings radare2-extras  Also binary builds for Windows and OSX are also available.">
+<meta itemprop="datePublished" content="2016-02-29T23:30:07+01:00" />
+<meta itemprop="dateModified" content="2016-02-29T23:30:07+01:00" />
+<meta itemprop="wordCount" content="684">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Radare 0.10.1"/>
+<meta name="twitter:description" content="radare2 0.10.1 - Release Notes Six weeks ago, when our great leader pancake announced &ldquo;a release every 6 weeks&rdquo;, everyone was a bit, well, surprised, but it seems that we did it.
+But first, some numbers:
+ Codename: solid chair society Weeks: 6 Commits: ~280 Issues Fixed: 50 Contributors: 38 New contributors: 10 New easter-eggs: 1  This 0.10.1 release pushes other updates for:
+ sdb acr radare2 radare2-bindings radare2-extras  Also binary builds for Windows and OSX are also available."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Radare 0.10.1</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        February 29, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="radare2-0101---release-notes">radare2 0.10.1 - Release Notes</h1>
+<p>Six weeks ago, when our great leader pancake announced &ldquo;a release every 6 weeks&rdquo;, everyone was a bit, well, <a href="https://twitter.com/r2gif/status/693462019610132480">surprised</a>, but it seems that we did it.</p>
+<p>But first, some numbers:</p>
+<ul>
+<li>Codename: <code>solid chair society</code></li>
+<li>Weeks: 6</li>
+<li>Commits: ~280</li>
+<li>Issues Fixed: 50</li>
+<li>Contributors: 38</li>
+<li>New contributors: 10</li>
+<li>New easter-eggs: 1</li>
+</ul>
+<p>This 0.10.1 release pushes other updates for:</p>
+<ul>
+<li><a href="http://radare.org/get/sdb-0.10.1.tar.gz">sdb</a></li>
+<li><a href="http://radare.org/get/acr-0.10.1.tar.gz">acr</a></li>
+<li><a href="http://radare.org/get/radare2-0.10.1.tar.xz">radare2</a></li>
+<li><a href="http://radare.org/get/radare2-bindings-0.10.1.tar.xz">radare2-bindings</a></li>
+<li><a href="http://radare.org/get/radare2-extras-0.10.1.tar.xz">radare2-extras</a></li>
+</ul>
+<p>Also binary builds for <a href="http://radare.org/get/pkg/radare2-w32-0.10.1.zip">Windows</a> and <a href="http://radare.org/get/pkg/radare2-0.10.1.pkg">OSX</a> are also available.</p>
+<p>This is great, since it means that our downstream people who puts radare2 into package manager will be able to push updates quicker (yes, I&rsquo;m looking at you, <a href="https://packages.debian.org/jessie/radare2">debian</a>).</p>
+<p>This also means more release party, which is a good thing. There wasn&rsquo;t an special focus on anything during that last 6 weeks, but if I had to comment on this release, I would say that its theme would be &ldquo;compiling on windows&rdquo;, and &ldquo;usability&rdquo;. Or something like that.</p>
+<p>Anyway, here is the human-readable changelog:</p>
+<ul>
+<li>Variables and flags can now be renamed in cursor mode <a href="https://asciinema.org/a/dp49kdvy1y1lykbb4n6fsxurb">asciinema</a></li>
+<li>Optimized GDB connectivity, now its 10x faster!</li>
+<li>print signed base 10 hexdumps with pxd[1,2,4]</li>
+<li>radiff2 -C to compare checksums</li>
+<li>Lot of work towards the mach-ification of the OSX/iOS debugger by alvarofe</li>
+<li>more polished cursor movements in Visual mode</li>
+<li>Better ARM and Thumb code analysis and emulation</li>
+<li>Added disassembler support for Microblaze architecture</li>
+<li>Updated unicorn plugin to be in sync with git</li>
+<li>Various enhancements in the Visual mode</li>
+<li>backward disassembly uses RAnal info for better offset computations</li>
+<li><code>asm.bbline</code> uses RAnal info to have precise results</li>
+<li>fix bug in <code>env.sh</code> when using more than 9 arguments</li>
+<li>Mingw compilation improvements</li>
+<li>preliminary support of <a href="https://en.wikipedia.org/wiki/XNU">XNU</a> debugging</li>
+<li>ESIL support for <a href="http://www.archaicpixels.com/blog/images/4/40/U10082EJ1V0UM00.pdf">v810</a></li>
+<li>radare2 does now compile in <a href="https://ci.appveyor.com/project/radare/radare2-shvdd">appveyor</a>: no more excuses for broken commits on windows!</li>
+<li><a href="http://lists.llvm.org/pipermail/llvm-dev/2016-February/095118.html">Lanai</a> (the secret CPU used by Google) support</li>
+<li>a new shiny <a href="http://ip.cadence.com/ipportfolio/tensilica-ip/xtensa-customizable">xtensa</a> CPU analysis backend</li>
+<li>change local variables/arguments format names (<code>ebp-0x10</code>, <code>ebp+0x13</code> becomes, respectively, <code>local_10h</code> and <code>arg_13h</code>) and now it works too when asm.ucase is set.</li>
+<li>add <code>Vdn</code> option to rename a flag/function/local variable/local argument used in the current instruction</li>
+<li>refactoring of <code>RFlag</code> + better names for functions when there are symbols</li>
+<li><code>ahi</code> now supports IPv4 and syscall</li>
+<li>various optimizations and bugfixes</li>
+<li>opcodes descriptions for v810, propeller, riscv, tms320, lm32, i4004, i8080, java, Malbolge, SH-4, M68K, ARC and LH5801 (that you can access with <code>?d</code> or e <code>asm.describe=true</code>)</li>
+<li><code>axg</code> to get a graph of the function xrefs to reach a specific point.</li>
+</ul>
+<p><img src="http://i.imgur.com/fbExjw0.png" alt=""></p>
+<p><img src="http://i.imgur.com/eE29fxK.png" alt=""></p>
+<p><img src="http://i.imgur.com/v7zs6Oz.png" alt=""></p>
+<p><img src="https://asciinema.org/a/dp49kdvy1y1lykbb4n6fsxurb" alt=""></p>
+<p><img src="https://regmedia.co.uk/2016/02/09/myricom_lanai.jpg" alt="Lanai CPU"></p>
+<h2 id="known-regressions-and-future-work">Known regressions and future work</h2>
+<p>The webui graph stopped working on Google Chrome because they have deprecated a js function to manipulate SVG which was used by the joint.js library, the webuis will be distributed in a <a href="https://github.com/radare/radare2-webui">separate repository</a> and dependencies will be maintained using bower/grunt/npm. This way we will solve the license problems some distros (Debian) complained for not packaging the webuis because of non-free and confusing uglified js blobs. This will hopefully attract more web developers.</p>
+<p>Debian, Docker, Void, FreeBSD, Sabotage and other distros raised the interest in our project, so, the 6week release cicle will hopefully fix the problem of having very old packaged versions of r2.</p>
+<p>Windows binaries from appveyor still need to be fixed thus the windows installer.</p>
+<p>There are some interesting wip patches to be included in the next <a href="https://github.com/radare/radare2/milestones">release 0.10.2</a> scheduled for April 11th.</p>
+<p>Also, it is important to note, that some people started to work on the GSoC microtasks even before knowing if we are accepted this year. This is a good sign which clearly shows the growing, healthy and brave community we have.</p>
+<h2 id="special-thanks-to">Special thanks to:</h2>
+<ul>
+<li>alvaro felipe: for fixing some bugs and enhancing the XNU debugger</li>
+<li>xvilka: finally getting the windows builds happy again</li>
+<li>maijin: for reviewing issues and adding more opcode descriptions</li>
+<li>deffi420: to find and fix some tiny, but important bugs in SDB</li>
+<li>condret: for working on the SIOL branch that will hopefully be merged soon.</li>
+<li>crowell: enhacing the local variables experience</li>
+<li>ret2libc: fixes a bug in dietline, rewrote flags, metadata, better midflags and cursor movement.</li>
+<li>mballano: for commiting for the first time, making RAP:// more consistent.</li>
+</ul>
+<p>Have fun with this new release and keep up hacking!</p>
+<p>&ndash;pancake</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fradare-0-10-1%2f - Radare%200.10.1 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

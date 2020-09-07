@@ -1,0 +1,1180 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on The Official Radare Blog</title>
+    <link>https://radareorg.github.io/blog/posts/</link>
+    <description>Recent content in Posts on The Official Radare Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://radareorg.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GSoC 2020: SLEIGH Disassembler Backend</title>
+      <link>https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/</link>
+      <pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/</guid>
+      <description>Introduction Hello all, I&amp;rsquo;m Jiaxiang Zhou from China. I was lucky to be selected as a participant of Radare2 project this year. My main work was to integrate SLEIGH as a disassembly backend into Radare2. r2ghidra-dec was my main working repository, aiming to delivering Ghidra&amp;rsquo;s decompiler to Radare2. It could be renamed as r2ghidra since it would become not only a decompiler but a complete bridge between Radare2 and Ghidra after this project.</description>
+    </item>
+    
+    <item>
+      <title>RSoC 2019 Final: Console Interface Improvements</title>
+      <link>https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/</link>
+      <pubDate>Tue, 01 Oct 2019 14:10:05 +0530</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/</guid>
+      <description>RSoC 2019 Final: Console Interface Improvements Introduction: Hello all, I’m deepakchethan from India. I got to work on the console interface improvements for radare2 as a part of 2019’s edition of Radare Summer of Code. My main task was to improve the terminal interface of radare2. As a part of which I was tasked with completing 6 main tasks. I was unable to complete the table API myself, gladly pancake helped me with implementing the Table engine, while I worked on the integration and various improvements of it.</description>
+    </item>
+    
+    <item>
+      <title>Radare2 Summer of Code 2019 Selection Results</title>
+      <link>https://radareorg.github.io/blog/posts/rsoc-2019-selection/</link>
+      <pubDate>Tue, 02 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/rsoc-2019-selection/</guid>
+      <description>As you might remember radare2 organization was a part of Google Summer of Code for many years already. Sadly this year we weren&amp;rsquo;t selected for participation, thus decided to open our own Radare2 Summer of Code season one more time (we did a few time already too). We want to thank NowSecure and KeenLab of Tencent one more time for helping us to make it happen.
+The rules and requirements for the RSoC&#39;19 were very similar to GSoC one, with a slightly shifted schedule, so people would give RSoC selection results before the GSoC deadline, to be able apply to GSoC in case of RSoC rejection.</description>
+    </item>
+    
+    <item>
+      <title>Radare2 Community Survey Results</title>
+      <link>https://radareorg.github.io/blog/posts/radare2-survey/</link>
+      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare2-survey/</guid>
+      <description>Overview As part of our efforts to make radare2 as relevant as possible for our community, we decided to involve our users in the decision-making process. A few weeks ago we published a short survey, collecting different questions from wide range of types. We asked our users to choose their preferences for different commands, what would they prefer for developers to focus on, and even what makes them prefer other tools over radare2.</description>
+    </item>
+    
+    <item>
+      <title>Radare2 and bioinformatics: a good match?</title>
+      <link>https://radareorg.github.io/blog/posts/radare2-bioinformatics/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare2-bioinformatics/</guid>
+      <description>Intro Ahead of this years&amp;rsquo; radarecon, pancake nudged me into discussion we both have about how software reverse engineering and bioinformatics compare and might complement each other, if at all. Inspired by Bunnie Huang&amp;rsquo;s writeups on (computational) biology as a living example of a cross-domain polymath, I&amp;rsquo;ll attempt to write down some thoughts and pointers on how radare could be used (or not) in bioinformatics and hopefully manage expectations on what&amp;rsquo;s possible today.</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2018 Final: Debugging and Emulation Support for Cutter</title>
+      <link>https://radareorg.github.io/blog/posts/cutter_debug/</link>
+      <pubDate>Mon, 20 Aug 2018 11:52:13 +0000</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/cutter_debug/</guid>
+      <description>Intro Hi, I&amp;rsquo;m mandlebro and during the summer I worked on the GSOC project &amp;ldquo;Debugging and Emulation Support for Cutter&amp;rdquo;. The goal of this GSOC project was to integrate radare2&amp;rsquo;s debugging and emulation capabilities in Cutter.
+You can check all my commits in the following links:
+ Cutter commits radare2 commits  Developed features During the duration of the project I both worked in radare2 and Cutter. On radare2 side I provided a json interface to existing r2 commands so that they could be well parsed on Cutter side as well as worked on some ESIL features.</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2018 Final: Console Interface Improvementes</title>
+      <link>https://radareorg.github.io/blog/posts/cli_improvements/</link>
+      <pubDate>Sun, 19 Aug 2018 08:27:46 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/cli_improvements/</guid>
+      <description>Introduction Hi, I&amp;rsquo;m cyanpencil and I was selected for the Console Interface Improvement task for the 2018 edition of the GSoC.
+I had a lot of fun spending this summer coding for radare. I learned so many things, and had an amazing experience overall. I am very grateful to my mentors, Xvilka, Pancake and Maijin, they were always present and closely followed me during the entire summer.
+My task was to improve some aspects of the terminal interface of radare2.</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2018: Control Flow Structuring for Radeco-lib</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/</link>
+      <pubDate>Sun, 12 Aug 2018 21:42:12 -0400</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/</guid>
+      <description>GSoC 2018: Control Flow Structuring for Radeco-lib Introduction This summer, I implemented the control flow structuring algorithm described in No More Gotos. The algorithm takes a program represented as a control flow graph and converts it into a semantically equivalent program but with all control flow represented with C-like control flow statements (e.g. if-statements, while-loops, etc.) and zero goto statements.
+Example bool c0 = test0(); if (!c0) { run1(); } if (c0 &amp;amp;&amp;amp; test2()) { run4(); } else { run3(); } run5(); Algorithm Overview This section is essentially a (very brief) summary of No More Gotos.</description>
+    </item>
+    
+    <item>
+      <title>Gsoc 2018 Radeco Pseudo C Code Generation</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/</link>
+      <pubDate>Sun, 12 Aug 2018 23:26:15 +0900</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/</guid>
+      <description>GSoC 2018 Radeco Pseudo C Code Generation Introduction This summer, I was working on C-like pseudocode generation with radeco. Althrough radeco was able to analyze executables, it could not decompile analyzed executables. My work allows to use radeco for generating C-like pseudocode from analyzed executables.
+Usage Installation Note: Nightly Rust is required. You can install it using rustup.
+$ rustup install nightly $ rustup default nightly $ git clone https://github.com/radareorg/radeco $ cd radeco $ cargo install Decompilation $ echo &amp;#39;#include&amp;lt;stdio.</description>
+    </item>
+    
+    <item>
+      <title>GSoC&#39;18 Final: Type inference</title>
+      <link>https://radareorg.github.io/blog/posts/type_inference/</link>
+      <pubDate>Sun, 12 Aug 2018 01:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/type_inference/</guid>
+      <description>GSoC has almost been finished. I would like to summarize my work done so far this summer.
+The goal of this task was to integrate types handling into the radare2 analysis loop, including automatic inference and suggestions.
+Example  C - source code  #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;string.h&amp;gt; void main() { int length, length2; char *final; char *s1 = &amp;#34;Hello&amp;#34;; char *s2 = &amp;#34; r2-folks&amp;#34;; length = strlen (s1); length2 = strlen (s2); }  Before my work  / (fcn) sym.</description>
+    </item>
+    
+    <item>
+      <title>Background Tasks in radare2</title>
+      <link>https://radareorg.github.io/blog/posts/background_tasks/</link>
+      <pubDate>Tue, 03 Jul 2018 20:45:00 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/background_tasks/</guid>
+      <description>Recently, I have been working on improving performance in Cutter, the radare2 GUI, especially when working with larger binaries. One major issue was that almost everything that accessed r2, such as updating the list of functions, strings, etc., was running on the main thread, and thus freezing the UI. While this is barely noticeable with smaller binaries, it can lead to a severe impact on usability for larger ones.
+The obvious solution for this is to somehow run the work in the background and update the UI when it is done.</description>
+    </item>
+    
+    <item>
+      <title>Android Crackme and Structure offset propagation</title>
+      <link>https://radareorg.github.io/blog/posts/crackme_with_tl/</link>
+      <pubDate>Sat, 16 Jun 2018 01:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/crackme_with_tl/</guid>
+      <description>Today we will look into the recently introduced feature in r2 - structure offset propagation.
+We will use it to solve a crackme based on reversing an Android JNI (Java Native Interface) library.Beware that the feature is still WIP and being constantly improved.
+This challenge is originally from NDH2012-wargame, so we are provided with an NDH.apk file, now after decompiling and using JD-GUI to browse through the code we can find some interesting functions :</description>
+    </item>
+    
+    <item>
+      <title>GSoC&#39;18 Progress Report - May</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc_2018_progress_report_may/</link>
+      <pubDate>Thu, 31 May 2018 01:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc_2018_progress_report_may/</guid>
+      <description>A few weeks passed but our students worked hard and achieved a tremendous results already. Lets see what they have to say about this:
+Cyanpencil&amp;rsquo;s update Hi, I&amp;rsquo;m cyanpencil, and in those initial three weeks of the GSoC 2018 I took care of the commands relative to graph drawing (all the commands starting with ag).
+Those commands were a bit confusing because each of them required a different syntax / used different config variables, resulting in a ag?</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2018 Selection Results</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc_2018_selection/</link>
+      <pubDate>Tue, 24 Apr 2018 02:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc_2018_selection/</guid>
+      <description>We are happy to announce this year we accepted five students: two for radare2 itself, two for radeco and one for cutter.
+HMPerson1 Hi, I&amp;rsquo;m Michael Zhang, also known as HMPerson1. I&amp;rsquo;m a first-year student at Purdue University. I use radare2 regularly when playing CTFs to disassemble and analyze binaries. Although radare is very powerful, there&amp;rsquo;s only so much that can be done staring at dissassembly. Having access to source code would make analysis much easier.</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2018</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc_2018/</link>
+      <pubDate>Mon, 05 Mar 2018 02:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc_2018/</guid>
+      <description>Hell yeah! We&amp;rsquo;re accepted in the Google Summer of Code, again! Hurry hurry, pick (or propose) a task, and spend the summer with us, improving radare2! Analysis, decompilation, GUI, portability, … you name it.
+During the previous years, students implemented awesome features (analysis, structure support, windows-related improvements, …). What are you going to implement next?
+The applications are ending the 27th of March, so hurry up, we&amp;rsquo;re waiting for you ♥</description>
+    </item>
+    
+    <item>
+      <title>Using r2 to analyse Minidumps</title>
+      <link>https://radareorg.github.io/blog/posts/minidump/</link>
+      <pubDate>Mon, 02 Oct 2017 08:00:00 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/minidump/</guid>
+      <description>The minidump format is used by Microsoft for storing user-mode memory dumps. It is an openly documented format that is also extensible, but it is almost always analysed in WinDbg [1][2].
+This article describes how to perform analysis of minidumps using radare2 mdmp module.
+Installation If you use radare2 from git as recommended nothing to do, you should already be able to identify the fileformat as mdmp rather than any.</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2nd stage and RSoC 1st stage report</title>
+      <link>https://radareorg.github.io/blog/posts/gsocrsoc_2017_2/</link>
+      <pubDate>Mon, 14 Aug 2017 08:00:00 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsocrsoc_2017_2/</guid>
+      <description>GSoC 2nd stage and RSoC 1st stage report Good morning ladies and gentlemen. As you probably know radare2 project was overly busy this summer by hosting Google Summer of Code and our own - Radare Summer of Code, 5 students in total. Woot, but now as summer comes to a close, we would like to report the progress from each of our students!
+Srimanta Barua (GDB server and client) Compared to the feature-implementing frenzy of the first phase, the second phase of GSoC involved more bug-fixes and closing of old issues.</description>
+    </item>
+    
+    <item>
+      <title>r2pipe API</title>
+      <link>https://radareorg.github.io/blog/posts/r2api/</link>
+      <pubDate>Mon, 17 Jul 2017 00:00:00 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/r2api/</guid>
+      <description>r2pipe
+The r2pipe design comes from the fact that using native APIs is much more complex and slower rather than using raw command strings and parsing the output. It encourages users to write pipe implementations which interact with the &amp;ldquo;quiet&amp;rdquo; mode of radare2 and use JSONs for easier deserialization. We have multiple implementations already present with a number of users opting to use exploratory languages such as Python and Ruby.</description>
+    </item>
+    
+    <item>
+      <title>RSOC 2017</title>
+      <link>https://radareorg.github.io/blog/posts/rsoc-2017/</link>
+      <pubDate>Wed, 21 Jun 2017 21:42:10 -0700</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/rsoc-2017/</guid>
+      <description>Radare Summer of Code 2017 - Selection Results This year, apart from our Google Summer of Code campaign we decided to start our own campaign again. But unlike the previous year we asked our candidates to focus on the high-level part of radare project - radeco and rune. We&amp;rsquo;ve been working on a decompiler (radeco) for 3 years already, and hope that this year you&amp;rsquo;ll be able to see the generated C pseudocode for the first time.</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2017 selection results</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc_2017_selection/</link>
+      <pubDate>Mon, 15 May 2017 02:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc_2017_selection/</guid>
+      <description>Google Summer of Code 2017 Good morning ladies and gentlemen! We&amp;rsquo;re happy to present you our 3 students, who passed all the hurdles of GSoC&#39;17 selection and successfully shown their passion for radare2 development. Two projects are related to debugging capabilities of radare2 - both local and remote, and the 3rdone will improve the most wanted platform support - Windows.
+Here they are introducing themselves and their projects:
+Rkx1209 Hi. I&amp;rsquo;m rkx1209 from Japan and I have been working on Timeless Debugging support for radare2&amp;rsquo;s debugger.</description>
+    </item>
+    
+    <item>
+      <title>Project files</title>
+      <link>https://radareorg.github.io/blog/posts/project-files/</link>
+      <pubDate>Sun, 12 Mar 2017 17:30:00 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/project-files/</guid>
+      <description>Project files Disclaimer: Projects files are highly subject to change but here is the current state on March 14th 2017. The feature is still under high work in progress please see the section Future of Project Files and How to Help.
+Purposes The Project files are used to store information related to your radare2 session. The idea is to use this Project file to save your analysis for later work, share it with an audience (colleagues, friend, RE articles&amp;hellip;), and scripting.</description>
+    </item>
+    
+    <item>
+      <title>Radare2 and Capstone</title>
+      <link>https://radareorg.github.io/blog/posts/radare2-capstone/</link>
+      <pubDate>Thu, 09 Mar 2017 18:30:00 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare2-capstone/</guid>
+      <description>Radare2 and Capstone This blogpost is the response to an observable fact: People don&amp;rsquo;t know that Radare2 is using Capstone/Keystone/Unicorn.
+This is also a blogpost to address the numerous comparisons done online to these two different components.
+Defining the tools   Capstone is a multi-architecture disassembly framework
+  Keystone is a multi-architecture assembler framework
+  Unicorn Engine is a multi-architecture CPU emulator framework
+  Radare2 is a reverse engineering framework, it includes, in addition to other functionality: multi-architecture disassembly, assembly, and CPU emulation.</description>
+    </item>
+    
+    <item>
+      <title>GSoC 2017</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc_2017/</link>
+      <pubDate>Thu, 09 Mar 2017 02:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc_2017/</guid>
+      <description>Good news everyone!
+Gather round, we&amp;rsquo;ve got incredible good news for everyone!
+We&amp;rsquo;re happy to announce that we&amp;rsquo;re (again) accepted for the Google Summer of Code! For this occasion, we wrote a fancy website with everyone you have to know to participate: mentors, ideas, contacts, protips, micro-tasks, …
+During the last years, students implemented interesting features, like structures support, a better analysis engine, … we&amp;rsquo;re looking forward to see what you are going to implement next ;)</description>
+    </item>
+    
+    <item>
+      <title>R2-1.0 Finally released</title>
+      <link>https://radareorg.github.io/blog/posts/r2-1.0/</link>
+      <pubDate>Sun, 06 Nov 2016 17:40:41 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/r2-1.0/</guid>
+      <description>radare2 1.0 comes with 20122 new lines of new features, bug fixes and enhancements. Here some of the most important highlights:
+The project have finally reached 1.0. What does it mean?
+It means that 10 years have passed and the ecosystem changed enough since its inception that it requires a new rethink of the versioning numbers.
+Pushing a new release every 6 weeks, increasing 0.1. And adding +1.0 after every r2con.</description>
+    </item>
+    
+    <item>
+      <title>r2con</title>
+      <link>https://radareorg.github.io/blog/posts/r2con_2016/</link>
+      <pubDate>Mon, 12 Sep 2016 12:30:00 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/r2con_2016/</guid>
+      <description>During the last couple of days in Barcelona, at the aurea social, everyone was at the r2con, to celebrate the 10thbirthday of radare2! It was an amazing 3-days event, which first day was dedicated to trainings, while the two others were all about interesting/fancy/weird talks!
+
+We did our very best to setup a video stream, but unfortunately, we didn&amp;rsquo;t managed to get something working. But, all the talks (except one) were recorded, and are now available online!</description>
+    </item>
+    
+    <item>
+      <title>GSOC, The last commit 213c6f</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc-the-last-commit-213c6f/</link>
+      <pubDate>Thu, 25 Aug 2016 13:13:29 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc-the-last-commit-213c6f/</guid>
+      <description>It has been so long since I posted, the reason is that I have been quite busy with my GSOC timeline. Yes, I know I said I will write blogs once every week, but I learned the hard way how not to do such promises again ;).
+I guess it is time to summarize the whole 3 months work, but before I start, I would like to state that all my contributions are in basically 2 repositories: radare2 and radare2-regression, you can find my contributions here and here for both repositories.</description>
+    </item>
+    
+    <item>
+      <title>GSoC WebUI overview</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc-webui-overview/</link>
+      <pubDate>Sat, 20 Aug 2016 17:40:41 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc-webui-overview/</guid>
+      <description>by https://twitter.com/GautierGC
+April 22th, my GSoC proposal for the radare web UI [was accepted] https://summerofcode.withgoogle.com/organizations/4965722304282624/#5484657504157696. Until today, I&amp;rsquo;ve made the UI progressed. The purpose of this article isn&amp;rsquo;t to close this chapter but to relate what I&amp;rsquo;ve done and share my experience about this Google Summer of Code.
+I would like to make a short overview of what I&amp;rsquo;ve done, a big picture of what I improved during the last months.</description>
+    </item>
+    
+    <item>
+      <title>Emulating a simple bootloader</title>
+      <link>https://radareorg.github.io/blog/posts/emulating-simple-bootloader/</link>
+      <pubDate>Tue, 16 Aug 2016 19:16:00 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/emulating-simple-bootloader/</guid>
+      <description>Introduction Generally speaking, emulating a bootloader is simpler than it is for regular binaries, because they lack external libraries and usually have direct access to memory and hardware.
+In this case, the bootloader is a binary for x86 architecture which runs in 16-bits real mode using BIOS calls to perform its loading duties and textual input/output.
+The idea here is to emulate Cropta1 crackme using radare2 ESIL emulation, providing the needed BIOS via a trivial quick &amp;amp; dirty python implementation of just what it&amp;rsquo;s needed to run the crackme code.</description>
+    </item>
+    
+    <item>
+      <title>Disassembly functionnalities inside Web UI /m</title>
+      <link>https://radareorg.github.io/blog/posts/webui-m-disasm/</link>
+      <pubDate>Thu, 11 Aug 2016 19:02:46 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/webui-m-disasm/</guid>
+      <description>by GautierGC
+In this blog post, we will discover the functionnalities of the disasm panel from the material Web UI and how are they implemented. This take place in the Material Web UI in place of the current implementation. If you want to read more details about the implementation and how it works, you can read this technical article on my blog.
+So, this new module about disassembly has the following functionnalities:</description>
+    </item>
+    
+    <item>
+      <title>Retrieving configuration of a Remote Administration Tool (Malware) with radare2 statically</title>
+      <link>https://radareorg.github.io/blog/posts/malware-static-analysis/</link>
+      <pubDate>Thu, 11 Aug 2016 08:30:00 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/malware-static-analysis/</guid>
+      <description>Introduction This article was written during BSidesLV, BlackHat and Defcon events.
+** We highly recommend you to try to do the analysis by yourself before looking at this article. Here is a fake one cfd26988d55294870f2676117cf1307ca4acdf8d **
+A remote administration tool (also known as a RAT) is a piece of software that allows a remote &amp;ldquo;operator&amp;rdquo; to control a system as if he has physical access to that system. While desktop sharing and remote administration have many legal uses, such software is usually associated with criminal or malicious activity.</description>
+    </item>
+    
+    <item>
+      <title>Crosscompile radare2 with dockcross</title>
+      <link>https://radareorg.github.io/blog/posts/dockcross/</link>
+      <pubDate>Wed, 10 Aug 2016 00:30:07 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/dockcross/</guid>
+      <description>So you want to cross-compile radare to some exotic architecture? Use this docker and you&amp;rsquo;ll save some headache:
+Here&amp;rsquo;s and example on how changes required for i.e ARMv5 (no hard float) borrowed from mk/armel.mk:
+ARCH=arm CROSS_ROOT=/usr/bin CROSS_TRIPLET=${ARCH}-linux-gnueabi CC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc USERCC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc RANLIB=${CROSS_TRIPLET}-ranlib CC_AR=${CROSS_ROOT}/${CROSS_TRIPLET}-ar -r ${LIBAR} (...)  After defining your new mk/arch.mk file it should be pretty straighforward to install the dockcross tool from one of its own containers:
+$ docker run thewtex/cross-compiler-linux-armv5 &amp;gt; ~/bin/dockcross $ chmod +x ~/bin/dockcross  And then, compile normally from inside the container:</description>
+    </item>
+    
+    <item>
+      <title>10 years old</title>
+      <link>https://radareorg.github.io/blog/posts/10-years-old/</link>
+      <pubDate>Fri, 05 Aug 2016 00:30:07 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/10-years-old/</guid>
+      <description>10 years passed since the first release of radare, and 8 since radare2. It was pretty primitive at the time, and lot of things has happened since that.
+SPOILER: Radare2&amp;rsquo;s Congress Announcement
+The tool was mainly used and written by me (@pancake) from the very first days. I was missing many interesting features in the opensource reverse engineering so I decided to collect and integrate all the interesting things that could fit on top of an abstracted IO layer, from disassemblers to debuggers or filesystems.</description>
+    </item>
+    
+    <item>
+      <title>RSoC 2016 progress</title>
+      <link>https://radareorg.github.io/blog/posts/rsoc-2016-progress/</link>
+      <pubDate>Tue, 02 Aug 2016 13:00:10 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/rsoc-2016-progress/</guid>
+      <description>This year we&amp;rsquo;re hosting our own Radare Summer of Code, again!
+This is why we have selected 4 students:
+ Aneesh Dogra (FAT PE binaries) Alexandru Razvan Caciulescu (ROP generator) Rakholia Jenish (Kernel level interfaces) Pankaj Kataria (SROP and COOP generators)  FAT PE binaries At first, Aneesh Dogra adding the support of FAT PE binaries: those PEs can contain multiple programs inside, like 16bit MZ stub, both native and MSIL/CIL(.</description>
+    </item>
+    
+    <item>
+      <title>How goes the Google Summer of Code?</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc-midterm-2016/</link>
+      <pubDate>Thu, 23 Jun 2016 21:00:10 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc-midterm-2016/</guid>
+      <description>As you know this year we&amp;rsquo;re taking part in the Google Summer of Code, with 3 students on cool tasks:
+ completing radeco, our own decompiler, by sushant94 improving variables and function arguments analysis, by anoddcoder completing our web interface, by gauthiergc  Lets see what our students were supposed to do, what they did, and what is now planned.
+Radeco The main task for GSoC’16 is to introduce type inference for radeco and produce pseudo C output.</description>
+    </item>
+    
+    <item>
+      <title>Radare2 Explorations: New book released!</title>
+      <link>https://radareorg.github.io/blog/posts/radare2-explorations/</link>
+      <pubDate>Fri, 10 Jun 2016 18:00:46 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare2-explorations/</guid>
+      <description>by http://github.com/monosource
+Context One of the challenges that people must face when starting to learn radare is getting to know how to use it for their specific needs; after all, not everyone uses radare for exploitation or forensics. As mentioned before, radare is indeed documented.
+If the difficulty is not related to a lack of documentation, then where does it originate from? There&amp;rsquo;s no middle ground between experimenting with each command in radare and replicating the writeups that people post online for often difficult challenges they solved.</description>
+    </item>
+    
+    <item>
+      <title>Improving analysis</title>
+      <link>https://radareorg.github.io/blog/posts/improving-analysis/</link>
+      <pubDate>Mon, 09 May 2016 21:00:10 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/improving-analysis/</guid>
+      <description>One of the main tasks of Radare2 is to statically analyse executables. This includes binary files disassembly, analysing functions setting calling conventions, auto detecting arguments and type propagation. Autodetecting arguments and type propagation are part of my Google Summer of Code task.
+New analysis round is added for argument detection. It is architecture independent and supposed to capture all arguments and variables then auto rename them. This analysis round is built on top of ESIL.</description>
+    </item>
+    
+    <item>
+      <title>The BIG big endian patch</title>
+      <link>https://radareorg.github.io/blog/posts/big-big-endian/</link>
+      <pubDate>Wed, 04 May 2016 16:04:13 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/big-big-endian/</guid>
+      <description>This text comes from radare2&amp;rsquo;s doc/endian. And aims to explain the reason why radare2 codebase was handling endianness in a problematic way. damo22 cooked a huge patch addressing those issues and making the code endian-independent. This means that at compile time the code doesn&amp;rsquo;t assumes any local specific endian.
+Endian issues As hackers, we need to be aware of endianness.
+Endianness can become a problem when you try to process buffers or streams of bytes and store intermediate values as integers with width larger than a single byte.</description>
+    </item>
+    
+    <item>
+      <title>Using RAsm</title>
+      <link>https://radareorg.github.io/blog/posts/rasm/</link>
+      <pubDate>Tue, 26 Apr 2016 11:47:13 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/rasm/</guid>
+      <description>RAsm Recently I have noticed that many people gets saturated by the amount of stuff r2 can do and most users end up not learning anything.
+So that&amp;rsquo;s why I am going to start writing a series of blog posts showing one feature at a time, making it as simple as possible.
+What&amp;rsquo;s rasm? The &amp;lsquo;r&amp;rsquo; in r_asm stands for radare, and it&amp;rsquo;s one of the several libraries shipped with radare2.</description>
+    </item>
+    
+    <item>
+      <title>Radare 0.10.2</title>
+      <link>https://radareorg.github.io/blog/posts/radare-0-10-2/</link>
+      <pubDate>Mon, 11 Apr 2016 23:30:07 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare-0-10-2/</guid>
+      <description>radare2 0.10.2 - Release Notes Codename: Panamake
+As usual, some numbers first:
+Contributors: 48 Commits: 480 Issues: 135 Grep stats: * Fixes: 269 * Add: 107 * Enhance: 7 * New: 7 * Esil: 18 * Anal: 36 * Leak: 15 Contributor commit counter: (sys/pie.sh)
+$ sys/pie.sh 0.10.1 | sort -un | tail -n 13 1	Adrien Garin 2	Adr1 3	Kitsu 4	Darredevil 5	Anders Kaare 6	Aneesh Dogra 7	Evan Shaw 8	Jeffrey Crowell 12	Maijin 16	Anton Kochkov 36	oddcoder 46	Álvaro Felipe Melchor 237	pancake Special thanks from pancake to:</description>
+    </item>
+    
+    <item>
+      <title>Ramoji2</title>
+      <link>https://radareorg.github.io/blog/posts/ramoji2/</link>
+      <pubDate>Fri, 01 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/ramoji2/</guid>
+      <description>The main complain by new radare2 users is the learning curve because of the complexity of the mnemonic commands.
+This is why we are releasing a new interface based on emoji! No need to know english, or assembly or even understand what the hell the entropy is. Just look at those cute pictures and build a story right in your terminal.
+We hope that such a mode could bring the joy of reverse engineering to everyone, including kids.</description>
+    </item>
+    
+    <item>
+      <title>Radare 0.10.1</title>
+      <link>https://radareorg.github.io/blog/posts/radare-0-10-1/</link>
+      <pubDate>Mon, 29 Feb 2016 23:30:07 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare-0-10-1/</guid>
+      <description>radare2 0.10.1 - Release Notes Six weeks ago, when our great leader pancake announced &amp;ldquo;a release every 6 weeks&amp;rdquo;, everyone was a bit, well, surprised, but it seems that we did it.
+But first, some numbers:
+ Codename: solid chair society Weeks: 6 Commits: ~280 Issues Fixed: 50 Contributors: 38 New contributors: 10 New easter-eggs: 1  This 0.10.1 release pushes other updates for:
+ sdb acr radare2 radare2-bindings radare2-extras  Also binary builds for Windows and OSX are also available.</description>
+    </item>
+    
+    <item>
+      <title>Radare 0.10.0</title>
+      <link>https://radareorg.github.io/blog/posts/radare-0-10-0/</link>
+      <pubDate>Thu, 21 Jan 2016 23:30:07 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare-0-10-0/</guid>
+      <description>On Monday 16th, we released a new version of radare2, the 0.10.0, codename NOLAN. Since you might be a but too lazy to read every single commit, we’re going to highlight some cool new features together!
+Numbers Thanks to more than 100 contributors who issued more than 2000 commits, here is what changed:
+$ git checkout 0.10.0 &amp;amp;&amp;amp; git diff 0.9.9 --shortstat 1095 files changed, 80695 insertions(+), 40792 deletions(-) We would like to thanks all contributors, especially the newcomers, that made this release possible.</description>
+    </item>
+    
+    <item>
+      <title>Unpacking shikata-ga-nai by scripting radare2</title>
+      <link>https://radareorg.github.io/blog/posts/unpacking-shikata-ga-nai-by-scripting-radare2/</link>
+      <pubDate>Tue, 08 Dec 2015 01:00:00 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/unpacking-shikata-ga-nai-by-scripting-radare2/</guid>
+      <description>During latest hacklu&amp;rsquo;s radare workshop, one part was dedicated to how to generically unpack shikata-ga-nai. This blogpost is a simple transposition of the slides into a blogpost.
+Disclaimer: almost everything here is stolenbased on ideas from NighterMan.
+First, was is Shitkata-ga-nai? It&amp;rsquo;s a polymorphic shellcode encoder implemented into metasploit:
+msf &amp;gt; info encoder/x86/shikata_ga_nai &amp;gt; out.txt Name: Polymorphic XOR Additive Feedback Encoder Module: encoder/x86/shikata_ga_nai Platform: All Arch: x86 Rank: Excellent Provided by: spoonm &amp;lt;spoonm@no$email.</description>
+    </item>
+    
+    <item>
+      <title>Analysis By Default</title>
+      <link>https://radareorg.github.io/blog/posts/analysis-by-default/</link>
+      <pubDate>Wed, 25 Nov 2015 12:47:13 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/analysis-by-default/</guid>
+      <description>Analysis By Default Many people that starts using radare2 complain about having a different workflow than other similar tools like IDA or Hopper.
+Probably the most annoying part for them is that it doesn&amp;rsquo;t run the analysis at startup. And this is the reason why I&amp;rsquo;m writing this blog post right now : to avoid having to explain why, again and again :)
+To begin with, r2 is a pretty broad tool.</description>
+    </item>
+    
+    <item>
+      <title>Hacklu 2015</title>
+      <link>https://radareorg.github.io/blog/posts/hacklu-2015/</link>
+      <pubDate>Tue, 27 Oct 2015 16:10:46 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/hacklu-2015/</guid>
+      <description>Like last year, some radare2 developers and contributors went to the 11th edition of the hack.lu, in Luxembourg, to hold not one, but two 5 hours-long workshops!
+ maijin did the first part, about what is radare2 and how to use it jvoisin did the second one, about how to write a nocd for a classic game, and (based on the work of NighterMan, also about how to unpack shikata ga nai with ESIL.</description>
+    </item>
+    
+    <item>
+      <title>Update On Radeco</title>
+      <link>https://radareorg.github.io/blog/posts/update-on-radeco/</link>
+      <pubDate>Sat, 26 Sep 2015 23:51:06 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/update-on-radeco/</guid>
+      <description>This post is to outline the work completed during the Google Summer of Code 2015 (GSoC) period and show you a glimpse of radeco and where we are heading with it.
+For those who are not aware, radeco is a decompiler framework that is developed and maintained by the radare team. The entire framework is open source, flexible and reusable. The base of radeco is radeco-lib that implements the analysis and transformations that are needed for decompiler.</description>
+    </item>
+    
+    <item>
+      <title>Extracting Digital Signatures from Signed Malware with pf</title>
+      <link>https://radareorg.github.io/blog/posts/extracting-digital-signatures-from-signed-malware/</link>
+      <pubDate>Thu, 03 Sep 2015 23:14:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/extracting-digital-signatures-from-signed-malware/</guid>
+      <description>Introduction Lot of malware/PUP (Potential Unwanted Programs)/Adwares are now digitally signed. Those signatures can contain interesting properties that can be used as Indicators Of Compromise (IOC) by analysts or used to perform some large-scale analysis on a lot of samples. As an example, let&amp;rsquo;s use the recent signed dridex sample sample (5df62149bb91084eb677aecff7a8ca5fffeaaa23).
+On Windows the Portable Executable file format uses IMAGE_DIRECTORY_ENTRY_SECURITY to store the information which corresponds to the 5th IMAGE_DATA_DIRECTORY.</description>
+    </item>
+    
+    <item>
+      <title>chsh -s /usr/bin/r2</title>
+      <link>https://radareorg.github.io/blog/posts/r2-as-a-unix-shell/</link>
+      <pubDate>Wed, 26 Aug 2015 16:36:33 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/r2-as-a-unix-shell/</guid>
+      <description>Radare2&amp;rsquo;s prompt is quite powerful and handy to use, but sometimes you need to interact with the filesystem or spawn system programs.. and spawning new shells or quitting r2 is not an option.
+For those cases, the simplest solution would be to just type ! and then type the shell command you like. This prefix command will just escape to the shell and run the text you type as in the system shell.</description>
+    </item>
+    
+    <item>
+      <title>The GSoC is Over!</title>
+      <link>https://radareorg.github.io/blog/posts/the-gsoc-is-over/</link>
+      <pubDate>Tue, 25 Aug 2015 13:13:29 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/the-gsoc-is-over/</guid>
+      <description>Good news everyone! Our first time participation in the Google Summer of Code, thanks to our previous and current experience of the hosting of the Radare Summer of Code, was a great success. It wouldn&amp;rsquo;t have been possible without the help of the great Solar Designer, who took us under Openwall&amp;rsquo;s project umbrella for the GSoC.
+We had two GSoC students successfully complete tasks related to Radeco, our new, work in progress, decompiler.</description>
+    </item>
+    
+    <item>
+      <title>Interview of ret2libc</title>
+      <link>https://radareorg.github.io/blog/posts/interview-of-ret2libc/</link>
+      <pubDate>Thu, 16 Jul 2015 11:53:57 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/interview-of-ret2libc/</guid>
+      <description>Almost one month since our last article, time flees. This article is an interview of a new contributor, that greatly enhanced one of the most visually impressive feature of radare2, the one that our propaganda departmentcontributors loves to show at conferences!
+ Who are you ?   Hi, I&amp;rsquo;m ret2libc, I was an IDA addicted and this is my 10thday that I don&amp;rsquo;t use IDA.
+  Hi ret2libc   Just joking, I still use IDA, but I&amp;rsquo;d really love to switch in the future, when r2 will be good enough.</description>
+    </item>
+    
+    <item>
+      <title>Update from the GSoC 2</title>
+      <link>https://radareorg.github.io/blog/posts/update-from-the-gsoc-2/</link>
+      <pubDate>Thu, 18 Jun 2015 14:55:42 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/update-from-the-gsoc-2/</guid>
+      <description>As part of GSoC I (dkreuter) and sushant94 have been working the last three weeks on what should become the basis for a decompiler integrated with the radare2 reversing framework.
+For now it&amp;rsquo;s a standalone program written in Rust that can read the radare2 code format ESIL. The rough process involves generating control and data flow graphs in SSA form for the input, applying simplifications on that, similar to compilers, and picking appropriate constructs in a target language to represent the input.</description>
+    </item>
+    
+    <item>
+      <title>Update From the GSoC</title>
+      <link>https://radareorg.github.io/blog/posts/update-from-the-gsoc/</link>
+      <pubDate>Mon, 15 Jun 2015 21:36:21 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/update-from-the-gsoc/</guid>
+      <description>As you know, we have 2 students working on r2 for the Google Summer of Code!
+As we&amp;rsquo;re 3 weeks into the Summer, here&amp;rsquo;s what one of our student, sushant94 has to say about what he&amp;rsquo;s been working on!
+It&amp;rsquo;s been three weeks into GSoC and I&amp;rsquo;m having an amazing time. I am working along side dkreuter and been learning tons from him too!
+Here is the repository where you can track our progress and also give us suggestions :)</description>
+    </item>
+    
+    <item>
+      <title>Radare 0.9.9</title>
+      <link>https://radareorg.github.io/blog/posts/radare-0-9-9/</link>
+      <pubDate>Sat, 06 Jun 2015 11:46:57 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare-0-9-9/</guid>
+      <description>Today, we&amp;rsquo;re releasing a new version of radare2, the 0.9.9, codename Almost There. Since you might be a bit too lazy to read every single commit, we&amp;rsquo;re going to highlight some cool new features!
+Numbers Thanks to more than 50 contributors who issued something like 1700 commits, here is what changed:
+$ git checkout 0.9.9 &amp;amp;&amp;amp; git diff 0.9.8 --shortstat 839 files changed, 156490 insertions(+), 18885 deletions(-) {pancake} I would like to give a special thanks to all the new contributors that made this release possible.</description>
+    </item>
+    
+    <item>
+      <title>Solving &#39;int3rupted&#39; from defcon 2015 qualifier with r2</title>
+      <link>https://radareorg.github.io/blog/posts/solving-int3rupted-from-defcon-2015-qualifier-with-r2/</link>
+      <pubDate>Thu, 04 Jun 2015 21:43:59 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/solving-int3rupted-from-defcon-2015-qualifier-with-r2/</guid>
+      <description>In previous blog posts we&amp;rsquo;ve shown how radare2 can be useful for exploiting &amp;ldquo;baby&amp;rdquo; level challenges. Let&amp;rsquo;s show how we can use it to find the bug and ultimately exploit a 5 point pwning challenge from the DEFCON 2015 qualifiers!
+You can find the binary here if you want to play along at home.
+To start with, in the challenge, we were just given a hostname and ip address, no binary was given!</description>
+    </item>
+    
+    <item>
+      <title>Defeating baby_rop with radare2</title>
+      <link>https://radareorg.github.io/blog/posts/defeating-baby_rop-with-radare2/</link>
+      <pubDate>Tue, 19 May 2015 23:55:59 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/defeating-baby_rop-with-radare2/</guid>
+      <description>In order to content the people that wanted something less hand-holding than this writeup which they say is too detailed and this one not enough, we decided to write this blogpost: not too short, not too long, and about pwning!
+The binary was a challenge (called baby_rop) from a small CTF that took place in France, called the sthack.
+As always, if you don&amp;rsquo;t get a command, append ? to it to get documentation.</description>
+    </item>
+    
+    <item>
+      <title>Using radare2 to pwn things</title>
+      <link>https://radareorg.github.io/blog/posts/using-radare2/</link>
+      <pubDate>Thu, 14 May 2015 23:45:49 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/using-radare2/</guid>
+      <description>While more and more people are using radare2 during ctf, in the same time we&amp;rsquo;ve got more and more complains that there is not enough documentation about radare2.
+This article&amp;rsquo;s goal is to make a small cheat-sheet when it comes to pwn things with our beloved piece of software.
+Keep in mind that:
+ Every character has a meaning (w stands for write, p stands for print, …) Every command can be a succession of character (pdf stands for p: print, d: disassemble, f: function Every command is documented with ?</description>
+    </item>
+    
+    <item>
+      <title>GSoC qualifications</title>
+      <link>https://radareorg.github.io/blog/posts/gsoc/</link>
+      <pubDate>Mon, 27 Apr 2015 22:45:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/gsoc/</guid>
+      <description>Attention, people of the internet!
+Gather round, we&amp;rsquo;ve got incredible good news for everyone!
+We&amp;rsquo;re incredibly happy to announce the acceptance of two students for the Google Summer of Code 2015:
+David Kreuter and Sushant Dinesh.
+Both students have already completed complex tasks, just as a qualification: an ESIL implementation for the 8051 architecture, and an ESIL-to-REIL converter.
+We hope that they&amp;rsquo;ll continue hard work at the same tempo and will make decompilation for radare2 much better Hex-Rays&amp;rsquo; decompiler.</description>
+    </item>
+    
+    <item>
+      <title>Rop&#39;n&#39;roll</title>
+      <link>https://radareorg.github.io/blog/posts/ropnroll/</link>
+      <pubDate>Sat, 18 Apr 2015 15:00:00 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/ropnroll/</guid>
+      <description>You may have already read this article 8 months ago, but since we changed a lot the ROP-related syntax, we&amp;rsquo;re quite sure that you won&amp;rsquo;t mind reading an updated version
+As attackers are moving forwards, so does the defense. Since a couple of years, every decent operating system has non-executable stack, defeating the classic &amp;lsquo;put your shellcode on the stack and execute it&amp;rsquo; modus operanti.
+This is why attackers are now using (among other things) Return Oriented Programming, also known as ROP, to bypass this protection.</description>
+    </item>
+    
+    <item>
+      <title>We have been acquired by Hex-Rays</title>
+      <link>https://radareorg.github.io/blog/posts/we-have-been-acquired-by-hex-rays/</link>
+      <pubDate>Wed, 01 Apr 2015 13:19:38 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/we-have-been-acquired-by-hex-rays/</guid>
+      <description>[edit] Of course, this article was an April fool.
+This will be the final post here (you can now follow us on this one instead), as radare has been acquired by Hex-Rays, and the radare2 project will be soon ported to ida-python. This has several advantages :
+ Maintaining such a big software in such an old language like C is tiresome, using a high-level one will allow use to write more features in less lines of code.</description>
+    </item>
+    
+    <item>
+      <title>[GR]SoC</title>
+      <link>https://radareorg.github.io/blog/posts/grsoc/</link>
+      <pubDate>Wed, 11 Mar 2015 23:02:27 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/grsoc/</guid>
+      <description>We&amp;rsquo;ve got two pieces of good news for you; the first one is that our RSoC is now live! The second is a bit surprising: we&amp;rsquo;ve got a GSoC slot!
+GSoC Thanks to solar designer who offered us to be part of the GSoC, under the umbrella of the Openwall project, we&amp;rsquo;ve got a slot for a single student to work on radare2 for a couple of months, while being payed $5,500!</description>
+    </item>
+    
+    <item>
+      <title>RSoC 2015</title>
+      <link>https://radareorg.github.io/blog/posts/rsoc-2015/</link>
+      <pubDate>Tue, 03 Mar 2015 17:18:58 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/rsoc-2015/</guid>
+      <description>It seems that our rejection from the GSoC is becoming a tradition: along with Mozilla, Tor, The Linux Foundation, and OWASP, we weren&amp;rsquo;t accepted. But fear not, like last year, we&amp;rsquo;re going to do our very own Radare Summer of Code: welcome to the RSoC&#39;15!
+Last year was our first time. Some things went wrong, others went well; but at the end r2 gained both shiny features and happy new contributorsa and those are the only things that really matter.</description>
+    </item>
+    
+    <item>
+      <title>Google Summer of Code 2015</title>
+      <link>https://radareorg.github.io/blog/posts/google-summer-of-code-2015/</link>
+      <pubDate>Fri, 20 Feb 2015 21:37:40 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/google-summer-of-code-2015/</guid>
+      <description>We have applied to be a mentoring organization for this year’s Google Summer of Code.
+We recognize that GSoC is always a fierce competition, but we are, as ever, hopeful that we will join many other fine organizations in a great summer of hacking. If you are a student interested in applying, please head over to our ideas page and begin thinking about what you might like to hack on. Furthermore, we have several low-hanging fruits if you want to play a bit with the codebase.</description>
+    </item>
+    
+    <item>
+      <title>Interactive ASCII graphs</title>
+      <link>https://radareorg.github.io/blog/posts/awesome-ascii-graphs/</link>
+      <pubDate>Fri, 06 Feb 2015 22:30:43 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/awesome-ascii-graphs/</guid>
+      <description>The graph feature of IDA, ImmunityDBG or Hopper are great to have a quick overview of what you&amp;rsquo;re dealing with. This is why we have graphs too in radare2, but since we&amp;rsquo;re terminal-lovers, ours are cooler in ASCII!
+After analyzing a function with af or any other method, type VV to get: We&amp;rsquo;ve got call graphs, which are way more understandable than simply listing the XREF adresses. To see it, simply press V when you&amp;rsquo;re in graph mode.</description>
+    </item>
+    
+    <item>
+      <title>What is planned for r2 in 2015?</title>
+      <link>https://radareorg.github.io/blog/posts/what-is-planned-for-r2-in-2015/</link>
+      <pubDate>Tue, 27 Jan 2015 19:39:56 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/what-is-planned-for-r2-in-2015/</guid>
+      <description>That&amp;rsquo;s an interesting question, isn&amp;rsquo;t it?
+Our last release was intended to be focused on bug-fixing, but we accidentally added tons of features, a new webui, enhaced debugger, code emulation and much more. This was supposed to land in the 0.9.9 version, which will be ready in February.
+Local variable detection has been uncommented and it&amp;rsquo;s now using SDB as storage and supports basic X86-32/64 and ARM constructions.
+Currently, you can do several low level analysis operations like manually define/resize/remove/merge/&amp;hellip; functions (ask a?</description>
+    </item>
+    
+    <item>
+      <title>Parsing a fileformat with radare2</title>
+      <link>https://radareorg.github.io/blog/posts/parsing-a-fileformat-with-radare2/</link>
+      <pubDate>Sun, 11 Jan 2015 01:55:32 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/parsing-a-fileformat-with-radare2/</guid>
+      <description>Thanks to Skia, one of our RSoC participants, radare2 is now able to show structures, like headers, in a meaningful way.
+Usage Lets see an example together (or watch the video):
+$ r2 -nn /bin/true The -nn option tells radare2 to load predefined binary structures.
+[0x00000000]&amp;gt; pf. pf.elf_header [16]z[2]E[2]Exqqqxwwwwww ident (elf_type)type (elf_machine)machine version entry phoff shoff flags ehsize phentsize phnum shentsize shnum shstrndx pf.elf_phdr qqqqqqqq type offset vaddr paddr filesz memsz flags align pf.</description>
+    </item>
+    
+    <item>
+      <title>The new web interface</title>
+      <link>https://radareorg.github.io/blog/posts/the-new-web-interface/</link>
+      <pubDate>Wed, 03 Dec 2014 10:40:18 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/the-new-web-interface/</guid>
+      <description>Thanks to pwntester, we&amp;rsquo;ve got a new web-interface for radare2! You can either get it by using the latest git, or try it on our cloud.
+Lets highlight the new features:
+Graphing The web-interface is now using viz.js to show interractive graphs, and the disassembly has now syntax highlighting, like the command line interface. When we say Interractive, we mean that you can not only move the graph, but also modify, edit and annotate it.</description>
+    </item>
+    
+    <item>
+      <title>Radare2 is documented</title>
+      <link>https://radareorg.github.io/blog/posts/radare2-is-documented/</link>
+      <pubDate>Wed, 26 Nov 2014 00:29:31 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare2-is-documented/</guid>
+      <description>Some miscreants are saying that radare2 is not documented, this is wrong.
+The Book The &amp;ldquo;radare book&amp;rdquo; was released together with radare 1.0, several years ago, so some of the examples/features may not be compatible with radare2.
+You can read it online or download the PDF.
+Recently, our tester in chief, maijin, started a project to update the radare book to create the radare2 book; feel free to contribute.
+A book focused on practical case by monosource is also available : radare2-explorations</description>
+    </item>
+    
+    <item>
+      <title>The RSoC is over</title>
+      <link>https://radareorg.github.io/blog/posts/the-rsoc-is-over/</link>
+      <pubDate>Mon, 17 Nov 2014 08:20:09 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/the-rsoc-is-over/</guid>
+      <description>October is over and we delayed a bit the end of the RSoC in order to get everything done for the release, and it seems that little happened as planned:
+The RSoC advertisement was a great opportunity to get new developers interested in contributing to the project, some of them even without joining the RSoC took some points that weren&amp;rsquo;t requested and delivered them! That&amp;rsquo;s pretty cool, because our two selected students disapeared during the summer.</description>
+    </item>
+    
+    <item>
+      <title>Radare 0.9.8</title>
+      <link>https://radareorg.github.io/blog/posts/radare-0-9-8/</link>
+      <pubDate>Wed, 12 Nov 2014 17:26:07 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/radare-0-9-8/</guid>
+      <description>Eight months ago, radare2 0.9.7 was released; today, we&amp;rsquo;re happy to announce radare 0.9.8!
+In details and numbers:
+ More than 2500 commits More than 120 new users in #radare (+300%) About 60 contributors. 13 colorscheme themes. 8 months 1 great leader One homepage A version nubmer: 0.9.8 A soundtrack! Thanks to neuroflip!  Downloads:  Sources Bindings Valabind SDB Git repository  Since you surely can read the 2500 commits by yourself (or the detailed changelog), we&amp;rsquo;re just going to highlight some cool new features and improvements:</description>
+    </item>
+    
+    <item>
+      <title>Extending r2 with new plugins</title>
+      <link>https://radareorg.github.io/blog/posts/extending-r2-with-new-plugins/</link>
+      <pubDate>Sun, 09 Nov 2014 12:00:00 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/extending-r2-with-new-plugins/</guid>
+      <description>One of the key features behind r2 is how easily it can be extended with new libraries or plugins. In this blopost, we&amp;rsquo;ll see the steps to add a new plugin in radare2.
+Let&amp;rsquo;s say we want to add a new plugin for r_asm because we are working with binaries of an architecture not supported by r2. Of course, adding a new plugin for another lib would be mostly the same.</description>
+    </item>
+    
+    <item>
+      <title>We were at hack.lu 2014!</title>
+      <link>https://radareorg.github.io/blog/posts/we-were-at-hack-lu-2014/</link>
+      <pubDate>Thu, 06 Nov 2014 14:55:11 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/we-were-at-hack-lu-2014/</guid>
+      <description>Hack.lu was a really great 4 day long convention in Luxembourg, organised by the CIRCL, where we (jvoisin, maijin and xvilka) did two 6h-long workshops about radare2 wit in front of a crowed room. In total more than 60 people attended!
+At first, we didn&amp;rsquo;t expected much people and planned only one workshop. But we ended up refusing people and doing a second one the day after!
+Maijin did the first part, dedicated to reversing and actually using radare2, jvosin the second one about exploitation, and xvilka did the last one; about reversing and analysing firmwares.</description>
+    </item>
+    
+    <item>
+      <title>Zignatures</title>
+      <link>https://radareorg.github.io/blog/posts/zignatures/</link>
+      <pubDate>Wed, 05 Nov 2014 22:16:46 +0100</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/zignatures/</guid>
+      <description>by http://twitter.com/j0sm1 modified by @Obaied
+In this blog post, we are going to show a simple example of the radare2 “zignatures” functionality. To manage “zignatures” in radare2, the only thing you have to do is type ‘z’ in the radare console. Here you can get more info on this &amp;lsquo;z&amp;rsquo; command:
+r2console&amp;gt; z? |Usage: z[abcp/*-] [arg]Zignatures | z show status of zignatures | z* display all zignatures | z-prefix unload zignatures with corresponding prefix | z-* unload all zignatures | z/[ini] [end] search zignatures between these regions | za .</description>
+    </item>
+    
+    <item>
+      <title>Solving &#39;At gunpoint&#39; from hack.lu 2014 with radare2</title>
+      <link>https://radareorg.github.io/blog/posts/solving-at-gunpoint-from-hack-lu-2014-with-radare2/</link>
+      <pubDate>Sat, 25 Oct 2014 15:23:58 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/solving-at-gunpoint-from-hack-lu-2014-with-radare2/</guid>
+      <description>Many thanks to crowell for giving us the permission to publish his writeup on this blog. Feel also free to take a look at depierre&amp;rsquo;s one.
+&amp;ldquo;At Gunpoint&amp;rdquo; was a 200 point Reversing challenge in Hack.lu ctf 2014. The description is as follows
+You &#39;re the sheriff of a small town, investigating news about a gangster squad passing by. Rumor has it they&#39; re easy to outsmart, so you have just followed one to their encampment by the river.</description>
+    </item>
+    
+    <item>
+      <title>Shellshock r2 fix</title>
+      <link>https://radareorg.github.io/blog/posts/shellshock-r2-fix/</link>
+      <pubDate>Tue, 30 Sep 2014 02:08:29 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/shellshock-r2-fix/</guid>
+      <description>A lot have been discussed recently about this vulnerability in bash. The internet was totally shocked just like what happened with heartbleed.
+Several vulnerabilities have been discovered in bash, which caused the distros to release several updates on the same package and being a little chaotic to know which was the correct patch to take.
+The vulnerability was not just affecting local users which have a little risk, but webservers running CGIs because http parameters are passed as environment variables to the script which was executing the functions defined in there.</description>
+    </item>
+    
+    <item>
+      <title>Adventures with Radare2 #1: A Simple Shellcode Analysis</title>
+      <link>https://radareorg.github.io/blog/posts/adventures-with-radare2-1-a-simple-shellcode-analysis/</link>
+      <pubDate>Fri, 26 Sep 2014 22:41:30 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/adventures-with-radare2-1-a-simple-shellcode-analysis/</guid>
+      <description>Posted on July 17, 2011 by Edd, on canthack.org.
+Radare2 is an open-source reverse engineering toolkit, consisting of a disassembler, debugger and hex editor. In this article I will show you the basics by reversing some shellcode I found on Project Shellcode.
+To put this into context let&amp;rsquo;s briefly discuss what we mean by the term &amp;ldquo;shellcode&amp;rdquo;, not to be confused with &amp;ldquo;shellscript&amp;rdquo;, which is something else entirely. &amp;ldquo;Shellcode&amp;rdquo; is a term colloquially used to refer to the payload of an exploit.</description>
+    </item>
+    
+    <item>
+      <title>Scripting r2 in Vala</title>
+      <link>https://radareorg.github.io/blog/posts/scripting-r2-in-vala/</link>
+      <pubDate>Thu, 18 Sep 2014 14:17:12 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/scripting-r2-in-vala/</guid>
+      <description>Under some situations you need to automatize or extend the features of radare. There are so many scripting languages out there: python, ruby, perl, lua between others.
+All of them are supported by the radare package and you can use them from inside r2 using r_lang plugins and the &amp;lsquo;#!&amp;rsquo; command or externally with the r2-swig.
+The main issue on scripting languages is performance. The code is interpreted and all the api bindings are wrapped, so linked list accesses and function calls are highly penalized.</description>
+    </item>
+    
+    <item>
+      <title>Solving crackmes with LDPRELOAD</title>
+      <link>https://radareorg.github.io/blog/posts/solving-crackmes-with-ldpreload/</link>
+      <pubDate>Tue, 16 Sep 2014 15:40:28 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/solving-crackmes-with-ldpreload/</guid>
+      <description>This is a translation of this article.
+One of the most common technics used in UNIX for analyzing and modifying a program consists in preloading a library to make the dynamic linker priorize the functions in there before the ones coming from external libraries.
+In fact, in iOS, the whole MobileSubstrate thing and the Flex app are based on this concept to extend and modify the functionalities of the applications in a very simple way.</description>
+    </item>
+    
+    <item>
+      <title>Trainings and Translations</title>
+      <link>https://radareorg.github.io/blog/posts/trainings-and-translations/</link>
+      <pubDate>Fri, 05 Sep 2014 15:07:09 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/trainings-and-translations/</guid>
+      <description>The summer is almost over and everyone is back to the main loop.
+Some of us will be in Oct 21-24 at hack.lu giving a talk and a workshop. See http://radare.today/well-be-at-hack-lu-2014/
+But pancake (aka Sergi Àlvarez), the author and main contributor to the project will be busy giving two trainings in spanish:
+Navajas Negras 2014 He&amp;rsquo;ll be there on October 2, 3, 4. Giving a free and libre 2h introductory workshop to r2 for reverse engineering.</description>
+    </item>
+    
+    <item>
+      <title>We&#39;ll be at hack.lu 2014</title>
+      <link>https://radareorg.github.io/blog/posts/well-be-at-hack-lu-2014/</link>
+      <pubDate>Sun, 31 Aug 2014 01:50:09 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/well-be-at-hack-lu-2014/</guid>
+      <description>We are accepted at hack.lu, both for a talk and a workshop: three of our contributors (jvoisin, maijin and xvilka) will be in Luxembourg to spread to good word about radare2!
+Talk If you don&amp;rsquo;t know radare2 yet, make sure to attend the talk, since it will explain what it is, why a tool like this is needed, and some examples about what it&amp;rsquo;s possible to achieve with it: exploitation, firmwares, malwares analysis, &amp;hellip;</description>
+    </item>
+    
+    <item>
+      <title>Visual mode</title>
+      <link>https://radareorg.github.io/blog/posts/visual-mode/</link>
+      <pubDate>Thu, 28 Aug 2014 00:35:56 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/visual-mode/</guid>
+      <description>One of the main complain we get about radare2 is that it has no GUI. Maybe we&amp;rsquo;ll get one someday, but for now, if you don&amp;rsquo;t like the CLI, you can use the visual mode, by entering V.
+Like with very command in r2, you can get help with the ?. Also, notice the fact that the CLI-command to get the same result it displayed on the top of your terminal.</description>
+    </item>
+    
+    <item>
+      <title>Binary diffing</title>
+      <link>https://radareorg.github.io/blog/posts/binary-diffing/</link>
+      <pubDate>Thu, 21 Aug 2014 16:28:49 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/binary-diffing/</guid>
+      <description>Yesterday, a new feature was pushed to radare2: offset-based function diffing. We&amp;rsquo;d like to take this opportunity to write a bit about radare2&amp;rsquo;s diffing features before showing the shiny new one.
+Let&amp;rsquo;s take a copy of a cracked crackme as an example, and the true and false binaries.
+Without parameter, radiff2 will by default show what bytes changed, and the corresponding offsets.
+$ radiff2 genuine cracked 0x000081e0 85c00f94c0 =&amp;gt; 9090909090 0x000081e0 0x0007c805 85c00f84c0 =&amp;gt; 9090909090 0x0007c805 $ rasm2 -d 85c00f94c0 test eax, eax sete al Notice how the two jumps are noped.</description>
+    </item>
+    
+    <item>
+      <title>Payloads in C</title>
+      <link>https://radareorg.github.io/blog/posts/payloads-in-c/</link>
+      <pubDate>Sun, 17 Aug 2014 16:15:17 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/payloads-in-c/</guid>
+      <description>Writing exploits requires to perform several steps to achieve the final purpose of the attack.
+ find a vulerability reverse engineer the bug achieve code execution write the payload profit  This post will focus on the later step: write the payload.
+The payload can spawn a shell, reuse a socket or do a connect back. But sometimes we will need a more complex payload that will need to open a file, change some permissions, do some mmap, etc.</description>
+    </item>
+    
+    <item>
+      <title>How goes the RSoC by the way?</title>
+      <link>https://radareorg.github.io/blog/posts/how-goes-the-rsoc-by-the-way/</link>
+      <pubDate>Mon, 28 Jul 2014 18:33:47 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/how-goes-the-rsoc-by-the-way/</guid>
+      <description>Apart moving a bit slowly, it&amp;rsquo;s going fine.
+Skia is working on extending &amp;lsquo;pf&amp;rsquo; command to improve display of nested structures, then will start to implement conditional structures, to lay the foundations of 010-templates-like support.
+jfrankowski is improving the YARA support, and will likely greatly enhance the zignature feature.
+fr33tux is working on sdb, but it seems that he has lost his internet connection.
+Things are moving slowly, but students seems to be interested by their tasks, and we&amp;rsquo;re doing the best to mentor them.</description>
+    </item>
+    
+    <item>
+      <title>Types</title>
+      <link>https://radareorg.github.io/blog/posts/types/</link>
+      <pubDate>Wed, 02 Jul 2014 02:27:59 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/types/</guid>
+      <description>One of the most wanted features for the RSoC was the support for 010-like templates. This is still planned, but there have been no recent movement on the topic.
+But some of the basic cparse support has been implemented and I think it&amp;rsquo;s time to get in touch with it in order to get ready for the integration with the rest of the analysis engine.
+Current cparse is able to handle cpp and C syntax with support for enums, structs and nested structs.</description>
+    </item>
+    
+    <item>
+      <title>We were at PSES!</title>
+      <link>https://radareorg.github.io/blog/posts/we-were-at-pses/</link>
+      <pubDate>Tue, 01 Jul 2014 18:06:58 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/we-were-at-pses/</guid>
+      <description>One of our resident contributor (jvoisin) was at PSES to do a talk in French, entitled Rétro-ingénierie avec radare2 - Parce que l&amp;rsquo;assembleur, c&amp;rsquo;est sympathique, aka Reversing with radare2 - Because assembly is sympathetic.
+If you&amp;rsquo;re interested in french terms (some of them are funny), you can watch the whole talk on youtube, and download the slides here
+Since the audience was non-technical, the first part is a gentle introduction to reverse engineering, and the second one is composed of two (messies) demos of radare2 in action for a WAP54G pwnage, and also a quick and dirty crack for an old game.</description>
+    </item>
+    
+    <item>
+      <title>Carving bins</title>
+      <link>https://radareorg.github.io/blog/posts/carving-bins/</link>
+      <pubDate>Fri, 20 Jun 2014 17:36:23 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/carving-bins/</guid>
+      <description>Radare was initially developed as a forensic tool. Nowadays most people use it for static code analysis or binary patching, but the framework and the tools still provide functionalities for analyzing disk partitions or filesystems..
+In this post I&amp;rsquo;m going to explain how to use r2 to extract some ELFs files from a raw memory dump or unknown format firmware image.
+This kind of search is called &amp;lsquo;carving&amp;rsquo; and there are already several tools that can do this automatically for free.</description>
+    </item>
+    
+    <item>
+      <title>The RSoC is starting!</title>
+      <link>https://radareorg.github.io/blog/posts/the-rsoc-is-starting/</link>
+      <pubDate>Tue, 17 Jun 2014 12:00:00 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/the-rsoc-is-starting/</guid>
+      <description>As announced, the Radare Summer of Code is starting today!
+ If you&amp;rsquo;re an applicant, please keep us up to date about what you&amp;rsquo;re working on. If you&amp;rsquo;re a mentor, please help applicants you&amp;rsquo;re in charge of. If you&amp;rsquo;re curious about what the RSoC is, please check this page. If you want to help, please feel free to crash into our irc chan If you want to have news about the RSoC, please add this blog to your RSS reader.</description>
+    </item>
+    
+    <item>
+      <title>Who uses r2 ?</title>
+      <link>https://radareorg.github.io/blog/posts/who-uses-r2/</link>
+      <pubDate>Wed, 11 Jun 2014 12:59:21 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/who-uses-r2/</guid>
+      <description>Everyone knows IDA and Ollydbg, but not everyone has 2700€ to spend on a software, nor wants to trust/use closed-source applications.
+But who uses radare2 as a replacement ?
+Cool projects Some reverse-engineering/security-oriented projects are using radare2, thanks to its convenient license (GPL/LGPL).
+ some coreboot developers are using radare2, since it supports not only x86 but also 8051, H8, CR16, ARM, used as embedded controllers. Droid Developers / MILEDROPEDIA using radare2 for the reversing baseband DSP firmware/RTOS (TMS320C55x+ architecture, unsupported in IDA Pro).</description>
+    </item>
+    
+    <item>
+      <title>Technical Analysis Of The GnuTLS Hello Vulnerability</title>
+      <link>https://radareorg.github.io/blog/posts/technical-analysis-of-the-gnutls-hello-vulnerability/</link>
+      <pubDate>Sun, 01 Jun 2014 22:38:43 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/technical-analysis-of-the-gnutls-hello-vulnerability/</guid>
+      <description>This past friday I checked out the gnutls repository and noticed a commit done two weeks ago:
+2014-05-23 19:50 Nikos Mavrogiannopoulos &amp;lt;nmav@gnutls.org&amp;gt; Prevent memory corruption due to server hello parsing.  The patch adds a second check to verify the boundary of the session id size.
+- if (len &amp;lt; session_id_len) { + if (len &amp;lt; session_id_len || session_id_len &amp;gt; TLS_MAX_SESSION_ID_SIZE) {  The memory corruption keywords triggered my attention, and just 6 days later there&amp;rsquo;s another funny commit:</description>
+    </item>
+    
+    <item>
+      <title>We were at PHDays!</title>
+      <link>https://radareorg.github.io/blog/posts/we-were-at-phdays/</link>
+      <pubDate>Sun, 25 May 2014 12:55:41 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/we-were-at-phdays/</guid>
+      <description>One of our resident developers (xvilka) was at PHDays to do a talk (A fast-track one):
+ Application of Radare2 Illustrated by Shylock and Snakso.A Analysis
+  The speaker will present his experience of applying Radare2 — an open-source reverse engineering tool, and illustrate it by the examples of the Windows trojan Shylock and 64-bit Linux malware Snakso.A. The techniques of analysis include both statistical disassembling of the code and its debugging with Radare2.</description>
+    </item>
+    
+    <item>
+      <title>Loading iOS binaries</title>
+      <link>https://radareorg.github.io/blog/posts/loading-ios-binaries/</link>
+      <pubDate>Mon, 19 May 2014 02:02:01 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/loading-ios-binaries/</guid>
+      <description>There are several posts explaining the process to decrypt an iOS app, this is not new, but no one explained the instruction to do it with r2.
+We have no aim in promoting piracy or cracking, but that&amp;rsquo;s the only way to analyze applications from the AppleStore.
+Retrieving information First of all you need a jailbroken device, in Cydia add the cydia.radare.org repository, in order to get the latest radare2 package from there.</description>
+    </item>
+    
+    <item>
+      <title>Javascript in r2</title>
+      <link>https://radareorg.github.io/blog/posts/javascript-in-r2/</link>
+      <pubDate>Tue, 13 May 2014 00:56:19 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/javascript-in-r2/</guid>
+      <description>One of the most prominent scripting languages right now is Javascript. Browsers rule the Internet and they all can execute code in this language, in addition, several other programming languages like C, C++, Go, Wisp, CoffeeScript, TypeScript, LUA, Python, Perl, Dart, Java, &amp;hellip; can be transpiled into JS.
+For those reasons r2 implements several ways to run Javascript and interact with the core APIs and commands.
+ Embedded WebServer (using AJAX from client side) Duktape RLang plugin (#!</description>
+    </item>
+    
+    <item>
+      <title>Mitigations detection</title>
+      <link>https://radareorg.github.io/blog/posts/mitigations-detection/</link>
+      <pubDate>Sat, 10 May 2014 20:40:10 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/mitigations-detection/</guid>
+      <description>Since the Smashing The Stack For Fun And Profit article from Aleph1, a lot has been done on mitigation side: canaries, DEP/W^X, PIC (to allow ASLR), RELRO, SafeSEH, &amp;hellip;
+Because radare2 is also designed to be a present in the exploit writer arsenal, jvoisin implemented detection for some of those mitigations.
+GNU/Linux  GCC&amp;rsquo;s canary implementation can be detected by the presence of the __stack_chk_fail function. It is used to terminate a function, in case of stack overflow.</description>
+    </item>
+    
+    <item>
+      <title>Getting the latest radare2</title>
+      <link>https://radareorg.github.io/blog/posts/getting-the-latest-radare2/</link>
+      <pubDate>Fri, 09 May 2014 23:31:43 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/getting-the-latest-radare2/</guid>
+      <description>Since radare2&amp;rsquo;s developement is pretty quick, the recommended version is the current git, and not the stable one. At least if you want to play with it in a comfortable way.
+You can always install it from your favorite packet manager if you are lazy: we are packaged in a lot of distributions.
+Simple way $ git clone https://github.com/radare/radare2.git $ cd radare2 $ ./sys/install.sh And that&amp;rsquo;s it, radare2 will be</description>
+    </item>
+    
+    <item>
+      <title>RSoC selections results</title>
+      <link>https://radareorg.github.io/blog/posts/rsoc-selections-results/</link>
+      <pubDate>Fri, 09 May 2014 00:13:06 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/rsoc-selections-results/</guid>
+      <description>We&amp;rsquo;re the 8th of May, and as planned, this is the day we announce the selected applicants/tasks.
+Money Thanks to the crowfunding, we managed to get a fair amount of money, less than we hoped, but it&amp;rsquo;s still nice.
+ Euros: 1347 EUR Bitcoin: 0.45 BTC Dogecoins: 123935 XDG  We didn&amp;rsquo;t managed to get corporate sponsors. Hopefully, since the project is gaining momentum, we&amp;rsquo;ll be able to get some for next year!</description>
+    </item>
+    
+    <item>
+      <title>Countries</title>
+      <link>https://radareorg.github.io/blog/posts/countries/</link>
+      <pubDate>Thu, 08 May 2014 10:33:18 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/countries/</guid>
+      <description>A couple of weeks ago, we did some aggressive advertisement for the RSoC. Time to take a look at the results.
+It seems that xvilka&amp;rsquo;s post on habrahabr attracted many peoples, then comes reddit and twitter. The lobbying on stackexchange is starting to pay.
+Most people are landing on the main page, and the second most viewed is the crowfunding one. Unsurprisingly, our main visitor base is from Russia and USA.</description>
+    </item>
+    
+    <item>
+      <title>Cleaning up</title>
+      <link>https://radareorg.github.io/blog/posts/cleaning-up/</link>
+      <pubDate>Wed, 07 May 2014 00:36:29 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/cleaning-up/</guid>
+      <description>By default sys/install.sh puts everything under /usr. Just to make things easier There are several reasons for this, but it may polute your system if you install multiple versions of r2 or use the one contained in the package system of your distro.
+If you want to remove previous installations of r2 from a specific directory type the following commands:
+$ ./configure --prefix=/usr/local $ make purge The purge will remove all r2 files from current and previous installations (older versions of it) from the /usr/local directory.</description>
+    </item>
+    
+    <item>
+      <title>x86 Capstone tests</title>
+      <link>https://radareorg.github.io/blog/posts/testing-coverity/</link>
+      <pubDate>Tue, 06 May 2014 15:14:16 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/testing-coverity/</guid>
+      <description>As you may know, we are using the capstone as a disassembling engine for several architectures. We are even planning to use it as main engine and to ditch udis86. Since the x86 is one of the most common architecture, we want to be sure that the transition does&amp;rsquo;t break anything.
+This is why our resident test writer maijin did the following things:
+ He added one thousand x86-related tests! Every test is now a one-liner, thanks to l0gic&amp;rsquo;s refactoring.</description>
+    </item>
+    
+    <item>
+      <title>Making Coverity happy</title>
+      <link>https://radareorg.github.io/blog/posts/making-coverity-happy/</link>
+      <pubDate>Mon, 05 May 2014 20:06:37 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/making-coverity-happy/</guid>
+      <description>We are currently using Coverity to spot bugs and issues. During the last week, jvoisin and xvilka went full berzerk and killed more than a hundret of bugs, also helped by the usual contributors.
+Feel free to help us and enter our one-fix-a-day contest!</description>
+    </item>
+    
+    <item>
+      <title>Initial ascii-art graph layout</title>
+      <link>https://radareorg.github.io/blog/posts/initial-ascii-art-graph-layout/</link>
+      <pubDate>Mon, 05 May 2014 04:15:37 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/initial-ascii-art-graph-layout/</guid>
+      <description>Lately, a lot of buzz has been going on with the new graph viewer implemented on top of RConsCanvas, which renders the basic blocks graph of a function using ascii art.
+Today we get an initial layout implemented by pancake which is just a PoC. It&amp;rsquo;s an initial work to implement the proper layouting algorithm to make the graph look more natural and readable by humans.
+Additionally the ? key in VV (visual graph) view now shows the help message explaining how to:</description>
+    </item>
+    
+    <item>
+      <title>End of RSoC participants application</title>
+      <link>https://radareorg.github.io/blog/posts/end-of-rsoc-participants-application/</link>
+      <pubDate>Sun, 04 May 2014 16:54:26 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/end-of-rsoc-participants-application/</guid>
+      <description>As announced, the applications are now closed. We currently have a little bit less than 25 applicants, this is incredible. They are all encouraged to join the #radare channel, and to submit (at least) one (non-trivial) patch to the radare2 codebase and one test case to radare2-regressions (any github issue, including closed is ok for writing test) to allow us to check that they know some code :)
+We can not afford to accept everyone, and we apologize for this: we should only be able to pay two people.</description>
+    </item>
+    
+    <item>
+      <title>Jumping around in visual mode</title>
+      <link>https://radareorg.github.io/blog/posts/jumping-around-in-visual-mode/</link>
+      <pubDate>Sun, 04 May 2014 01:33:41 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/jumping-around-in-visual-mode/</guid>
+      <description>Yesterday, someone asked on IRC how to jump around in visual mode (V key to activate it, and ? for help, as usual). This is a perfect pretext for another blogpost.
+To move in visual mode, you can use:
+ g to seek to the begining of the file G to seek to the end of the file hjkl to move, à la vim. mK to set the mark K at the current offset &#39;K to seek to the previously set K mark.</description>
+    </item>
+    
+    <item>
+      <title>Playing with rasm2</title>
+      <link>https://radareorg.github.io/blog/posts/playing-with-rasm2/</link>
+      <pubDate>Fri, 02 May 2014 12:43:49 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/playing-with-rasm2/</guid>
+      <description>Radare2&amp;rsquo;s assembler/disassembler is rasm2, and albeit being used internally, it is also a standalone binary that you can use.
+It can of course disassemble
+$ rasm2 -d 89d85d90 mov eax, ebx;pop ebp;nop but also assemble
+$ rasm2 &#39;mov eax, ebx;pop ebp;nop&#39; 89d85d90 Not only x86, but also mips
+$ rasm2 -a mips &#39;addiu a1, a2, 8&#39; 0800c524 $ rasm2 -a mips -d 0800c524 addiu a1, a2, 8 and many more. You can have the full list with rasm2 -L.</description>
+    </item>
+    
+    <item>
+      <title>Exploring the database</title>
+      <link>https://radareorg.github.io/blog/posts/exploring-the-database/</link>
+      <pubDate>Thu, 01 May 2014 17:48:58 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/exploring-the-database/</guid>
+      <description>We&amp;rsquo;re currently trying to integrate sdb into radare2. This will greatly reduce code complexity, improve portability, and open the way to collaborative reversing.
+What is sdb ?  sdb is a simple string key/value database based on djb&amp;rsquo;s cdb disk storage and supports JSON and arrays introspection.
+  There&amp;rsquo;s also the sdbtypes: a vala library that implements several data structures on top of an sdb or a memcache instance.</description>
+    </item>
+    
+    <item>
+      <title>YARA support</title>
+      <link>https://radareorg.github.io/blog/posts/yara-support/</link>
+      <pubDate>Wed, 30 Apr 2014 23:30:45 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/yara-support/</guid>
+      <description>We now have (experimental) YARA support inside radare2.
+If you are building from the latest git, you just have to install libyara, no need to recompile anything.
+[0x00000000]&amp;gt; yara Yara plugin | add [path] : add yara rules | clear : clear all rules | help : show this help | list : list all rules | scan : scan the current file [0x00000000]&amp;gt; Since you may not already have some rules, we bundled some defaults ones, for packers and crypto primitives.</description>
+    </item>
+    
+    <item>
+      <title>ASCII graphs!</title>
+      <link>https://radareorg.github.io/blog/posts/ascii-graphs/</link>
+      <pubDate>Wed, 30 Apr 2014 12:47:13 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/ascii-graphs/</guid>
+      <description>We may not have a GUI like IDA, but we still have some graphs. This is a small (200 lines of code) proof of concept, but there is more to come
+ colors utf-8 layouts resizing animations &amp;hellip;  You can try this new feature with VV if you are using radare2 from git.
+And by the way, this is documented, and has some tests to avoid regressions. Feel free to take a look at the /libr/cons folder if you want to contribute.</description>
+    </item>
+    
+    <item>
+      <title>?e Hello World</title>
+      <link>https://radareorg.github.io/blog/posts/e-hello-world/</link>
+      <pubDate>Wed, 30 Apr 2014 01:12:50 +0200</pubDate>
+      
+      <guid>https://radareorg.github.io/blog/posts/e-hello-world/</guid>
+      <description>Today we are announcing the official blog of the Radare project in order to explain new features and changes, share tips and tricks, tutorials and more.
+The community of radare has grown a lot recently, and we need more tools to provide users a source for updated information without having to read every commit or IRC log.</description>
+    </item>
+    
+  </channel>
+</rss>

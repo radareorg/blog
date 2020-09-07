@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>RSoC 2016 progress</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="RSoC 2016 progress" />
+<meta property="og:description" content="This year we&rsquo;re hosting our own Radare Summer of Code, again!
+This is why we have selected 4 students:
+ Aneesh Dogra (FAT PE binaries) Alexandru Razvan Caciulescu (ROP generator) Rakholia Jenish (Kernel level interfaces) Pankaj Kataria (SROP and COOP generators)  FAT PE binaries At first, Aneesh Dogra adding the support of FAT PE binaries: those PEs can contain multiple programs inside, like 16bit MZ stub, both native and MSIL/CIL(." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/rsoc-2016-progress/" />
+<meta property="article:published_time" content="2016-08-02T13:00:10+02:00" />
+<meta property="article:modified_time" content="2016-08-02T13:00:10+02:00" />
+
+
+<meta itemprop="name" content="RSoC 2016 progress">
+<meta itemprop="description" content="This year we&rsquo;re hosting our own Radare Summer of Code, again!
+This is why we have selected 4 students:
+ Aneesh Dogra (FAT PE binaries) Alexandru Razvan Caciulescu (ROP generator) Rakholia Jenish (Kernel level interfaces) Pankaj Kataria (SROP and COOP generators)  FAT PE binaries At first, Aneesh Dogra adding the support of FAT PE binaries: those PEs can contain multiple programs inside, like 16bit MZ stub, both native and MSIL/CIL(.">
+<meta itemprop="datePublished" content="2016-08-02T13:00:10+02:00" />
+<meta itemprop="dateModified" content="2016-08-02T13:00:10+02:00" />
+<meta itemprop="wordCount" content="994">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RSoC 2016 progress"/>
+<meta name="twitter:description" content="This year we&rsquo;re hosting our own Radare Summer of Code, again!
+This is why we have selected 4 students:
+ Aneesh Dogra (FAT PE binaries) Alexandru Razvan Caciulescu (ROP generator) Rakholia Jenish (Kernel level interfaces) Pankaj Kataria (SROP and COOP generators)  FAT PE binaries At first, Aneesh Dogra adding the support of FAT PE binaries: those PEs can contain multiple programs inside, like 16bit MZ stub, both native and MSIL/CIL(."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>RSoC 2016 progress</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 2, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>This year we&rsquo;re hosting our own <strong>Radare Summer of Code</strong>, again!</p>
+<p>This is why we have selected 4 students:</p>
+<ul>
+<li>Aneesh Dogra (FAT PE binaries)</li>
+<li>Alexandru Razvan Caciulescu (ROP generator)</li>
+<li>Rakholia Jenish (Kernel level interfaces)</li>
+<li>Pankaj Kataria (SROP and COOP generators)</li>
+</ul>
+<h3 id="fat-pe-binaries">FAT PE binaries</h3>
+<p>At first, Aneesh Dogra adding the support of FAT PE binaries: those PEs can contain multiple programs inside, like 16bit MZ stub, both native and MSIL/CIL(.NET) code. This task also includes adding support for .NET in RBin, to be able to list the symbols, get the entrypoint, code metadata, etc.</p>
+<h4 id="progress-so-far">Progress so far</h4>
+<p><em>r2</em> used to crash when loading a fat binary with a lot of sub-bins. Every sub-binary was loaded on RAM at all times and it costed a lot of memory and computation. We tested it using a dyld cache (around 650mb in size) with around 950 libs, and it costed more than 16GBs of ram to load that binary. Now, we can load the same in around 1.2 GBs. We did this by caching the libraries in sdb while parsing the fatbin and then only loading them on ram if we require. Currently I am working on a PE RBinXtr plugin, that would allow PE files to be loaded as fat binaries, hence allowing us to play around with its sub-bins (W16, W32, .NET) in r2.</p>
+<h3 id="kernel-support-for-r2">Kernel support for r2</h3>
+<p>Also, Rakholiya Jenish will work on the integration of radare2 with kernel-level interfaces. This includes multiple fixes/features such as:</p>
+<ul>
+<li>Adding support for huge elf files such as Linux kernels with debug information</li>
+<li>Ability to read and parse <code>/proc/kcore</code> files</li>
+<li>Linux and Windows kernel drivers to read/write in kernel address space</li>
+<li>Import structures from dwarf and make them available for <code>pf</code></li>
+<li>Multiple scripts to extract information from kernel structures</li>
+</ul>
+<h4 id="progress-so-far-1">Progress so far</h4>
+<p><em>r2</em> can now also support working with files larger than RAM. If memory allocation fails while loading a large file into memory, r2 will instead allocate a buffer (128MB as default size) and analysis will be done by re-reading the buffer everytime the physical address is not in the buffer range. The buffer size can also be manually defined using the <code>R_IO_MAX_ALLOC</code> environment variable. The test suite cannot test this at the moment, so a future direction could be to look into integrating the manual tests that I&rsquo;m doing into the test suite.</p>
+<p>Currently, I am working on extracting structures in different formats from <code>.dwarf_info</code> section so that they can be made available for use with <code>pf</code>. We currently plan to use external library <code>libdwarf</code>.</p>
+<h3 id="rop-generator">ROP generator</h3>
+<p>Then, Alexandru Razvan Caciulescu working on the ROPchain generator, based on ragg2. The new tool (or just improved ragg2) will provide parity to well known ROPgadget tool. Also improving the current ROP search algorithms, for example caching rop gadgets in SDB, for quicker retrieval. Something like this syntax is going to be used:</p>
+<pre><code>register reg1 = 0; 
+register reg2 = whatever;
+register reg3 = reg1 + reg2;
+system(echo reg3);
+</code></pre><h4 id="progress-so-far-2">Progress so far</h4>
+<p>For the midterm I focused on the gadget caching in SDB for faster retrieval + lookup while also trying to classify them based on a semantic analysis.</p>
+<p>From now on all the <code>/R</code> commands which previously only searched and displayed gadgets also cache them in the SDB. We decided to store them as &lt;start_addr&gt;:<!-- raw HTML omitted --> For querying them we have the new commands:</p>
+<ul>
+<li><code>/Rk</code> display all gadgets</li>
+<li><code>/Rkj</code> display in JSON format</li>
+<li><code>/Rkq</code> display only the offsets</li>
+</ul>
+<p>The <code>Ps</code> and <code>Po</code> commands have also been enhanced to save/load the ROP SDB into the projects.</p>
+<p>Currently I am working on the semantic classification of gadgets. Each gadget will be classified in on of the categories presented here: <a href="https://hackmd.io/s/By-S2GLu">https://hackmd.io/s/By-S2GLu</a>
+For this task the radare framework is ideal because we can emulate each assembly instruction and see which REGs, FLAGs and MEM addr are accessed and how they are changed, thus providing all the information required for assigning a class to each gadget. The main challenge for this was actually understanding how this works and how radare handles all of this in the background so I can adapt it to my specific needs for this task.</p>
+<h3 id="sropcoop-generator">SROP/COOP generator</h3>
+<p>Pankaj Kataria will add the ability to generate SROP and COOP (Counterfeit Object Oriented Programming) sequences to the same tool, sharing the code/infrastructure with ROP generation code.</p>
+<p>Counterfeit Object-oriented programming is an advanced and fairly new technique which even by hand is hard and error prone process so, more importance is given on the design for the tool automating this technique is make is less painfull to use. Currently i am implementing Searcher for finding vfgadgets (virtual functions) used by the input binary.</p>
+<h5 id="situtation">Situtation</h5>
+<p>The problem of finding all the virtual function boils down to find all vtable&rsquo;s being used in a binary. But as the exact location of the all the vtable&rsquo;s is not known so, to solve this I am using an algorithm made by combination techniques described in this and this paper. The abstract algorithm composed is described as follows :</p>
+<ul>
+<li>Start by analyzing the data segment and scanning each location in it.</li>
+<li>If current location is referenced from a code segment and its value  is a pointer to a function, then mark it as a start of vtable.</li>
+<li>Else continue to search.</li>
+<li>Other elements of the virtual table must be must be unreferenced pointers to functions, so finding the size of virtual table is straightforward as Vtable ends with the first locations that is either referenced from the program code, orht is not a pointer to a function.</li>
+</ul>
+<p>Once the virtual function table is identified Runtime Type information(RTTI) can be recovered as well because in most of Application Binary Interface pointer to RTTI structure of a class always precedes the corresponding virtual table. Later using RTTI polymorphic class hierarchies is reconstructed exactly as it was in the source C++ program.</p>
+<hr>
+<p>Please, help us to pay the proper amount of money to our students by supporting our crowdfunding campaign at IndieGoGo: <a href="https://igg.me/at/rsoc2016">https://igg.me/at/rsoc2016</a></p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2frsoc-2016-progress%2f - RSoC%202016%20progress by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

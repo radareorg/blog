@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Using radare2 to pwn things</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Using radare2 to pwn things" />
+<meta property="og:description" content="While more and more people are using radare2 during ctf, in the same time we&rsquo;ve got more and more complains that there is not enough documentation about radare2.
+This article&rsquo;s goal is to make a small cheat-sheet when it comes to pwn things with our beloved piece of software.
+Keep in mind that:
+ Every character has a meaning (w stands for write, p stands for print, …) Every command can be a succession of character (pdf stands for p: print, d: disassemble, f: function Every command is documented with ?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/using-radare2/" />
+<meta property="article:published_time" content="2015-05-14T23:45:49+02:00" />
+<meta property="article:modified_time" content="2015-05-14T23:45:49+02:00" />
+
+
+<meta itemprop="name" content="Using radare2 to pwn things">
+<meta itemprop="description" content="While more and more people are using radare2 during ctf, in the same time we&rsquo;ve got more and more complains that there is not enough documentation about radare2.
+This article&rsquo;s goal is to make a small cheat-sheet when it comes to pwn things with our beloved piece of software.
+Keep in mind that:
+ Every character has a meaning (w stands for write, p stands for print, …) Every command can be a succession of character (pdf stands for p: print, d: disassemble, f: function Every command is documented with ?">
+<meta itemprop="datePublished" content="2015-05-14T23:45:49+02:00" />
+<meta itemprop="dateModified" content="2015-05-14T23:45:49+02:00" />
+<meta itemprop="wordCount" content="344">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Using radare2 to pwn things"/>
+<meta name="twitter:description" content="While more and more people are using radare2 during ctf, in the same time we&rsquo;ve got more and more complains that there is not enough documentation about radare2.
+This article&rsquo;s goal is to make a small cheat-sheet when it comes to pwn things with our beloved piece of software.
+Keep in mind that:
+ Every character has a meaning (w stands for write, p stands for print, …) Every command can be a succession of character (pdf stands for p: print, d: disassemble, f: function Every command is documented with ?"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Using radare2 to pwn things</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 14, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>While more and more people are using radare2 during ctf, in the same time we&rsquo;ve got more and more complains that there is not enough documentation about radare2.</p>
+<p>This article&rsquo;s goal is to make a small cheat-sheet when it comes to pwn things with our beloved piece of software.</p>
+<p>Keep in mind that:</p>
+<ul>
+<li>Every character has a meaning (<code>w</code> stands for <em>write</em>, <code>p</code> stands for <em>print</em>, …)</li>
+<li>Every command can be a succession of character (<code>pdf</code> stands for <code>p</code>: <em>print</em>, <code>d</code>: <em>disassemble</em>, <code>f</code>: <em>function</em></li>
+<li>Every command is documented with ? (<code>pdf?</code>, <code>???</code>, …)</li>
+</ul>
+<h1 id="search">Search</h1>
+<ul>
+<li>search a string in memory/binary: <code>/ yourstring</code></li>
+<li>search for rop gadgets: <code>/R</code></li>
+<li>search for rop gadgets with a regexp: <code>/R/</code></li>
+<li>show strings: <code>iz</code></li>
+<li>find writeable sections: <code>iS | grep perm=..w</code></li>
+<li>find executables sections: <code>iS | grep perm=...x</code></li>
+<li>find xref of a function: <code>axt [offset|yourfunctioname]</code></li>
+<li>list libc imports: <code>is~imp.</code></li>
+<li>generate cyclical pattern: <code>ragg2 -P $SIZE -r</code></li>
+<li>find offset of pattern: <code>wopO $VALUE</code></li>
+<li>change the deep of the rop-search: <code>e search.roplen = 4</code></li>
+<li>computing how far a symbol is from where you currently are: <code>fd [offset|yourfunctioname]</code></li>
+<li>find protections in binary:
+<ul>
+<li><code>i~canary</code> for canaries</li>
+<li><code>i~pic</code> for Position Independent Code</li>
+<li><code>i~nx</code> for non-executable stack</li>
+</ul>
+</li>
+</ul>
+<h1 id="emulation">Emulation</h1>
+<ul>
+<li>initialize emulation: <code>aei</code></li>
+<li>deinitialize emulation: <code>aed</code></li>
+<li>emulate a whole function: <code>aef</code></li>
+<li>single-step: <code>aes</code></li>
+</ul>
+<h1 id="display">Display</h1>
+<ul>
+<li>hexdump: <code>pxw [len] [@ offset]</code></li>
+<li>get offset of a symbol: <code>?v sym.main</code></li>
+<li>disassemble a whole function: <code>pdf @ [offset|yourfunctioname]</code></li>
+<li>list functions: <code>afl</code></li>
+<li>get in which function an address is used: <code>afi address~fcn</code>
+<ul>
+<li><code>afi</code> to get function information</li>
+<li><code>~fcn</code> to grep for &ldquo;fcn&rdquo;</li>
+<li>append <code>j</code> to get a JSON output : <code>ij</code>, <code>pdfj</code>, <code>/Rj</code> &hellip;</li>
+</ul>
+</li>
+<li>calculus of offsets: <code>? 0x20 + 0x4028a0</code></li>
+</ul>
+<h1 id="debugger">Debugger</h1>
+<ul>
+<li>connecting the gdbserver <code>r2 -D gdb -d [binary] gdb://[address:port]</code> (<a href="https://github.com/radare/radare2/blob/master/doc/gdb">full doc</a>)</li>
+<li>connecting the remote windbg <code>r2 -D wind -d [binary] windbg://[pipe address]</code> (<a href="https://github.com/radare/radare2/blob/master/doc/gdb">full doc</a>)</li>
+<li>show registers: <code>dr=</code></li>
+<li>emuling strace: <code>dcs*</code></li>
+<li>disassemble at register <code>reg</code>: <code>pd [len] @ [reg]</code></li>
+</ul>
+<h1 id="misc">Misc</h1>
+<ul>
+<li>emulating socat: <code>rarun2 program=./plzpwnme.exe listen=4444</code>
+You should really take a look at <code>rarun2</code>'s manpage.</li>
+</ul>
+<p>Feel free to <a href="irc://irc.freenode.net/radare">tell us</a> if you think that we missed something, and good luck for the <a href="https://2015.legitbs.net/">Defcon CTF Quals</a>!</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fusing-radare2%2f - Using%20radare2%20to%20pwn%20things by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

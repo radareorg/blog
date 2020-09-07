@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Radare 0.9.9</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Radare 0.9.9" />
+<meta property="og:description" content="Today, we&rsquo;re releasing a new version of radare2, the 0.9.9, codename Almost There. Since you might be a bit too lazy to read every single commit, we&rsquo;re going to highlight some cool new features!
+Numbers Thanks to more than 50 contributors who issued something like 1700 commits, here is what changed:
+$ git checkout 0.9.9 &amp;&amp; git diff 0.9.8 --shortstat 839 files changed, 156490 insertions(&#43;), 18885 deletions(-) {pancake} I would like to give a special thanks to all the new contributors that made this release possible." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/radare-0-9-9/" />
+<meta property="article:published_time" content="2015-06-06T11:46:57+02:00" />
+<meta property="article:modified_time" content="2015-06-06T11:46:57+02:00" />
+
+
+<meta itemprop="name" content="Radare 0.9.9">
+<meta itemprop="description" content="Today, we&rsquo;re releasing a new version of radare2, the 0.9.9, codename Almost There. Since you might be a bit too lazy to read every single commit, we&rsquo;re going to highlight some cool new features!
+Numbers Thanks to more than 50 contributors who issued something like 1700 commits, here is what changed:
+$ git checkout 0.9.9 &amp;&amp; git diff 0.9.8 --shortstat 839 files changed, 156490 insertions(&#43;), 18885 deletions(-) {pancake} I would like to give a special thanks to all the new contributors that made this release possible.">
+<meta itemprop="datePublished" content="2015-06-06T11:46:57+02:00" />
+<meta itemprop="dateModified" content="2015-06-06T11:46:57+02:00" />
+<meta itemprop="wordCount" content="1471">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Radare 0.9.9"/>
+<meta name="twitter:description" content="Today, we&rsquo;re releasing a new version of radare2, the 0.9.9, codename Almost There. Since you might be a bit too lazy to read every single commit, we&rsquo;re going to highlight some cool new features!
+Numbers Thanks to more than 50 contributors who issued something like 1700 commits, here is what changed:
+$ git checkout 0.9.9 &amp;&amp; git diff 0.9.8 --shortstat 839 files changed, 156490 insertions(&#43;), 18885 deletions(-) {pancake} I would like to give a special thanks to all the new contributors that made this release possible."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Radare 0.9.9</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        June 6, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Today, we&rsquo;re releasing a new version of radare2, the <strong>0.9.9</strong>, codename <em>Almost There</em>. Since you might be a bit too lazy to read <a href="https://github.com/radare/radare2/commits/master">every single commit</a>, we&rsquo;re going to highlight some cool new features!</p>
+<h1 id="numbers">Numbers</h1>
+<p>Thanks to more than <strong>50</strong> contributors who issued something like 1700 commits, here is what changed:</p>
+<pre><code>$ git checkout 0.9.9 &amp;&amp; git diff 0.9.8 --shortstat  
+ 839 files changed, 156490 insertions(+), 18885 deletions(-)
+</code></pre><p>{pancake} I would like to give a special thanks to all the new contributors that made this release possible. You can find a complete list of them in the AUTHORS file. I am still the main developer, architect and maintainer of the project, but thanks to the increased popularity of the project i&rsquo;m starting to delegate some tasks and handle the development from a better perspective, teaching newcomers, priorizing features, enforcing the testsuite and much more.</p>
+<h1 id="console">Console</h1>
+<p>As you know, the current recommended way to use radare2 is its CLI interface. This is why we&rsquo;re doing our best to polish it. Our <em>Windows</em> user will be delighted to know that radare2 now <a href="https://www.youtube.com/watch?v=pnZRsmY6xsw">works great</a> on their platform, and has almost reached feature-parity with <em>real</em> operating systems, with ground-breaking features like arrow-keys support or ^C to issue <code>SIGTERM</code>.</p>
+<p>Most of the w32 enhacements were done by <a href="https://twitter.com/sanguinawer">Skuater</a>, who fixed and tested some bugs in the windbg plugin, implemented support for FPU and MMX registers on Windows and Linux-x86-32/64, enhaced the console input to work almost as well as in linux.</p>
+<p>One of our core-contributors happens to be a <a href="https://gist.github.com/XVilka/8346728">truecolor fanatic</a>, so now radare2 can support all 16,777,216 colors!</p>
+<p>Among various console improvements, you&rsquo;ll find the new variables  <code>scr.wheelspeed</code> and <code>scr.responsive</code> to improve navigation.</p>
+<p>We know that the learning curve for radare2 is <em>super</em>-steep, and we&rsquo;re sorry about this. The good news is that we checked that documentation was available for every single command, and wrote it where it was missing! You can as usual append <code>?</code> to your commands to get documentation about them.</p>
+<h1 id="new-architectures">New architectures</h1>
+<h2 id="i4004">i4004</h2>
+<p>Let&rsquo;s go back in time to 1971. At this time, Intel released the first general purpose programmable microprocessor on the market, the <a href="https://en.wikipedia.org/wiki/Intel_4004">i4004</a></p>
+<p><img src="/blog/images/C4004_-Intel-.jpg" alt="i4004 CPU"></p>
+<p>It was a blazing-fast CPU, 740 kHz, able to directly address 640 bytes of RAM! So now, 34 years later, radare2 supports this CPU.</p>
+<h1 id="lh5801">LH5801</h1>
+<p>While we&rsquo;re back in time, did you know that we&rsquo;re supporting the good old <a href="http://www.old-computers.com/museum/computer.asp?st=1&amp;c=965">LH5801</a>?</p>
+<p><img src="/blog/images/shapre.JPG" alt="pocket computer"></p>
+<p>It&rsquo;s a 8bit CPU that was used in the first <a href="https://en.wikipedia.org/wiki/Pocket_computer">pocket computer</a>!</p>
+<h2 id="z80">z80</h2>
+<p>The previous <a href="https://en.wikipedia.org/wiki/Zilog_Z80">z80</a> disassembler was under GPL, had comments in German (Like <a href="https://bugs.documentfoundation.org/show_bug.cgi?id=39468">LibreOffice</a> and <a href="https://plus.google.com/+LennartPoetteringTheOneAndOnly/posts/VUzeRLf5g5m">systemd</a>!), was huge and a pain to maintain. Thanks to condret, we now have a clean, correct, LGPL-licenced z80 disassembler which is 75% smaller!</p>
+<h2 id="pebble">Pebble</h2>
+<p>If you have a <a href="https://getpebble.com/">pebble watch</a>, you can <a href="https://github.com/radare/radare2/commit/e35d55e18ab2bfe1d38b4a9398222531982f070a">now</a> disassemble applications with radare2!</p>
+<h1 id="analysis-improvement">Analysis improvement</h1>
+<p>Added two alternative analysis loops with several levers to tune some options like skipping nops at the begining of the function, detect functions by following calls, handle local variables, ELF PLT and Thumb detection are now supported for ARM and ARM64;
+local-flags/function-labels are also back for every supported architecture.</p>
+<p>PE relocations are now displayed in a <em>sexy</em> way:
+<img src="/blog/images/reloc.png" alt="PE RELOC">
+<img src="/blog/images/reloc2.png" alt="PE RELOC 2"></p>
+<p>There is (basic) support for <a href="https://en.wikipedia.org/wiki/ETRAX_CRIS">CRIS</a> analysis
+<img src="/blog/images/cris.png" alt="Cris anal"></p>
+<p>Also, can you <a href="https://twitter.com/radareorg/status/580289536892252160">spot</a> Dalvik-related enhancements?</p>
+<h1 id="commands-changes">Commands changes</h1>
+<p>We changed some commands (for good), but since they were cryptic, you probably never used it before, so you won&rsquo;t even notice the changes. If you do, we would appreciate your feedback.</p>
+<p>We also added a new ones, mostly subcommands of <code>p</code>. Can you find them? ;)</p>
+<h1 id="fixing-bugs">Fixing bugs</h1>
+<p>Thanks to the amazing work of <a href="http://maijin.fr/">maijin</a>, we now have our (ever-growing) testsuite running on <a href="https://travis-ci.org/radare/radare2">travis</a> to avoid regressions!</p>
+<p>Also, <a href="https://github.com/jvoisin">jvoisin</a> had fun fixing 75% of our coverity issues, bringing the current total to less than 150!</p>
+<p>We also fixed bugs found by <a href="http://www.shellcheck.net/">shellcheck</a>, <a href="http://cppcheck.sourceforge.net/">cppcheck</a>, <a href="http://valgrind.org/">valgrind</a>, and more!</p>
+<h1 id="esil">ESIL</h1>
+<p>Remember <a href="https://github.com/radare/radare2/wiki/esil">ESIL</a>? Our <a href="https://en.wikipedia.org/wiki/Intermediate_language">IL</a>. Come on.</p>
+<p>Anyway, <a href="http://runas-racer.com/main.html">condret</a> has been working hard on it, mainly working in the specs and gamebody support. <a href="https://twitter.com/nighterman">Nighterman</a> has added features for x86 emulation, <a href="https://twitter.com/trufae">pancake</a> for arm and mips and <a href="https://twitter.com/dkreuter_">dkreuter</a> for i8051&hellip; Emulation, here we come!</p>
+<p>Also, congrats to <a href="https://sushant94.github.io/">sushant94</a> for his implementation of an ESIL to <a href="http://blog.zynamics.com/2010/03/07/the-reil-language-part-i/">REIL</a> translator and <a href="https://github.com/dkreuter">dkreuter</a> for his <a href="https://github.com/radare/radare2/blob/master/libr/anal/p/anal_8051.c">ESIL implementation for 8051</a>! Not bad for a first contribution, heh?</p>
+<h1 id="search">Search</h1>
+<p>We <a href="http://radare.today/ropnroll/">already wrote</a> about it, but <a href="https://github.com/crowell">crowell</a> added regular-expressions support to the rop-gadget finder. Also please note that the separator is now <code>;</code>, and that you must quote <em>the whole command</em> when you use it.</p>
+<p>Some people are using radare2 instead of <a href="http://binwalk.org/">binwalk</a> to run libmagic on unknown files. This is why we optimized a bit the speed and efficiency of the <code>/m</code> command.</p>
+<h1 id="ascii-graphs">ASCII graphs</h1>
+<p>Remember when we <a href="http://radare.today/initial-ascii-art-graph-layout/">bragged about</a> the awesome ASCII-graph support in radare2? Well, today, thanks to <a href="https://github.com/r0nk">r0nk</a>, we&rsquo;ll brag again:</p>
+<p>Graphs now have awesome colours by default:
+<img src="/blog/images/r2graphloop.png" alt="Graph colours"></p>
+<p>Of course, colours are supported in the minigraph too!</p>
+<p><img src="/blog/images/meh.png" alt="Coloured minigraph"></p>
+<p>We&rsquo;ve got two display mode for graphs edges. You can switch between them with the <code>e</code> key.</p>
+<p><img src="/blog/images/r2graphmain.png" alt="Graph edge styles"></p>
+<h1 id="teaching">Teaching</h1>
+<p>Radare2 is not only used to reverse exotic binaries, or craft ingenious exploits : it&rsquo;s also used to teach computer science!</p>
+<p>Radare2 comes with almost 250 fortunes, and while we think that they are super-fun, some might actually be offensive, or ill-suited for <em>formal</em> presentations. This is why we split them: you can now set <code>cfg.fortunetype</code> to <code>tips</code>, <code>fun</code>, <code>nsfw</code>, or any combination of them. We hope that this will help you to  avoid awkward situations while doing a presentation ;)</p>
+<p>Since not everyone is fluent with weird instructions set, radare2 comes with an <code>asm.pseudo</code> option, to show instructions in a more obvious way.</p>
+<p>You can also try our <em>proto-alpha-preprod</em> decompiler with <code>pdc</code>:</p>
+<p><img src="/blog/images/decomp.png" alt="decompiler"></p>
+<h1 id="debugger">Debugger</h1>
+<h2 id="windbg">WinDBG</h2>
+<p><a href="https://github.com/LemonBoy">TheLemonMan</a> added support for <a href="https://msdn.microsoft.com/en-us/windows/hardware/hh852365">WinDBG</a>, the ring-0 debugger of Windows. This means that you can not only debug drivers with radare2, but also virtual machines. Imagine, breaking, modifying and stepping Windows, with radare2!</p>
+<p><img src="/blog/images/windbg.jpg" alt="WinDBG support"></p>
+<h2 id="tracing">Tracing</h2>
+<p>Thanks to <a href="https://twitter.com/earada">earada</a>, tracing is now working much better and can be displayed in the ascii-art and web graphs.</p>
+<p><img src="/blog/images/tracing.png" alt="tracing"></p>
+<h1 id="web-interface">Web interface</h1>
+<p>We already said a lot about our <a href="http://radare.today/the-new-web-interface/">new web interface</a>, by <a href="https://github.com/pwntester">pwntester</a>, but I&rsquo;m quite sure that you can&rsquo;t have enough of it:</p>
+<ul>
+<li>a miminap</li>
+<li>massive speedup</li>
+<li>interactive graphs</li>
+<li>even more contextual menu</li>
+<li>hexdump</li>
+<li>projects support</li>
+<li>type-edition</li>
+<li>variables renaming</li>
+<li>debugger support</li>
+<li>tracing</li>
+</ul>
+<p><img src="/blog/images/tracegraph.png" alt="tracegraph"></p>
+<h1 id="r2pipe">r2pipe</h1>
+<p>Since radare2 is a fast-moving target, instead of using <em>traditional-bindings</em>, the recommended way to call radare2 from a foreign language is to use <em>r2pipe</em>, which is roughly an API to communicate with an instance of radare2 using HTTP, PIPEs, TCP sockets or STDIO to run r2 commands and get the output in a string.</p>
+<p>We&rsquo;d like to take this opportunity to remind you that you just have to add <code>j</code> to every single command to get the output in <em>JSON</em>. If you&rsquo;re parsing raw radare2 input by yourself, you&rsquo;re going to have a bad time.</p>
+<p>Currently, we have stable and mature support for  Python (2+3), Go and NodeJS; but also support D, C#, Java, Ruby, Perl, Vala, NewList, Shellscript, Rust&hellip;</p>
+<p>Packages for r2pipe are available from the python <a href="https://pypi.python.org/pypi/r2pipe/0.6.5">pip</a>, ruby <a href="https://rubygems.org/gems/r2pipe">gem</a>, and node.js <a href="https://www.npmjs.com/package/r2pipe">npm</a> package managers.</p>
+<p><a href="https://github.com/radare/radare2-bindings/tree/master/r2pipe">r2pipe</a> offers a simple interface for running r2 commands over a pipe, tcp or http connection and get the output in a plain string or a JSON object. Also it have been integrated with rlang, so you can run those scripts from the shell like if it was a plain r2 script:</p>
+<pre><code>r2 -i stuff.py /bin/ls
+[0x8040580]&gt; . stuff.py
+</code></pre>
+<h1 id="misc">Misc</h1>
+<p>Most of the radare developers are using <a href="http://emacs.rehab">vim</a>, but some of us prefer <a href="https://www.gnu.org/software/emacs/">emacs</a>. This is why there are now vim <em>and</em> emacs keybindings in visual mode!</p>
+<p>Thanks to <a href="https://github.com/aaronpuchert">Aaron Puchert</a>, we&rsquo;ve got a new assembler for x86, cleaner, and more efficient! But we are still using the x86.nz assembler plugin which supports more instructions, and bear in mind that you can also use the x86.olly or x86.as.</p>
+<h1 id="ok-whats-next">Ok, what&rsquo;s next?</h1>
+<p>It depends of what you&rsquo;re going to implement of course! Now that we have a fantastic testsuite, it&rsquo;s way easier to contribute. The <a href="https://github.com/radare/radare2/milestones/1.0.0">next release</a> should focus on improving the debugging capabilities, but since we&rsquo;re an open-source project, it depends what our contributors are up to.</p>
+<h1 id="misc-1">Misc</h1>
+<h2 id="build">Build</h2>
+<p>Thanks to <a href="https://twitter.com/radareorg">pancake</a>, build time have been reduced (especially on Windows, where you can expect a 30% reduction!). This is why it only takes <a href="https://twitter.com/radareorg/status/588124975976095745">3m37s</a> to build radare2 from git on the <a href="http://www.ubuntu.com/phone/devices">UbuntuPhone</a>.</p>
+<p>The <a href="https://play.google.com/store/apps/details?id=org.radare2.installer&amp;hl=en">android application</a> has been updated, you can now build radare2 :</p>
+<ul>
+<li>on iOS 8.3 and its simulator</li>
+<li>on latest OSX statically</li>
+<li>without GPL plugins</li>
+</ul>
+<h2 id="tv">TV</h2>
+<p>Did you know that radare2 <a href="https://twitter.com/radareorg/status/582610366561140736">was shown</a> on a national (spanish) TV chain thanks to <a href="https://twitter.com/GabrielGonzalez">Gabriel Gonzalez</a> from <a href="https://twitter.com/IOActive">IOActive</a>.</p>
+<p>By the way, if you&rsquo;re using radare2 at work, we&rsquo;ll be delighted if you <a href="http://radare.today/who-uses-r2/">let us know</a> about ;)</p>
+<h2 id="bonus-screenshots">Bonus screenshots</h2>
+<p><img src="/blog/images/r2graphlines.png" alt="Edge style comparison">
+Comparison of the two edge styles.</p>
+<p><img src="/blog/images/r2-3D-logo.png" alt="R2 3D logo">
+Awesome stereograms!</p>
+<p><img src="/blog/images/mazda.jpeg" alt="Mazda">
+Of course radare2 runs on your Mazda!
+Yes, it&rsquo;s a car :)</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fradare-0-9-9%2f - Radare%200.9.9 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

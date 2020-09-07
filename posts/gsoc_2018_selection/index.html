@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC 2018 Selection Results</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC 2018 Selection Results" />
+<meta property="og:description" content="We are happy to announce this year we accepted five students: two for radare2 itself, two for radeco and one for cutter.
+HMPerson1 Hi, I&rsquo;m Michael Zhang, also known as HMPerson1. I&rsquo;m a first-year student at Purdue University. I use radare2 regularly when playing CTFs to disassemble and analyze binaries. Although radare is very powerful, there&rsquo;s only so much that can be done staring at dissassembly. Having access to source code would make analysis much easier." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/gsoc_2018_selection/" />
+<meta property="article:published_time" content="2018-04-24T02:45:16+02:00" />
+<meta property="article:modified_time" content="2018-04-24T02:45:16+02:00" />
+
+
+<meta itemprop="name" content="GSoC 2018 Selection Results">
+<meta itemprop="description" content="We are happy to announce this year we accepted five students: two for radare2 itself, two for radeco and one for cutter.
+HMPerson1 Hi, I&rsquo;m Michael Zhang, also known as HMPerson1. I&rsquo;m a first-year student at Purdue University. I use radare2 regularly when playing CTFs to disassemble and analyze binaries. Although radare is very powerful, there&rsquo;s only so much that can be done staring at dissassembly. Having access to source code would make analysis much easier.">
+<meta itemprop="datePublished" content="2018-04-24T02:45:16+02:00" />
+<meta itemprop="dateModified" content="2018-04-24T02:45:16+02:00" />
+<meta itemprop="wordCount" content="749">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC 2018 Selection Results"/>
+<meta name="twitter:description" content="We are happy to announce this year we accepted five students: two for radare2 itself, two for radeco and one for cutter.
+HMPerson1 Hi, I&rsquo;m Michael Zhang, also known as HMPerson1. I&rsquo;m a first-year student at Purdue University. I use radare2 regularly when playing CTFs to disassemble and analyze binaries. Although radare is very powerful, there&rsquo;s only so much that can be done staring at dissassembly. Having access to source code would make analysis much easier."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC 2018 Selection Results</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 24, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>We are happy to announce this year we accepted <strong>five</strong> students: two for <a href="http://rada.re">radare2</a> itself, two for <a href="https://github.com/radare/radeco">radeco</a> and one for <a href="https://github.com/radareorg/cutter">cutter</a>.</p>
+<h2 id="hmperson1">HMPerson1</h2>
+<p>Hi, I&rsquo;m Michael Zhang, also known as <a href="https://github.com/HMPerson1">HMPerson1</a>. I&rsquo;m a first-year student at <a href="https://purdue.edu/">Purdue University</a>. I use radare2 regularly when playing CTFs to disassemble and analyze binaries. Although radare is very powerful, there&rsquo;s only so much that can be done staring at dissassembly. Having access to source code would make analysis much easier.</p>
+<p>This summer, I&rsquo;ll be working on adding structured control flow recovery to <a href="https://github.com/radare/radeco-lib">radeco-lib</a>, a radare2-based decompilation library. Currently, radeco-lib can create an IR in SSA form from <a href="https://radare.gitbooks.io/radare2book/content/disassembling/esil.html">ESIL</a> produced by radare2. The instructions in this IR are organized into <a href="https://en.wikipedia.org/wiki/Basic_block">basic blocks</a>, and the flow of execution between these blocks can be described by a <a href="https://en.wikipedia.org/wiki/Control_flow_graph">control flow graph</a>.</p>
+<p>My project is to convert the control flow graph described by this IR into a more structured form, specifically into the control flow structures used in C (i.e. <code>for</code> and <code>while</code> loops; and <code>if-else</code> and <code>switch</code> statements). To do this, I will be implementing the algorithm described in the paper titled <a href="https://doi.org/10.14722/ndss.2015.23185">No More Gotos</a>.</p>
+<p>Kriw and I will be working together to create a working decompiler by the end of this summer that can correctly decompile most binary programs into human-readable source code.</p>
+<h2 id="kriw">Kriw</h2>
+<p>Hi, I&rsquo;m <a href="https://github.com/kriw">kriw</a>. I&rsquo;m a student at Tokyo Institute of Technology. I usually use radare2 to analyse some programs statically (mainly for CTF) and I need a decompiler of multi-architecture for fast and better analysis. I have contributed to <code>radare2</code>/<code>radeco-lib</code> a little since last December. My previous contributions were in <code>rax2</code>, and on improving the analysis of radeco-lib.</p>
+<p>For GSoc'18, I&rsquo;ll be working on developing radeco-lib together with HMPerson1 to make the decompiler produce C code. Our major goal is to produce C-AST and pseudo-C code. The current status of radeco-lib is what HMPerson1 has written above. I&rsquo;ll do my best to implement a converter to C-AST from the result of analysis and finally, output pseudo-C code.</p>
+<p>Our additional objectives are to improve various analysis heuristics of the decompiler, and to integrate with radare2 so that everyone can easily use it.</p>
+<h2 id="cyanpencil">Cyanpencil</h2>
+<p>Hello, I&rsquo;m Luca, also known as <a href="https://github.com/cyanpencil">cyanpencil</a>. I am an italian CS student in my final undergraduate year.
+I got to know radare during my first CTF competition and I immediately fell in love with it. In particular, I was fascinated by its aesthethics and integration with the console. For this reason, in this Summer of Code I&rsquo;ll work on console interface improvements.</p>
+<p>In detail, the first part of my GSoC will be devoted to fixing UTF-8 related bugs and implementation of an API to generate ASCII art tables easily. The second part will be focused on the graph view, with the addition of features like cursor mode and node highlighting (like in IDA). Finally, the last part will revolve around writing the tests and documentation (r2book) and adding an autocompletion widget similar to vim:</p>
+<p><img src="https://camo.githubusercontent.com/3b2eb4c4dc72b975032f536a93260dfe7353c23f/687474703a2f2f6e6f736d696c65666163652e72752f696d616765732f676f636f64652d73637265656e73686f742e706e67" alt="example screenshot"></p>
+<p>Even if I already sent some bugfixes (example: <a href="https://github.com/radare/radare2/pull/9685">1</a>, <a href="https://github.com/radare/radare2/pull/9607">2</a>, <a href="https://github.com/radare/radare2/pull/9591">3</a>), I&rsquo;m really looking forward to contribute seriously to this awesome tool.</p>
+<h2 id="sivaramaaa">sivaramaaa</h2>
+<p>Hi, I’m <a href="https://github.com/sivaramaaa">Siva Rama Krishnan</a>, a third year undergraduate student from India. I  have contributed several small patches to r2 over the last few months, primarily fixing bugs in analysis.</p>
+<p>Currently radare2 support C-like types with <code>t</code> command, we could parse the C type definition from C header, or load from &ldquo;precompiled&rdquo; SDB file.</p>
+<p>The major goal of this task is to implement an analysis that would infer types of variables using known libc function signature. The core goals for this summer also include :</p>
+<ul>
+<li>Improve and test the current variable recovery mechanism</li>
+<li>Improve and test <code>t</code> commands</li>
+<li>Ability to convert numeric immediates (and offsets) into structures offsets/global offsets in disassembly</li>
+<li>Handling of complex nested structures</li>
+<li>Type inference engine based on function arguments types, return types</li>
+<li>Export and import return and argument types with function signatures</li>
+</ul>
+<h2 id="mandlebro">mandlebro</h2>
+<p>Hi! I&rsquo;m Filipe also known as <a href="https://github.com/fcasal">mandlebro</a> and I am currently doing my PhD at <a href="https://tecnico.ulisboa.pt">Técnico ULisboa</a>. I have been using radare2 for some time to do reversing CTF tasks and AVR emulation, as well as making contributions to both <a href="https://github.com/radare/radare2/pulls?q=is%3Apr+author%3Afcasal+is%3Aclosed">r2</a> and <a href="https://github.com/radareorg/cutter/pulls?q=is%3Apr+author%3Afcasal+is%3Aclosed">Cutter</a>.</p>
+<p>This summer I will be working on <a href="https://github.com/radareorg/cutter">Cutter</a>, the GUI for radare2. Specifically, I will be integrating the emulation and debugging capabilities of radare2 into Cutter. This will allow new radare2 users or users which do not like the CLI to take advantage of the powerful debugging/emulation features radare2 has to offer.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgsoc_2018_selection%2f - GSoC%202018%20Selection%20Results by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

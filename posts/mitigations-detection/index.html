@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Mitigations detection</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Mitigations detection" />
+<meta property="og:description" content="Since the Smashing The Stack For Fun And Profit article from Aleph1, a lot has been done on mitigation side: canaries, DEP/W^X, PIC (to allow ASLR), RELRO, SafeSEH, &hellip;
+Because radare2 is also designed to be a present in the exploit writer arsenal, jvoisin implemented detection for some of those mitigations.
+GNU/Linux  GCC&rsquo;s canary implementation can be detected by the presence of the __stack_chk_fail function. It is used to terminate a function, in case of stack overflow." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/mitigations-detection/" />
+<meta property="article:published_time" content="2014-05-10T20:40:10+02:00" />
+<meta property="article:modified_time" content="2014-05-10T20:40:10+02:00" />
+
+
+<meta itemprop="name" content="Mitigations detection">
+<meta itemprop="description" content="Since the Smashing The Stack For Fun And Profit article from Aleph1, a lot has been done on mitigation side: canaries, DEP/W^X, PIC (to allow ASLR), RELRO, SafeSEH, &hellip;
+Because radare2 is also designed to be a present in the exploit writer arsenal, jvoisin implemented detection for some of those mitigations.
+GNU/Linux  GCC&rsquo;s canary implementation can be detected by the presence of the __stack_chk_fail function. It is used to terminate a function, in case of stack overflow.">
+<meta itemprop="datePublished" content="2014-05-10T20:40:10+02:00" />
+<meta itemprop="dateModified" content="2014-05-10T20:40:10+02:00" />
+<meta itemprop="wordCount" content="139">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Mitigations detection"/>
+<meta name="twitter:description" content="Since the Smashing The Stack For Fun And Profit article from Aleph1, a lot has been done on mitigation side: canaries, DEP/W^X, PIC (to allow ASLR), RELRO, SafeSEH, &hellip;
+Because radare2 is also designed to be a present in the exploit writer arsenal, jvoisin implemented detection for some of those mitigations.
+GNU/Linux  GCC&rsquo;s canary implementation can be detected by the presence of the __stack_chk_fail function. It is used to terminate a function, in case of stack overflow."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Mitigations detection</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 10, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Since the <a href="http://insecure.org/stf/smashstack.html">Smashing The Stack For Fun And Profit</a> article from Aleph1, a lot has been done on mitigation side: <a href="https://en.wikipedia.org/wiki/Stack-smashing_protection#Canaries">canaries</a>, <a href="https://en.wikipedia.org/wiki/Data_Execution_Prevention">DEP</a>/<a href="https://en.wikipedia.org/wiki/NX_bit#Software_emulation_of_feature">W^X</a>, <a href="https://en.wikipedia.org/wiki/Position-independent_code">PIC</a> (to allow <a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">ASLR</a>), <a href="http://tk-blog.blogspot.fr/2009/02/relro-not-so-well-known-memory.html">RELRO</a>, <a href="http://msdn.microsoft.com/en-us/library/vstudio/9a89h429%28v=vs.100%29.aspx">SafeSEH</a>, &hellip;</p>
+<p>Because radare2 is also designed to be a present in the exploit writer arsenal, <em>jvoisin</em> implemented detection for some of those mitigations.</p>
+<h2 id="gnulinux">GNU/Linux</h2>
+<ul>
+<li>GCC&rsquo;s canary implementation can be detected by the presence of the <a href="http://refspecs.linux-foundation.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/libc---stack-chk-fail-1.html">__stack_chk_fail</a> function. It is used to terminate a function, in case of stack overflow.</li>
+<li><em>PIE</em> can be detected by the presence of sections headers of type <em>dynamic</em>.</li>
+</ul>
+<p>Unfortunately, radare2 is not able to detect RELRO and NX for now.</p>
+<h2 id="windows">Windows</h2>
+<ul>
+<li>On windows, the <em>DEP</em> and <em>PIE</em> features can be detected by <a href="http://0xdabbad00.com/2013/09/02/file-scanner-web-app-part-3-of-5-yara-signatures/">parsing the header</a>.</li>
+<li>Visual Studio&rsquo;s canary implementation can be detected by the presence of a <em>__security_init_cookie</em> function.</li>
+</ul>
+<p>Radare2 is not yet able to detect SafeSEH.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fmitigations-detection%2f - Mitigations%20detection by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

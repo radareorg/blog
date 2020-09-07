@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>What is planned for r2 in 2015?</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="What is planned for r2 in 2015?" />
+<meta property="og:description" content="That&rsquo;s an interesting question, isn&rsquo;t it?
+Our last release was intended to be focused on bug-fixing, but we accidentally added tons of features, a new webui, enhaced debugger, code emulation and much more. This was supposed to land in the 0.9.9 version, which will be ready in February.
+Local variable detection has been uncommented and it&rsquo;s now using SDB as storage and supports basic X86-32/64 and ARM constructions.
+Currently, you can do several low level analysis operations like manually define/resize/remove/merge/&hellip; functions (ask a?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/what-is-planned-for-r2-in-2015/" />
+<meta property="article:published_time" content="2015-01-27T19:39:56+01:00" />
+<meta property="article:modified_time" content="2015-01-27T19:39:56+01:00" />
+
+
+<meta itemprop="name" content="What is planned for r2 in 2015?">
+<meta itemprop="description" content="That&rsquo;s an interesting question, isn&rsquo;t it?
+Our last release was intended to be focused on bug-fixing, but we accidentally added tons of features, a new webui, enhaced debugger, code emulation and much more. This was supposed to land in the 0.9.9 version, which will be ready in February.
+Local variable detection has been uncommented and it&rsquo;s now using SDB as storage and supports basic X86-32/64 and ARM constructions.
+Currently, you can do several low level analysis operations like manually define/resize/remove/merge/&hellip; functions (ask a?">
+<meta itemprop="datePublished" content="2015-01-27T19:39:56+01:00" />
+<meta itemprop="dateModified" content="2015-01-27T19:39:56+01:00" />
+<meta itemprop="wordCount" content="708">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="What is planned for r2 in 2015?"/>
+<meta name="twitter:description" content="That&rsquo;s an interesting question, isn&rsquo;t it?
+Our last release was intended to be focused on bug-fixing, but we accidentally added tons of features, a new webui, enhaced debugger, code emulation and much more. This was supposed to land in the 0.9.9 version, which will be ready in February.
+Local variable detection has been uncommented and it&rsquo;s now using SDB as storage and supports basic X86-32/64 and ARM constructions.
+Currently, you can do several low level analysis operations like manually define/resize/remove/merge/&hellip; functions (ask a?"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>What is planned for r2 in 2015?</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        January 27, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>That&rsquo;s an interesting question, isn&rsquo;t it?</p>
+<p>Our <a href="http://radare.today/radare-0-9-8/">last release</a> was intended to be focused on bug-fixing, but we <em>accidentally</em> added tons of features, a new webui, enhaced debugger, code emulation and much more. This was supposed to land in the <a href="https://github.com/radare/radare2/milestones/0.9.9">0.9.9</a> version, which will be ready in February.</p>
+<p>Local variable detection has been uncommented and it&rsquo;s now using <a href="https://github.com/radare/sdb">SDB</a> as storage and supports basic X86-32/64 and ARM constructions.</p>
+<p>Currently, you can do several low level analysis operations like manually define/resize/remove/merge/&hellip; functions (ask <code>a?</code> about this), or find function preludes in new ways (using the <code>ac</code> command). There are also different (selectable) analysis loops.</p>
+<p>The current <a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a> parser is <del>awful</del> and a bit suboptimal, but fortunately, <a href="https://github.com/LemonBoy">TheLemonMan</a> is working on a simplified version. There are only a few tests to fix before getting it merged in master!</p>
+<p>But before that it will need to be fuzzed to avoid unexpected crashes (we have already fixed several crashes thanks to zzuf, radamsa, nightmare, afl, asan and other fuzzing helpers in r2).</p>
+<p>In addition pancake added support to force a specific RBin plugin to be used when parsing a new RIO file, this allows anyone to replace the stock ELF parser without having to recompile the whole lib.</p>
+<p>Pancake and condret are working on <a href="https://github.com/radare/radare2/wiki/ESIL">ESIL</a>, and you can already emulate entire chunks of code in radare2! No need to setup a whole exotic QEMU environment to get the result of a single function!</p>
+<p>Also, the upcoming analysis engine will rely on the aforementioned ESIL, allowing the get jump destinations, compute values, simplify obfuscation, …</p>
+<p>In 2014, the <a href="http://rada.re/rsoc/">RSoC</a> helped the project a lot, increasing the user base, defining specific tasks, teaching developers how to contribute to r2 and getting new features in a very nice way. This year we will try to get into the <a href="https://developers.google.com/open-source/soc/?csw=1">GSoC</a>.</p>
+<p>Pancake fixed some glitches in the RConsCanvas api to make the ASCII graphs better, and there are plans for future reusable APIs to construct interactive ascii-art graphs from the shell. So expect a blogpost about them in a near future.</p>
+<p><a href="https://twitter.com/pwntester">Pwntester</a> is working <em>hard</em> on an awesome <a href="http://radare.today/the-new-web-interface/">web interface</a>. Which is available at the <a href="http://cloud.rada.re">r2cloud</a></p>
+<p>Thanks to pancake&rsquo;s <a href="https://github.com/radare/sdb">sdb</a>, the analysis is now way more efficient, thanks to <em>O(1)</em> access times. The analysis is not yet fully ported to SDB, but it&rsquo;s in a transitional state which allows to interactively manage the database contents, contain memleaks and simplify in memory and disk data structures.</p>
+<p>There&rsquo;s already support for debugging x86-32/64 Windows Kernels via the GDB and WinDBG support. But we have plans to greatly enhace it, extending the support for more platforms. In fact, It is now possible to also debug iOS applications from commandline using the XCode simulator (x86 only) with r2.</p>
+<p>If crowell and jvoisin manage to keep each other uptight, you can also expect some enhancements in the exploitation area!</p>
+<p>Since our <a href="https://twitter.com/trufae">great lead dev</a> will start working for a mobile security company, you can expect massive improvements for analyzing and debugging applications for mobile operating systems.</p>
+<p>In fact r2 is the first reverse engineering tool out there supporting Swift demangling of symbols (wip), and there have been a recent update for iOS and Android platforms (checkout playstore and cydia).</p>
+<p>There&rsquo;s also an ongoing work on removing GPL&rsquo;d code out of the r2 codebase (and moving it into the new <a href="https://github.com/radare/radare2-extras">radare2-extras</a> repository).</p>
+<p>We have plans to continue testing and using <a href="http://capstone-engine.org/">Capstone</a> as a disassembler, we are using it by default for all the supported platforms, but there are some architectures (like MIPS16) which are not yet supported and we prefer to keep both plugins (GNU and Capstone) ones, to be able to compare them easily to find new bugs, compare speed, size and memory consumptions.</p>
+<p>So it&rsquo;s up to the user to make his experiments. It&rsquo;s quite clear that Capstone is fixing bugs very fast and it has been proved to be quite reliable for most uses (so, we will try to be as proactive as possible to delegate the core disassembler maintainance to others).</p>
+<p>And as usual, thanks to our inside fuzzer, and to our testsuite and to coverity, better code, less warnings, less memleaks, less bugs!</p>
+<p>If you want to be part of this, we&rsquo;ve got <a href="https://github.com/radare/radare2/labels/easy">some easy bugs</a> to fix.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fwhat-is-planned-for-r2-in-2015%2f - What%20is%20planned%20for%20r2%20in%202015%3f by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

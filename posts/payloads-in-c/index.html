@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Payloads in C</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Payloads in C" />
+<meta property="og:description" content="Writing exploits requires to perform several steps to achieve the final purpose of the attack.
+ find a vulerability reverse engineer the bug achieve code execution write the payload profit  This post will focus on the later step: write the payload.
+The payload can spawn a shell, reuse a socket or do a connect back. But sometimes we will need a more complex payload that will need to open a file, change some permissions, do some mmap, etc." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/payloads-in-c/" />
+<meta property="article:published_time" content="2014-08-17T16:15:17+02:00" />
+<meta property="article:modified_time" content="2014-08-17T16:15:17+02:00" />
+
+
+<meta itemprop="name" content="Payloads in C">
+<meta itemprop="description" content="Writing exploits requires to perform several steps to achieve the final purpose of the attack.
+ find a vulerability reverse engineer the bug achieve code execution write the payload profit  This post will focus on the later step: write the payload.
+The payload can spawn a shell, reuse a socket or do a connect back. But sometimes we will need a more complex payload that will need to open a file, change some permissions, do some mmap, etc.">
+<meta itemprop="datePublished" content="2014-08-17T16:15:17+02:00" />
+<meta itemprop="dateModified" content="2014-08-17T16:15:17+02:00" />
+<meta itemprop="wordCount" content="388">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Payloads in C"/>
+<meta name="twitter:description" content="Writing exploits requires to perform several steps to achieve the final purpose of the attack.
+ find a vulerability reverse engineer the bug achieve code execution write the payload profit  This post will focus on the later step: write the payload.
+The payload can spawn a shell, reuse a socket or do a connect back. But sometimes we will need a more complex payload that will need to open a file, change some permissions, do some mmap, etc."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Payloads in C</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 17, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Writing exploits requires to perform several steps to achieve the final purpose of the attack.</p>
+<ul>
+<li>find a vulerability</li>
+<li>reverse engineer the bug</li>
+<li>achieve code execution</li>
+<li>write the payload</li>
+<li>profit</li>
+</ul>
+<p>This post will focus on the later step: write the payload.</p>
+<p>The payload can spawn a shell, reuse a socket or do a connect back. But sometimes we will need a more complex payload that will need to open a file, change some permissions, do some mmap, etc.</p>
+<p>We can use different tools to do this:</p>
+<ul>
+<li><a href="http://www.metasploit.com/">metasploit</a> to cook a generic shellcode and encode it</li>
+<li><a href="http://corelabs.coresecurity.com/index.php?module=Wiki&amp;action=view&amp;type=tool&amp;name=InlineEgg">inline-egg</a></li>
+<li><a href="http://www.secdev.org/projects/shellforge/">shellforge</a></li>
+</ul>
+<p>But r2 already provides its own functionalities to do this with ragg2. Ragg2 implements the following features:</p>
+<ul>
+<li>generic shellcodes</li>
+<li>xor encoder</li>
+<li>tiny binary construction via rabin2</li>
+<li>specific low level lang</li>
+<li>C compatible lang to shellcode (based on shellforge)</li>
+</ul>
+<p>We will focus on the last option. It&rsquo;s the most flexible, but have a runtime dependency on gcc/clang.</p>
+<h2 id="halp">Halp</h2>
+<p>Let&rsquo;s first run <code>ragg2-cc -h</code> to see what it can do for us:</p>
+<pre><code>$ ragg2-cc -h
+Usage: ragg2-cc [-dabkoscxv] [file.c]
+  -d       enable debug mode
+  -a x86   set arch (x86, arm)
+  -b 32    bits (32, 64)
+  -k linux set kernel (darwin, linux)
+  -o file  set output file
+  -s       generate assembly
+  -c       generate compiled shellcode
+  -x       show hexpair bytes
+  -v       show version
+</code></pre>
+<h2 id="compiling-a-shellcode">Compiling a shellcode</h2>
+<p>At this point we are probably not interested on memory constraints, but we still need a simple way to express code.</p>
+<p>Shellforge was abandoned a while ago, and it was done in Python. Ragg2 just replicates the same functionalities in few shellscript lines and aims to keep the include directory updated.</p>
+<p>We just need to write C code, using syscalls, and avoiding libc or other library calls. For example:</p>
+<pre><code>$ cat hi.c
+int main() {
+  write (1,&quot;Hello!\n&quot;,7);
+  exit(0);
+}
+</code></pre>
+<p>We can now compile this with ragg2-cc:</p>
+<pre><code>$ ragg2-cc -x hi.c
+eb00488d351d000000bf01000000ba07000000b8010000000f0531ffb83c0000000f0531c0c348656c6c6f210a00
+</code></pre>
+<p>The -x flag will dump the shellcode in hexadecimal to stdout.</p>
+<p>We can then disassemble this using rasm2 -d.</p>
+<h2 id="under-the-hood">Under the hood</h2>
+<p>What ragg2-cc is doing is basically replacing the -isystem include path and compile the program in relocatable mode (-fPIE).</p>
+<p>Then it will just dump the whole text section, prepending it with a single jmp to main.</p>
+<p>We can feed that hexpair thing to ragg2 or metasploit to encrypt or encode it before sending the payload to the target.</p>
+<p>&ndash;pancake</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fpayloads-in-c%2f - Payloads%20in%20C by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

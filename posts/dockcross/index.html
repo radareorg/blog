@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Crosscompile radare2 with dockcross</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Crosscompile radare2 with dockcross" />
+<meta property="og:description" content="So you want to cross-compile radare to some exotic architecture? Use this docker and you&rsquo;ll save some headache:
+Here&rsquo;s and example on how changes required for i.e ARMv5 (no hard float) borrowed from mk/armel.mk:
+ARCH=arm CROSS_ROOT=/usr/bin CROSS_TRIPLET=${ARCH}-linux-gnueabi CC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc USERCC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc RANLIB=${CROSS_TRIPLET}-ranlib CC_AR=${CROSS_ROOT}/${CROSS_TRIPLET}-ar -r ${LIBAR} (...)  After defining your new mk/arch.mk file it should be pretty straighforward to install the dockcross tool from one of its own containers:
+$ docker run thewtex/cross-compiler-linux-armv5 &gt; ~/bin/dockcross $ chmod &#43;x ~/bin/dockcross  And then, compile normally from inside the container:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/dockcross/" />
+<meta property="article:published_time" content="2016-08-10T00:30:07+01:00" />
+<meta property="article:modified_time" content="2016-08-10T00:30:07+01:00" />
+
+
+<meta itemprop="name" content="Crosscompile radare2 with dockcross">
+<meta itemprop="description" content="So you want to cross-compile radare to some exotic architecture? Use this docker and you&rsquo;ll save some headache:
+Here&rsquo;s and example on how changes required for i.e ARMv5 (no hard float) borrowed from mk/armel.mk:
+ARCH=arm CROSS_ROOT=/usr/bin CROSS_TRIPLET=${ARCH}-linux-gnueabi CC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc USERCC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc RANLIB=${CROSS_TRIPLET}-ranlib CC_AR=${CROSS_ROOT}/${CROSS_TRIPLET}-ar -r ${LIBAR} (...)  After defining your new mk/arch.mk file it should be pretty straighforward to install the dockcross tool from one of its own containers:
+$ docker run thewtex/cross-compiler-linux-armv5 &gt; ~/bin/dockcross $ chmod &#43;x ~/bin/dockcross  And then, compile normally from inside the container:">
+<meta itemprop="datePublished" content="2016-08-10T00:30:07+01:00" />
+<meta itemprop="dateModified" content="2016-08-10T00:30:07+01:00" />
+<meta itemprop="wordCount" content="104">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Crosscompile radare2 with dockcross"/>
+<meta name="twitter:description" content="So you want to cross-compile radare to some exotic architecture? Use this docker and you&rsquo;ll save some headache:
+Here&rsquo;s and example on how changes required for i.e ARMv5 (no hard float) borrowed from mk/armel.mk:
+ARCH=arm CROSS_ROOT=/usr/bin CROSS_TRIPLET=${ARCH}-linux-gnueabi CC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc USERCC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc RANLIB=${CROSS_TRIPLET}-ranlib CC_AR=${CROSS_ROOT}/${CROSS_TRIPLET}-ar -r ${LIBAR} (...)  After defining your new mk/arch.mk file it should be pretty straighforward to install the dockcross tool from one of its own containers:
+$ docker run thewtex/cross-compiler-linux-armv5 &gt; ~/bin/dockcross $ chmod &#43;x ~/bin/dockcross  And then, compile normally from inside the container:"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Crosscompile radare2 with dockcross</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 10, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>So you want to cross-compile radare to some exotic architecture? Use <a href="https://github.com/dockcross/dockcross">this docker</a> and you&rsquo;ll save some headache:</p>
+<p>Here&rsquo;s and example on how changes required for i.e ARMv5 (no hard float) borrowed from <code>mk/armel.mk</code>:</p>
+<pre><code>ARCH=arm
+CROSS_ROOT=/usr/bin
+CROSS_TRIPLET=${ARCH}-linux-gnueabi
+
+CC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc
+USERCC=${CROSS_ROOT}/${CROSS_TRIPLET}-gcc
+
+RANLIB=${CROSS_TRIPLET}-ranlib
+CC_AR=${CROSS_ROOT}/${CROSS_TRIPLET}-ar -r ${LIBAR}
+(...)
+</code></pre>
+<p>After defining your new <code>mk/arch.mk</code> file it should be pretty straighforward to install the <code>dockcross</code>
+tool from one of its own containers:</p>
+<pre><code>$ docker run thewtex/cross-compiler-linux-armv5 &gt; ~/bin/dockcross
+$ chmod +x ~/bin/dockcross
+</code></pre>
+<p>And then, compile normally from inside the container:</p>
+<pre><code>$ dockcross --image thewtex/cross-compiler-linux-armv5 ./configure --with-compiler=armel --host=armel
+$ dockcross make
+</code></pre>
+<p>Here is some more context and references:</p>
+<ul>
+<li><a href="https://github.com/radare/radare2/pull/5060">https://github.com/radare/radare2/pull/5060</a></li>
+<li><a href="http://blogs.nopcode.org/brainstorm/2016/07/26/cross-compiling-with-docker">http://blogs.nopcode.org/brainstorm/2016/07/26/cross-compiling-with-docker</a></li>
+</ul>
+<p>&ndash;brainstorm</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fdockcross%2f - Crosscompile%20radare2%20with%20dockcross by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Loading iOS binaries</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Loading iOS binaries" />
+<meta property="og:description" content="There are several posts explaining the process to decrypt an iOS app, this is not new, but no one explained the instruction to do it with r2.
+We have no aim in promoting piracy or cracking, but that&rsquo;s the only way to analyze applications from the AppleStore.
+Retrieving information First of all you need a jailbroken device, in Cydia add the cydia.radare.org repository, in order to get the latest radare2 package from there." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/loading-ios-binaries/" />
+<meta property="article:published_time" content="2014-05-19T02:02:01+02:00" />
+<meta property="article:modified_time" content="2014-05-19T02:02:01+02:00" />
+
+
+<meta itemprop="name" content="Loading iOS binaries">
+<meta itemprop="description" content="There are several posts explaining the process to decrypt an iOS app, this is not new, but no one explained the instruction to do it with r2.
+We have no aim in promoting piracy or cracking, but that&rsquo;s the only way to analyze applications from the AppleStore.
+Retrieving information First of all you need a jailbroken device, in Cydia add the cydia.radare.org repository, in order to get the latest radare2 package from there.">
+<meta itemprop="datePublished" content="2014-05-19T02:02:01+02:00" />
+<meta itemprop="dateModified" content="2014-05-19T02:02:01+02:00" />
+<meta itemprop="wordCount" content="604">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Loading iOS binaries"/>
+<meta name="twitter:description" content="There are several posts explaining the process to decrypt an iOS app, this is not new, but no one explained the instruction to do it with r2.
+We have no aim in promoting piracy or cracking, but that&rsquo;s the only way to analyze applications from the AppleStore.
+Retrieving information First of all you need a jailbroken device, in Cydia add the cydia.radare.org repository, in order to get the latest radare2 package from there."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Loading iOS binaries</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 19, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>There are several posts explaining the process to decrypt an iOS app, this is not new, but no one explained the instruction to do it with r2.</p>
+<p>We have no aim in promoting piracy or cracking, but that&rsquo;s the only way to analyze applications from the AppleStore.</p>
+<h2 id="retrieving-information">Retrieving information</h2>
+<p>First of all you need a jailbroken device, in <a href="http://cydia.saurik.com/">Cydia</a> add the <code>cydia.radare.org</code> repository, in order to get the latest radare2 package from there. Once installed, ssh into the device and type the following commands to retrieve the encryption information stored in the MACH0 header.</p>
+<pre><code>$ export APP=/var/mobile/Applications/*/Target.app/Target
+$ rabin2 -k 'info/*' $APP
+uuid.0=034324c306b633909dbd0f229ceae7c9
+crypto=true
+cryptid=0x1
+cryptoff=0x4000
+cryptsize=0x6e4000
+</code></pre><p>At the moment, only few information are stored in SDB, but this will change during next months. You may also access this information from the r2 shell this way:</p>
+<pre><code>$ r2 $APP
+[0x00004320]&gt; k bin/cur/info/*
+</code></pre><p>Let&rsquo;s create a simple r2 script to add two flags to store <em>cryptoff</em> and <em>cryptsiz</em>e variables that we may use later for dumping and patching.</p>
+<pre><code>$ cat &gt; bin.r2 &lt;&lt;EOF
+f cryptoff=0x4000
+f cryptsize=0x6e4000
+EOF
+</code></pre><p>Dumping the memory from the debugger can be done with the following commands:</p>
+<pre><code>$ r2 -i bin.r2 -d $APP
+[0x2be78028]&gt; dm
+sys 0x00000000 - 0x00001000 s --- --- 00 share/priv/not-reserved
+sys 0x0002d000 - 0x00031000 s r-x r-x 01 copy/priv/not-reserved
+sys 0x00031000 - 0x00715000 s r-x r-x 02 copy/priv/not-reserved
+sys 0x00715000 - 0x00889000 s rw- rw- 03 copy/priv/not-reserved
+sys 0x00889000 - 0x0088d000 s rw- rw- 04 copy/priv/not-reserved
+sys 0x0088d000 - 0x00909000 s r-- r-- 05 copy/priv/not-reserved
+sys 0x27cd7000 - 0x27cd8000 s --- rwx 06 copy/priv/not-reserved
+sys 0x27cd8000 - 0x27dd7000 s rw- rwx 07 copy/priv/not-reserved
+sys 0x2be77000 * 0x2be98000 s r-x r-x 08 copy/priv/not-reserved
+sys 0x2be98000 - 0x2be99000 s rw- rw- 09 copy/priv/not-reserved
+sys 0x2be99000 - 0x2bec1000 s rw- rw- 0a copy/priv/not-reserved
+sys 0x2bec1000 - 0x2becf000 s r-- r-- 0b copy/priv/not-reserved
+sys 0x2c000000 - 0x3c000000 s r-- rwx 0c share/priv/reserved
+sys 0x3c000000 - 0x40000000 s r-- rwx 0d share/priv/reserved
+[0x2be78028]&gt; s `dm~r-x:0[1]`
+[0x00040000]&gt; s+cryptoff
+[0x00044000]&gt; wt dump.bin cryptsize
+dumped 0x6e4000 bytes
+</code></pre><h2 id="patching-the-binary">Patching the binary</h2>
+<p>Once we get the dump we will want to patch the program. We will ignore the <em>RBin</em> information (<code>-n</code>) and enable the write mode option (<code>-w</code>). This will load the file in &lsquo;<em>raw</em>&rsquo; and we will patch with the decrypted block.</p>
+<pre><code>$ cp -f $APP bin
+$ r2 -i bin.r2 -nw bin
+[0x00000000]&gt; wf dump.bin @ cryptoff
+</code></pre><p>We will have to patch the binary to mark it as unencrypted. Setting <code>cryptid</code> to <strong>0</strong>.</p>
+<pre><code>[0x00000000]&gt; /v cryptsize
+[0x00000000]&gt; s hit0_0+4
+[0x00000a08]&gt; wx 00
+</code></pre><h2 id="loading-objective-c-metadata">Loading Objective-C metadata</h2>
+<p>Most iOS apps are written in ObjC, and all the symbolic information are stored there, this is very useful to understand the app workflow and design.</p>
+<p>At the moment, the way to load ObjC information into radare2 is by using the <code>objc.pl</code> script which makes uses of <code>class-dump</code>.</p>
+<pre><code>$ ~/radare2/doc/objc.pl bin &gt; bin.objc.r2
+
+</code></pre><p>Or directly from the r2 shell</p>
+<pre><code>[0x00004000]&gt; .!./objc.pl $FILE
+
+</code></pre><h2 id="extracting-sub-bins">Extracting sub-bins:</h2>
+<p>As a final note, just say that you may find iOS apps in MACH0 or FATMACH0 formats, in the last case we will be interested in extracting and analyzing only the one that fits best to our needs.</p>
+<p>For example, inside a FATMACH0 iOS app you can find ARMv6, ARMv7 and ARM64 executables. The tool <code>rabin2</code> can be used to list all sub-binaries contained inside a FATMACH0 file using the <code>-A</code> flag:</p>
+<pre><code>$ rabin2 -A bin
+</code></pre><p>Also we can use the <code>-x</code> flag to extract them all.</p>
+<pre><code>$ rabin2 -x bin
+</code></pre><p>Or we may need to specify which sub-bin we want to load by using the <code>r2 -a &lt;arch&gt; -b &lt;bits&gt;</code> flags when loading a FATMACH0.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2floading-ios-binaries%2f - Loading%20iOS%20binaries by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

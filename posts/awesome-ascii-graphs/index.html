@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Interactive ASCII graphs</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Interactive ASCII graphs" />
+<meta property="og:description" content="The graph feature of IDA, ImmunityDBG or Hopper are great to have a quick overview of what you&rsquo;re dealing with. This is why we have graphs too in radare2, but since we&rsquo;re terminal-lovers, ours are cooler in ASCII!
+After analyzing a function with af or any other method, type VV to get: We&rsquo;ve got call graphs, which are way more understandable than simply listing the XREF adresses. To see it, simply press V when you&rsquo;re in graph mode." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/awesome-ascii-graphs/" />
+<meta property="article:published_time" content="2015-02-06T22:30:43+01:00" />
+<meta property="article:modified_time" content="2015-02-06T22:30:43+01:00" />
+
+
+<meta itemprop="name" content="Interactive ASCII graphs">
+<meta itemprop="description" content="The graph feature of IDA, ImmunityDBG or Hopper are great to have a quick overview of what you&rsquo;re dealing with. This is why we have graphs too in radare2, but since we&rsquo;re terminal-lovers, ours are cooler in ASCII!
+After analyzing a function with af or any other method, type VV to get: We&rsquo;ve got call graphs, which are way more understandable than simply listing the XREF adresses. To see it, simply press V when you&rsquo;re in graph mode.">
+<meta itemprop="datePublished" content="2015-02-06T22:30:43+01:00" />
+<meta itemprop="dateModified" content="2015-02-06T22:30:43+01:00" />
+<meta itemprop="wordCount" content="352">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Interactive ASCII graphs"/>
+<meta name="twitter:description" content="The graph feature of IDA, ImmunityDBG or Hopper are great to have a quick overview of what you&rsquo;re dealing with. This is why we have graphs too in radare2, but since we&rsquo;re terminal-lovers, ours are cooler in ASCII!
+After analyzing a function with af or any other method, type VV to get: We&rsquo;ve got call graphs, which are way more understandable than simply listing the XREF adresses. To see it, simply press V when you&rsquo;re in graph mode."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Interactive ASCII graphs</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        February 6, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>The graph feature of IDA, ImmunityDBG or Hopper are great to have a quick overview of what you&rsquo;re dealing with. This is why we have graphs too in radare2, but since we&rsquo;re terminal-lovers, ours are <del>cooler</del> in ASCII!</p>
+<p>After analyzing a function with <code>af</code> or any other method, type <code>VV</code> to get:
+<img src="/blog/images/BmWvHyyIcAAoIfo-png-large.png" alt="functions graphs"></p>
+<p>We&rsquo;ve got call graphs, which are way more understandable than simply listing the XREF adresses. To see it, simply press <code>V</code> when you&rsquo;re in graph mode.
+<img src="/blog/images/callgraph.png" alt="call graphs"></p>
+<p>Unfortunately, the classic <em>80x24</em> terminal size is not that convenient when it comes to having an overview of a big function. This is why we also have <code>VVn</code>, to show a <em>mini-graph</em>.</p>
+<p>On the left, you can see the code of the current node (The one with <code>@@</code> on it. You can switch nodes with <code>&lt;tab&gt;</code>). The <code>t</code> branche stands for <em>true</em> and <code>f</code> for <em>false</em>.</p>
+<p><img src="/blog/images/mini.png" alt="mini graphs"></p>
+<p>Every graph is interactive: you can move their nodes around, walk them (<code>t</code>,<code>f</code>,<code>u</code>), show bytes/flags (<code>O</code>), debug within them (<code>z</code>/<code>Z</code>), jump around xrefs (<code>x</code>/<code>X</code>), …</p>
+<p>To scroll the RConsCanvas use the <code>asdw</code> keys. The <code>hjkl</code> ones are used for moving the nodes around. Also bear in mind that ASDW and HJKL will do the same as the lowercase ones, but <em>faster!</em></p>
+<p>And of course, it&rsquo;s documented, with <code>?</code>
+<img src="/blog/images/doc.png" alt="graphs documentation"></p>
+<p>If you think that we&rsquo;re missing your favourite type of graph, feel free to come rant about this on <a href="irc://irc.freenode.net/radare">irc</a> ;)</p>
+<p>There&rsquo;s also three different graphs implementations in the WebUI, which works fine with touchscreens, but its still not perfect, you can check the default one by pressing <code>space</code> in the disasm view of <code>r2 -c=H /bin/ls</code></p>
+<p>Ho, and speaking of graph, tracing information from the debugger or the esil emulation is now displayed in the <a href="http://cloud.radare.org/p">web interface</a>!
+<img src="/blog/images/tracegraph.png" alt="tracing in web interface"></p>
+<p>Future plans for graphs are:</p>
+<ul>
+<li>Better layout (no more overlapping nodes)</li>
+<li>Support Colors</li>
+<li>Support UTF-8</li>
+<li>Group nodes</li>
+<li>Add comments in nodes</li>
+<li>Save/Restore graph states (wip in the webui)</li>
+<li>Print graph to file</li>
+<li>Generic API and commandline tool to create graphs like <code>dot</code> does.</li>
+<li>Better WebUI graphs</li>
+</ul>
+<p>If you want to do any of those things feel free to checkout the code <code>libr/core/graph.c</code>.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fawesome-ascii-graphs%2f - Interactive%20ASCII%20graphs by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

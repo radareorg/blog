@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Analysis By Default</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Analysis By Default" />
+<meta property="og:description" content="Analysis By Default Many people that starts using radare2 complain about having a different workflow than other similar tools like IDA or Hopper.
+Probably the most annoying part for them is that it doesn&rsquo;t run the analysis at startup. And this is the reason why I&rsquo;m writing this blog post right now : to avoid having to explain why, again and again :)
+To begin with, r2 is a pretty broad tool." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/analysis-by-default/" />
+<meta property="article:published_time" content="2015-11-25T12:47:13+02:00" />
+<meta property="article:modified_time" content="2015-11-25T12:47:13+02:00" />
+
+
+<meta itemprop="name" content="Analysis By Default">
+<meta itemprop="description" content="Analysis By Default Many people that starts using radare2 complain about having a different workflow than other similar tools like IDA or Hopper.
+Probably the most annoying part for them is that it doesn&rsquo;t run the analysis at startup. And this is the reason why I&rsquo;m writing this blog post right now : to avoid having to explain why, again and again :)
+To begin with, r2 is a pretty broad tool.">
+<meta itemprop="datePublished" content="2015-11-25T12:47:13+02:00" />
+<meta itemprop="dateModified" content="2015-11-25T12:47:13+02:00" />
+<meta itemprop="wordCount" content="1554">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Analysis By Default"/>
+<meta name="twitter:description" content="Analysis By Default Many people that starts using radare2 complain about having a different workflow than other similar tools like IDA or Hopper.
+Probably the most annoying part for them is that it doesn&rsquo;t run the analysis at startup. And this is the reason why I&rsquo;m writing this blog post right now : to avoid having to explain why, again and again :)
+To begin with, r2 is a pretty broad tool."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Analysis By Default</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        November 25, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="analysis-by-default">Analysis By Default</h1>
+<p>Many people that starts using radare2 complain about having a different
+workflow than other similar tools like IDA or Hopper.</p>
+<p>Probably the most annoying part for them is that it doesn&rsquo;t run the analysis at
+startup.  And this is the reason why I&rsquo;m writing this blog post right now : to
+avoid having to explain why, again and again :)</p>
+<p>To begin with, r2 is a pretty broad tool. It didn&rsquo;t even started as a
+disassembler in mind, so for example, code analysis doesn&rsquo;t makes sense to be
+done when you load a hard disk image or a memory dump for example. But some
+others will complain that we can just run the analysis when the file format is
+known to contain code.</p>
+<p>But then, several other reasons appear in the scene. Let&rsquo;s enumerate them:</p>
+<h2 id="slow-process">Slow process</h2>
+<p>Code analysis is not a quick operation, and not even predictable or taking a
+linear time to be processed. This makes starting times pretty heavy, compared
+to just loading the headers and strings information like it&rsquo;s done by default.</p>
+<p>People that are used to IDA or Hopper just load the binary, go out to make a
+coffee and then when the analysis is done, they start doing the manual analysis
+to understand what the program is doing. It&rsquo;s true that those tools perform the
+analysis in background, and the GUI is not blocked. But this takes a lot of CPU
+time, and r2 aims to run in many more platforms than just high-end desktop
+computers, for example a <a href="http://radare.today/posts/radare-0-9-9/">mazda car</a></p>
+<p>Radare2 can also load the binary information in background, and perform there&rsquo;s
+some initial work to do code analysis in async and threaded mode, but this is
+just not an excuse for running a heavy operation by default on start.</p>
+<p>If speed really matters for your task, and you have already a script that puts
+all the information you need on top of the binary you can just run <code>r2 -n</code> to
+avoid parsing the file headers and strings, loading the binary as a plain raw
+dump, without virtual mappings or flags at all.</p>
+<h2 id="perfection">Perfection</h2>
+<p>In the world of static code analysis tools, perfection doesn&rsquo;t exist. This is
+somehow a pretty complex topic that depends on the target architecture, file
+format, &hellip;</p>
+<p>In our case. radare2 is able to load many more file formats than any other tool
+in the market and as long as fuzzing is part of our development model, we are
+able to load pretty messed up files in a flawless way, while others are simply
+crashing. This turns out to create some side effects in the code analysis,
+by forcing it to walk into strange and invalid code paths when it is never going
+to be executed in a real environment.</p>
+<p>Also, r2 has a single analysis engine (which can be changed or extended by
+plugins), this contrasts with other tools that just have a specific dedicated
+engine for each architecture, which is probably better for very specific use
+cases, but probably not good when you are out of the scope of their supposed
+use cases.</p>
+<p>Also, bear in mind that switch tables are not always easy to resolve
+statically, most tools just expect those constructions to be standard building
+blocks spitted by compilers, but it can be different. Many times, you will
+always need some manual interaction with the tool to get full and proper
+analysis of our binary.</p>
+<h2 id="configuration">Configuration</h2>
+<p>As described in the previous section, analysis is not an exact science, so it
+needs some manual tuning in order to optimize the results depending on the
+target. Yeah, I know, malware is probably one of the main sources that requires
+this kind of options to be defined.</p>
+<p>In r2, we have 26 different <code>anal.</code> configuration variables that can be used to
+change the behaviour of the analysis engine. Probably the most interesting ones
+are the following:</p>
+<ul>
+<li><code>anal.afterjmp</code></li>
+<li><code>anal.depth</code></li>
+<li><code>anal.eobjmp</code></li>
+<li><code>anal.esil</code></li>
+<li><code>anal.hasnext</code></li>
+<li><code>anal.nopskip</code></li>
+</ul>
+<p>See the <code>e??anal.</code> command to get some detailed descriptions for them.</p>
+<p>There&rsquo;s even two more handy configuration variables (<code>anal.from</code> and <code>anal.to</code>)
+that allows you to restrict the boundaries of the analysis. This way you can
+for example focus on analyzing only the application code in a statically
+compiled binary by excluding the library code, which is usually at the end
+of the program, this can be easily detected by manually reading the
+disassembly.</p>
+<h2 id="types">Types</h2>
+<p>Running the analysis in radare2, is not just a single step or action. We have
+many different commands that perform different kind of analysis and let you
+identify new functions and references in faster or funky ways, which are
+handier in different situations. Let&rsquo;s just enumerate some of them:</p>
+<ul>
+<li>Find functions by prelude instructions (<code>aap</code>)</li>
+<li>Identify functions by following calls (<code>aac</code>)</li>
+<li>Detect jump tables and pointers to code section (<code>/V</code>)</li>
+<li>Analyze opcode absolute and relative references (<code>aar</code>)</li>
+<li>Find code/data/string references to a specific address (<code>/r</code>)</li>
+<li>Emulate code to identify new pointer references (<code>aae</code>)</li>
+<li>Use binary header information to find public functions (<code>aas</code>)</li>
+<li>Assume functions are consecutive (<code>aat</code>)</li>
+<li>&hellip;</li>
+</ul>
+<p>radare2 is not a click-and-run program, it&rsquo;s a set of orthogonal tools and
+commands that allows you to understand, analyze, manipulate and play with a
+large list of binary types. And as long as every single point in the above
+list will take some time, you probably do not want to run them all in a shot,
+also, the execution order will alter the results. Only experience and
+understanding will give you control on what you are doing.</p>
+<h2 id="delegated-analysis">Delegated Analysis</h2>
+<p>Another good point towards this model relays on the fact that r2 can be easily
+sandboxed or run in many different environments. This allows to distribute the
+analysis into different environments, which are in a clean state and cannot
+leak any information from your system or other binaries analyzed in case of
+loading a binary that exploits some kind of vulnerability.</p>
+<p>As said in other points. The entire analysis information can be serialized in
+textual form, which can be passed between different machines or centralized in
+a database like <a href="https://github.com/fabsx00/bjoern-radare">bjoern</a>, for a
+deeper understanding of the program.</p>
+<p>Anyway, if you are using r2 from git, you can always build with <a href="http://clang.llvm.org/docs/AddressSanitizer.html">ASAN</a>, and other compiler
+protections that are not viable options on precompiled closed source
+alternatives that will not be able to protect you in those situations.</p>
+<p>Crash reports in r2land are taking very little time to be fixed, and including
+fuzzing in the development process, as well as using <a href="http://clang-analyzer.llvm.org/">clang-analyzer</a>, <a href="https://www.coverity.com/">coverity</a> and
+run the entire <a href="https://github.com/radare/radare2-regressions">testsuite</a>
+with <a href="http://valgrind.org/">valgrind</a> and ASAN gives you some more
+reliability in the code you are going to run. (yes, I don&rsquo;t even trust system
+libmagic, libc&rsquo;s regex library or so, that&rsquo;s why r2 comes with our own specific
+versions of them).</p>
+<h2 id="use-cases">Use Cases</h2>
+<p>Not every time you load a binary you need or want an entire code analysis of
+it. Let&rsquo;s say, for example, that you have already performed a previous analysis
+and you have a project database stored somewhere and you just want to load it
+into this binary.</p>
+<p>Radare2 allows you to do this, but not only this, because, as long as projects
+are text files, you can rebase all the symbols in case the binary shifted the
+symbols to a new address, etc&hellip;</p>
+<p>Also, it supports signatures, so you can just find function entrypoints by
+loading a signatures files which can be generated by radare2 or IDA (<a href="https://www.hex-rays.com/products/ida/tech/flirt/index.shtml">FLIRT</a>). In this case
+you will probably not need to analyze the entire binary to understand what it
+is doing.</p>
+<p>If you are going to do some automated process in a binary as fast as possible,
+you&rsquo;d like to load only parts of the binary you&rsquo;re interested in,
+and do only the steps you want to perform your actions, nothing else.</p>
+<p>In other words: 90% of the time you are going to analyze a binary, it&rsquo;s to find
+references to some imports or strings, read the code of the function, maybe
+analyze 2 or 3 functions and go away. You don&rsquo;t need full code analysis for
+forensics, or exploiting, or binary patching, and for reverse engineering,
+you&rsquo;ll probably focus on one or two specific problems which doesn&rsquo;t require a
+complete program analysis, neither for extracting information of a binary.</p>
+<p>The only reasons for doing a full code analysis are similar to the ones for
+decompilation, which is to recover lost source code, <a href="https://en.wikipedia.org/wiki/Source-to-source_compiler">transpile</a> the program to
+another architecture or operating system, rebasing it, etc. I would say that
+those cases are less than 10% of what most people need.</p>
+<h2 id="final-words">Final Words</h2>
+<p>If you are used to this old-fashioned, lazy workflow, you will probably not switch to radare2 as your main tool.</p>
+<p>Worst care, you always just load r2 with the <code>-A</code> flag to get some default
+analysis done at start time, or just <code>echo aa &gt; ~/.config/radare2/radare2rc</code>.
+But again, this will probably be a loss of time if you are an experienced reverse engineer.</p>
+<p>We are not closing the door to perform a full analysis of the binary, but I
+just think that it&rsquo;s something that shouldn&rsquo;t be done by default at startup
+time.</p>
+<p>We enforce users to think about their workflows in order to better understand the
+problem they are facing and solve it in an optimal way, saving cpu, memory and
+why not: cats.</p>
+<p>Have phun!</p>
+<p>&ndash;pancake</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fanalysis-by-default%2f - Analysis%20By%20Default by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

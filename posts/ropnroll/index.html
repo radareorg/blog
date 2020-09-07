@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Rop&#39;n&#39;roll</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Rop&#39;n&#39;roll" />
+<meta property="og:description" content="You may have already read this article 8 months ago, but since we changed a lot the ROP-related syntax, we&rsquo;re quite sure that you won&rsquo;t mind reading an updated version
+As attackers are moving forwards, so does the defense. Since a couple of years, every decent operating system has non-executable stack, defeating the classic &lsquo;put your shellcode on the stack and execute it&rsquo; modus operanti.
+This is why attackers are now using (among other things) Return Oriented Programming, also known as ROP, to bypass this protection." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/ropnroll/" />
+<meta property="article:published_time" content="2015-04-18T15:00:00+02:00" />
+<meta property="article:modified_time" content="2015-04-18T15:00:00+02:00" />
+
+
+<meta itemprop="name" content="Rop&#39;n&#39;roll">
+<meta itemprop="description" content="You may have already read this article 8 months ago, but since we changed a lot the ROP-related syntax, we&rsquo;re quite sure that you won&rsquo;t mind reading an updated version
+As attackers are moving forwards, so does the defense. Since a couple of years, every decent operating system has non-executable stack, defeating the classic &lsquo;put your shellcode on the stack and execute it&rsquo; modus operanti.
+This is why attackers are now using (among other things) Return Oriented Programming, also known as ROP, to bypass this protection.">
+<meta itemprop="datePublished" content="2015-04-18T15:00:00+02:00" />
+<meta itemprop="dateModified" content="2015-04-18T15:00:00+02:00" />
+<meta itemprop="wordCount" content="927">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Rop&#39;n&#39;roll"/>
+<meta name="twitter:description" content="You may have already read this article 8 months ago, but since we changed a lot the ROP-related syntax, we&rsquo;re quite sure that you won&rsquo;t mind reading an updated version
+As attackers are moving forwards, so does the defense. Since a couple of years, every decent operating system has non-executable stack, defeating the classic &lsquo;put your shellcode on the stack and execute it&rsquo; modus operanti.
+This is why attackers are now using (among other things) Return Oriented Programming, also known as ROP, to bypass this protection."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Rop&#39;n&#39;roll</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 18, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>You may have already read this article 8 months ago, but since we changed a lot the ROP-related syntax, we&rsquo;re quite sure that you won&rsquo;t mind reading an updated version</p>
+<p>As attackers are moving forwards, so does the defense. Since a couple of years, every decent operating system has non-executable stack, defeating the classic &lsquo;put your shellcode on the stack and execute it&rsquo; <em>modus operanti</em>.</p>
+<p>This is why attackers are now using (among other things) <a href="https://en.wikipedia.org/wiki/Return-oriented_programming">Return Oriented Programming</a>, also known as <em>ROP</em>, to bypass this protection.</p>
+<p>Because radare2 (also) aims to be useful to exploits writers and make their life easier, it can:</p>
+<ul>
+<li>hunt for gadgets, with a configurable depth</li>
+<li>filter gadgets</li>
+<li>do this for multiples archs</li>
+</ul>
+<pre><code>[0x08048320]&gt; /R
+Do you want to print 468.9K chars? (y/N)
+</code></pre><p>Well, let&rsquo;s filter.</p>
+<pre><code>[0x08048350]&gt; /R call eax
+  0x080483a3   0085c0741155  add byte [ebp + 0x551174c0], al
+  0x080483a9           89e5  mov ebp, esp
+  0x080483ab         83ec14  sub esp, 0x14
+  0x080483ae     6824a00408  push 0x804a024
+  0x080483b3           ffd0  call eax
+
+  0x080483a8             55  push ebp
+  0x080483a9           89e5  mov ebp, esp
+  0x080483ab         83ec14  sub esp, 0x14
+  0x080483ae     6824a00408  push 0x804a024
+  0x080483b3           ffd0  call eax
+
+  0x080483ac             ec  in al, dx
+  0x080483ad           1468  adc al, 0x68
+  0x080483af           24a0  and al, 0xa0
+  0x080483b1           0408  add al, 8
+  0x080483b3           ffd0  call eax
+
+[0x08048350]&gt; 
+
+</code></pre><p>You can also display them in a linear manner, à la <a href="https://github.com/JonathanSalwan/ROPgadget">ROPGadget</a>, you just have to use <code>/Rl</code>:</p>
+<pre><code>[0x08048350]&gt; /Rl leave
+0x080483b3: call eax; add esp, 0x10; leave; ret;
+0x080483b6: les edx, [eax]; leave; ret;
+0x080483ed: call ecx; add esp, 0x10; leave; ret;
+0x080483f0: les edx, [eax]; leave; ret;
+0x0804840f: call 0x8048390; mov byte [0x804a024], 1; leave; ret;
+0x08048419: or byte [ecx], al; leave; ret;
+0x08048440: call edx; add esp, 0x10; leave; jmp 0x80483c0;
+0x08048443: les edx, [eax]; leave; jmp 0x80483c0;
+0x080484af: call 0x8048320; add esp, 0x10; mov edi, dword [ebp - 4]; leave; ret;
+0x080484b3: inc dword [ebx + 0x7d8b10c4]; cld; leave; ret;
+0x080484b5: les edx, [eax]; mov edi, dword [ebp - 4]; leave; ret;
+0x080484b8: jge 0x80484b6; leave; ret;
+0x080484ee: adc byte [eax], bh; mov ecx, dword [ebp - 4]; leave; lea esp, [ecx - 4]; ret;
+0x080484ef: mov eax, 0; mov ecx, dword [ebp - 4]; leave; lea esp, [ecx - 4]; ret;
+0x080484f2: add byte [eax], al; mov ecx, dword [ebp - 4]; leave; lea esp, [ecx - 4]; ret;
+0x080484f5: dec ebp; cld; leave; lea esp, [ecx - 4]; ret;
+</code></pre><p>If you&rsquo;re searching for a ret-to-reg gadget, you&rsquo;re only interested into <code>call reg</code> ones; you can do this with regexp, with <code>/R/</code></p>
+<pre><code>[0x08048350]&gt; /R/ call e[abcd]x
+  0x080483a3   0085c0741155  add byte [ebp + 0x551174c0], al
+  0x080483a9           89e5  mov ebp, esp
+  0x080483ab         83ec14  sub esp, 0x14
+  0x080483ae     6824a00408  push 0x804a024
+  0x080483b3           ffd0  call eax
+
+  0x080483a8             55  push ebp
+  0x080483a9           89e5  mov ebp, esp
+  0x080483ab         83ec14  sub esp, 0x14
+  0x080483ae     6824a00408  push 0x804a024
+  0x080483b3           ffd0  call eax
+
+  0x080483ac             ec  in al, dx
+  0x080483ad           1468  adc al, 0x68
+  0x080483af           24a0  and al, 0xa0
+  0x080483b1           0408  add al, 8
+  0x080483b3           ffd0  call eax
+
+  0x080483e2           89e5  mov ebp, esp
+  0x080483e4         83ec10  sub esp, 0x10
+  0x080483e7             50  push eax
+  0x080483e8     6824a00408  push 0x804a024
+  0x080483ed           ffd1  call ecx
+
+  0x080483e5             ec  in al, dx
+  0x080483e6         105068  adc byte [eax + 0x68], dl
+  0x080483e9           24a0  and al, 0xa0
+  0x080483eb           0408  add al, 8
+  0x080483ed           ffd1  call ecx
+
+  0x08048434   0085d274f255  add byte [ebp + 0x55f274d2], al
+  0x0804843a           89e5  mov ebp, esp
+  0x0804843c         83ec14  sub esp, 0x14
+  0x0804843f             50  push eax
+  0x08048440           ffd2  call edx
+
+  0x08048436       d274f255  sal byte [edx + esi*8 + 0x55], cl
+  0x0804843a           89e5  mov ebp, esp
+  0x0804843c         83ec14  sub esp, 0x14
+  0x0804843f             50  push eax
+  0x08048440           ffd2  call edx
+
+  0x08048438           f255  push ebp
+  0x0804843a           89e5  mov ebp, esp
+  0x0804843c         83ec14  sub esp, 0x14
+  0x0804843f             50  push eax
+  0x08048440           ffd2  call edx
+
+  0x08048439             55  push ebp
+  0x0804843a           89e5  mov ebp, esp
+  0x0804843c         83ec14  sub esp, 0x14
+  0x0804843f             50  push eax
+  0x08048440           ffd2  call edx
+
+  0x0804843b           e583  in eax, -0x7d
+  0x0804843d             ec  in al, dx
+  0x0804843e           1450  adc al, 0x50
+  0x08048440           ffd2  call edx
+</code></pre><p>Well, we only want the <code>call reg</code> part, we don&rsquo;t care about the previous operands:</p>
+<pre><code>[0x08048350]&gt; /R/ call e[abcd]x~call
+  0x080483b3           ffd0  call eax
+  0x080483b3           ffd0  call eax
+  0x080483b3           ffd0  call eax
+  0x080483ed           ffd1  call ecx
+  0x080483ed           ffd1  call ecx
+  0x08048440           ffd2  call edx
+  0x08048440           ffd2  call edx
+  0x08048440           ffd2  call edx
+  0x08048440           ffd2  call edx
+  0x08048440           ffd2  call edx
+</code></pre><p>Ho, by the way, if you want to search for several gadgets, the separator is <code>;</code>, which also happen to be the one to seperate commands in r2. This is why you need to quote the <strong>whole</strong> command like this:</p>
+<pre><code>[0x08048350]&gt; &quot;/R/ inc *;ret&quot; 
+  0x08048413           ffc6  inc esi
+  0x08048415     0524a00408  add eax, 0x804a024
+  0x0804841a           01c9  add ecx, ecx
+  0x0804841c           f3c3  ret
+
+  0x080484b3   ff83c4108b7d  inc dword [ebx + 0x7d8b10c4]
+  0x080484b9             fc  cld
+  0x080484ba             c9  leave
+  0x080484bb             c3  ret
+
+  0x0804867c             41  inc ecx
+  0x0804867d             c3  ret
+
+[0x08048350]&gt; 
+</code></pre><p>It&rsquo;s possible to change the depth of the search, to speed-up the hunt:</p>
+<pre><code>[0x08048320]&gt; e search.roplen = 4
+[0x08048320]&gt; /R mov ebp,call eax
+0x08048386 call eax
+  0x0804837a         89e5  mov ebp, esp
+  0x0804837c       83ec18  sub esp, 0x18
+  0x0804837f c7042420a00408  mov dword [esp], 0x804a020
+  0x08048386         ffd0  call eax
+
+0x0804840f call eax
+  0x08048403         89e5  mov ebp, esp
+  0x08048405       83ec18  sub esp, 0x18
+  0x08048408 c70424109f0408  mov dword [esp], 0x8049f10
+  0x0804840f         ffd0  call eax
+
+[0x08048320]&gt;
+</code></pre><p>And as always, you can append <code>j</code> to get a JSON output.</p>
+<p>The next step might be ROP chain assembling and manipulation, and why not automatic-construction, à la <a href="https://github.com/radare/radare2/issues/1019">mona.py</a>? Or maybe a semantic search powered by <a href="https://github.com/radare/radare2/wiki/ESIL">ESIL</a>?</p>
+<p>Anyway, contributions are welcome, and if you&rsquo;re using radare2 to pop somes shells, we&rsquo;ll be <em>delighted</em> to know about it!</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fropnroll%2f - Rop%27n%27roll by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

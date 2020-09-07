@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Getting the latest radare2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Getting the latest radare2" />
+<meta property="og:description" content="Since radare2&rsquo;s developement is pretty quick, the recommended version is the current git, and not the stable one. At least if you want to play with it in a comfortable way.
+You can always install it from your favorite packet manager if you are lazy: we are packaged in a lot of distributions.
+Simple way $ git clone https://github.com/radare/radare2.git $ cd radare2 $ ./sys/install.sh And that&rsquo;s it, radare2 will be" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/getting-the-latest-radare2/" />
+<meta property="article:published_time" content="2014-05-09T23:31:43+02:00" />
+<meta property="article:modified_time" content="2014-05-09T23:31:43+02:00" />
+
+
+<meta itemprop="name" content="Getting the latest radare2">
+<meta itemprop="description" content="Since radare2&rsquo;s developement is pretty quick, the recommended version is the current git, and not the stable one. At least if you want to play with it in a comfortable way.
+You can always install it from your favorite packet manager if you are lazy: we are packaged in a lot of distributions.
+Simple way $ git clone https://github.com/radare/radare2.git $ cd radare2 $ ./sys/install.sh And that&rsquo;s it, radare2 will be">
+<meta itemprop="datePublished" content="2014-05-09T23:31:43+02:00" />
+<meta itemprop="dateModified" content="2014-05-09T23:31:43+02:00" />
+<meta itemprop="wordCount" content="229">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Getting the latest radare2"/>
+<meta name="twitter:description" content="Since radare2&rsquo;s developement is pretty quick, the recommended version is the current git, and not the stable one. At least if you want to play with it in a comfortable way.
+You can always install it from your favorite packet manager if you are lazy: we are packaged in a lot of distributions.
+Simple way $ git clone https://github.com/radare/radare2.git $ cd radare2 $ ./sys/install.sh And that&rsquo;s it, radare2 will be"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Getting the latest radare2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        May 9, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Since radare2&rsquo;s developement is pretty quick, the recommended version is the current git, and not the stable one. At least if you want to play with it in a comfortable way.</p>
+<p>You can always install it from your favorite packet manager if you are lazy: we are packaged in a lot of distributions.</p>
+<h2 id="simple-way">Simple way</h2>
+<pre><code>$ git clone https://github.com/radare/radare2.git
+$ cd radare2
+$ ./sys/install.sh
+</code></pre><p>And that&rsquo;s it, radare2 will be</p>
+<ol>
+<li>Updated</li>
+<li>Compiled</li>
+<li>Installed on your system</li>
+</ol>
+<p>To update it, just run <code>./sys/install.sh</code> again.</p>
+<h2 id="in-a-container">In a container</h2>
+<p>Since <a href="https://www.docker.io/">docker</a> is awesome, here is the receipt to get radare2 inside it, with every bindings.</p>
+<pre><code># using phusion/baseimage as base image. 
+FROM phusion/baseimage:0.9.9
+
+# Set correct environment variables.
+ENV HOME /root
+
+# Regenerate SSH host keys. baseimage-docker does not contain any
+RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+
+# Use baseimage-docker's init system.
+CMD [&quot;/sbin/my_init&quot;]
+
+# create code directory
+RUN mkdir /opt/code/
+# install packages required to compile vala and radare2
+RUN apt-get update
+RUN apt-get install -y software-properties-common python-all-dev wget
+RUN apt-get install -y swig flex bison git gcc g++ make pkg-config glib-2.0
+RUN apt-get install -y python-gobject-dev
+
+# compile vala
+RUN cd /opt/code; wget http://download.gnome.org/sources/vala/0.24/vala-0.24.0.tar.xz; tar -Jxf vala-0.24.0.tar.xz
+RUN cd /opt/code/vala-0.24.0; ./configure --prefix=/usr ; make &amp;&amp; make install
+# compile radare
+RUN cd /opt/code; git clone https://github.com/radare/radare2.git; cd radare2; ./sys/all.sh
+
+# Clean up APT when done.
+RUN apt-get clean &amp;&amp; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+</code></pre>
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgetting-the-latest-radare2%2f - Getting%20the%20latest%20radare2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

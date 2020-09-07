@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Radare2 is documented</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Radare2 is documented" />
+<meta property="og:description" content="Some miscreants are saying that radare2 is not documented, this is wrong.
+The Book The &ldquo;radare book&rdquo; was released together with radare 1.0, several years ago, so some of the examples/features may not be compatible with radare2.
+You can read it online or download the PDF.
+Recently, our tester in chief, maijin, started a project to update the radare book to create the radare2 book; feel free to contribute.
+A book focused on practical case by monosource is also available : radare2-explorations" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/radare2-is-documented/" />
+<meta property="article:published_time" content="2014-11-26T00:29:31+01:00" />
+<meta property="article:modified_time" content="2014-11-26T00:29:31+01:00" />
+
+
+<meta itemprop="name" content="Radare2 is documented">
+<meta itemprop="description" content="Some miscreants are saying that radare2 is not documented, this is wrong.
+The Book The &ldquo;radare book&rdquo; was released together with radare 1.0, several years ago, so some of the examples/features may not be compatible with radare2.
+You can read it online or download the PDF.
+Recently, our tester in chief, maijin, started a project to update the radare book to create the radare2 book; feel free to contribute.
+A book focused on practical case by monosource is also available : radare2-explorations">
+<meta itemprop="datePublished" content="2014-11-26T00:29:31+01:00" />
+<meta itemprop="dateModified" content="2014-11-26T00:29:31+01:00" />
+<meta itemprop="wordCount" content="270">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Radare2 is documented"/>
+<meta name="twitter:description" content="Some miscreants are saying that radare2 is not documented, this is wrong.
+The Book The &ldquo;radare book&rdquo; was released together with radare 1.0, several years ago, so some of the examples/features may not be compatible with radare2.
+You can read it online or download the PDF.
+Recently, our tester in chief, maijin, started a project to update the radare book to create the radare2 book; feel free to contribute.
+A book focused on practical case by monosource is also available : radare2-explorations"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Radare2 is documented</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        November 26, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Some <em>miscreants</em> are saying that radare2 is not documented, this is wrong.</p>
+<h1 id="the-book">The Book</h1>
+<p>The &ldquo;radare book&rdquo; was released together with radare 1.0, several years ago, so some of the examples/features may not be compatible with radare2.</p>
+<p>You can read it <a href="http://radare.org/doc/html/contents.html">online</a> or download the <a href="http://radare.org/get/radare.pdf">PDF</a>.</p>
+<p>Recently, our tester in chief, maijin, started a project to update the radare book to create the <a href="http://radare.gitbooks.io/radare2book/content/">radare2 book</a>; feel free to contribute.</p>
+<p>A book focused on practical case by monosource is also available : <a href="https://monosource.gitbooks.io/radare2-explorations/content/">radare2-explorations</a></p>
+<h1 id="the-api">The API</h1>
+<p>The radare2 api (aka <a href="https://github.com/radare/radare2/tree/master/libr">libr</a>) is described in <a href="https://github.com/radare/radare2-bindings/tree/master/vapi">vapi</a> files. Those files are translated by <a href="https://github.com/radare/valabind">valaswig</a> into swig interface files to generate the bindings for python, ruby, perl and others.</p>
+<p>Those <a href="http://live.gnome.org/Vala">Vala</a> vapi files are at the same time parsed by <a href="http://live.gnome.org/Valadoc">Valadoc</a> to generate the <a href="http://radare.org/vdoc">online</a> documentation.</p>
+<h1 id="articles">Articles</h1>
+<p>Some e-zines and bloggers have published articles about how to use radare.</p>
+<ul>
+<li><a href="http://phrack.org/issues/66/14.html#article">phrack</a>, issue #66, article 14, <strong>manual binary mangling with radare</strong>,  by pancake</li>
+<li><a href="http://issuu.com/smithcharly/docs/arteam_ezine_number4/58">arteam#4</a>, <strong>handy primer on linux reversing</strong>, by Gunther</li>
+<li><a href="http://canthack.org/2011/07/adventures-with-radare-1-a-simple-shellcode-analysis/">canthack.org</a>, <strong>Adventures with Radare2 #1: A Simple Shellcode Analysis</strong>, by a <em>concatenation of geeks from Canterbury, UK.</em></li>
+<li><a href="http://dustri.org/b/defeating-ioli-with-radare2.html">dustri.org</a>, <strong>Defeating IOLI with radare2</strong>, by jvoisin</li>
+<li><a href="https://crowell.github.io/blog/categories/radare2/">crowell</a>&rsquo;s blog</li>
+<li><a href="http://thanat0s.trollprod.org/tag/radare2/">trollprod.org</a> wrote some blogposts in French.</li>
+<li><a href="http://dukebarman.pro/tag/radare2/">dukebarman</a>&rsquo;s blog - articles about Radare2 in Russian language.</li>
+<li><a href="http://radare.today">This</a> blog ;)</li>
+</ul>
+<h1 id="talks">Talks</h1>
+<p>People gave <a href="http://radare.org/y/?p=talks">talks</a> about radare2 at several well-know conferences, like <a href="http://2014.hack.lu/index.php/List#Radare2.2C_a_Concrete_Alternative_to_IDA_-_workshop">hack.lu</a>, <a href="http://www.passageenseine.org/Passage/PSES-2014">pses</a>, <a href="http://oggcamp.org">oggcamp</a>, <a href="https://www.rootedcon.com">rootedlabs</a>, lancon, …
+We also did a lot of workshops!</p>
+<h1 id="wiki">Wiki</h1>
+<p>There are some worthful information and gems on our <a href="https://github.com/radare/radare2/wiki">wiki</a>. Feel free to complete it with your favourites tips and tricks.</p>
+<h1 id="cheatsheet">Cheatsheet</h1>
+<p><a href="https://twitter.com/pwntester">@pwntester</a> did a really great <a href="https://github.com/pwntester/cheatsheets/blob/master/radare2.md">cheatsheet</a> to put on your wall, along with the <a href="https://github.com/Maijin/radare2book/blob/master/refcard/radare2_rc.pdf?raw=true">refcard</a>.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fradare2-is-documented%2f - Radare2%20is%20documented by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

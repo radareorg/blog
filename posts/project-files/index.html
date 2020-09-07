@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Project files</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Project files" />
+<meta property="og:description" content="Project files Disclaimer: Projects files are highly subject to change but here is the current state on March 14th 2017. The feature is still under high work in progress please see the section Future of Project Files and How to Help.
+Purposes The Project files are used to store information related to your radare2 session. The idea is to use this Project file to save your analysis for later work, share it with an audience (colleagues, friend, RE articles&hellip;), and scripting." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/project-files/" />
+<meta property="article:published_time" content="2017-03-12T17:30:00+01:00" />
+<meta property="article:modified_time" content="2017-03-12T17:30:00+01:00" />
+
+
+<meta itemprop="name" content="Project files">
+<meta itemprop="description" content="Project files Disclaimer: Projects files are highly subject to change but here is the current state on March 14th 2017. The feature is still under high work in progress please see the section Future of Project Files and How to Help.
+Purposes The Project files are used to store information related to your radare2 session. The idea is to use this Project file to save your analysis for later work, share it with an audience (colleagues, friend, RE articles&hellip;), and scripting.">
+<meta itemprop="datePublished" content="2017-03-12T17:30:00+01:00" />
+<meta itemprop="dateModified" content="2017-03-12T17:30:00+01:00" />
+<meta itemprop="wordCount" content="478">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Project files"/>
+<meta name="twitter:description" content="Project files Disclaimer: Projects files are highly subject to change but here is the current state on March 14th 2017. The feature is still under high work in progress please see the section Future of Project Files and How to Help.
+Purposes The Project files are used to store information related to your radare2 session. The idea is to use this Project file to save your analysis for later work, share it with an audience (colleagues, friend, RE articles&hellip;), and scripting."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Project files</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        March 12, 2017
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="project-files">Project files</h1>
+<p><strong>Disclaimer</strong>: Projects files are highly subject to change but here is the current state on March 14th 2017. The feature is still under high work in progress please see the section Future of Project Files and How to Help.</p>
+<p><img src="/blog/images/project_intro.png" alt="CaseXXXX"></p>
+<h1 id="purposes">Purposes</h1>
+<p>The Project files are used to store information related to your radare2 session. The idea is to use this Project file to save your analysis for later work, share it with an audience (colleagues, friend, RE articles&hellip;), and scripting.</p>
+<h1 id="how-it-look-like-in-radare2">How it look like in radare2</h1>
+<h2 id="how-to-use">How to use</h2>
+<p>In radare2 world, you can manipulate the Project files using the <code>P?</code> set of commands and <code>r2 -p proj myfile</code> command.</p>
+<p>To save a Project, you can use <code>Ps name</code> (Project Save) in a radare2 session, this will trigger the save of the project. By default, the config files do not contain your file, only information about the radare2 session.</p>
+<p>To reopen your project, simply do <code>r2 -p name myfile</code> or <code>Po name</code> in the interactive session.</p>
+<p>Projects are stored in ~/.config/radare2/projects by default. (Can be changed via <code>dir.projects</code>)</p>
+<p><code>Pn-</code> allows you to edit project notes.</p>
+<h2 id="file-format">File Format</h2>
+<p>A project file is usually consists of an <code>rc</code> file and some <code>.sdb</code> files.</p>
+<p>The <code>rc</code> file contains plaintext radare2 commands.</p>
+<p>For example here are the flags:</p>
+<p><img src="/blog/images/project_flags.jpg" alt=""></p>
+<p>The sections:
+<img src="/blog/images/project_sections.jpg" alt=""></p>
+<p>The Configuration:
+<img src="/blog/images/project_eval.jpg" alt=""></p>
+<p>But many other things are stored such as analysis, symbols etc. I strongly encourage you to look at the content of the rc files to get a better understanding of radare2 itself.</p>
+<p>The SDB files are databases in <a href="https://github.com/radare/sdb">sdb</a> format.</p>
+<h2 id="the-evals">The Evals</h2>
+<p>You currently can configure the project file via the following eval variables:</p>
+<ul>
+<li><code>e prj.files = true</code>: Save the target binary inside the project directory</li>
+<li><code>prj.name = true</code>: Name of current project</li>
+<li><code>prj.zip = true</code>: Use ZIP format for project files</li>
+</ul>
+<h3 id="git-versioning">Git Versioning</h3>
+<p>A recently added feature allowws you to</p>
+<ul>
+<li><code>e prj.git = true</code>: Every project is a git repository.</li>
+</ul>
+<p>Currently saving the project via <code>Ps</code> will prompt you for a commit automatically.</p>
+<p>Here is an example of this in use <a href="http://radare.today/posts/malware-static-analysis/">malware analysis article</a>.</p>
+<p>See the <a href="https://github.com/Maijin/caseXXXX">commits</a></p>
+<p><img src="/blog/images/project_case.jpg" alt="Case"></p>
+<h3 id="storing-commands-in-your-project-file">Storing commands in your project file</h3>
+<p>You can insert radare2 commands into your project file, that can be executed from the script with <code>Pnx</code>. This is useful if you have a set of commands that need to be run to bring radare2 into a specific state each time you start working on your project.</p>
+<p>Any line prefixed with a <code>:</code> is considered a command and will be run when you call <code>Pnx</code></p>
+<h1 id="future-of-project-files-and-how-to-help">Future of Project Files and How to Help</h1>
+<p>We currently have a META - Issue grouping all the project related issues <a href="https://github.com/radare/radare2/issues/6945">here</a>.</p>
+<p>It contains a list of fixes/enhancements that you are welcome to help fixing.</p>
+<p>In addition to better reliability, one of the functionality we are currently looking after is the possibility to sign and encrypt project via GnuPGv2.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fproject-files%2f - Project%20files by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>10 years old</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="10 years old" />
+<meta property="og:description" content="10 years passed since the first release of radare, and 8 since radare2. It was pretty primitive at the time, and lot of things has happened since that.
+SPOILER: Radare2&rsquo;s Congress Announcement
+The tool was mainly used and written by me (@pancake) from the very first days. I was missing many interesting features in the opensource reverse engineering so I decided to collect and integrate all the interesting things that could fit on top of an abstracted IO layer, from disassemblers to debuggers or filesystems." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/10-years-old/" />
+<meta property="article:published_time" content="2016-08-05T00:30:07+01:00" />
+<meta property="article:modified_time" content="2016-08-05T00:30:07+01:00" />
+
+
+<meta itemprop="name" content="10 years old">
+<meta itemprop="description" content="10 years passed since the first release of radare, and 8 since radare2. It was pretty primitive at the time, and lot of things has happened since that.
+SPOILER: Radare2&rsquo;s Congress Announcement
+The tool was mainly used and written by me (@pancake) from the very first days. I was missing many interesting features in the opensource reverse engineering so I decided to collect and integrate all the interesting things that could fit on top of an abstracted IO layer, from disassemblers to debuggers or filesystems.">
+<meta itemprop="datePublished" content="2016-08-05T00:30:07+01:00" />
+<meta itemprop="dateModified" content="2016-08-05T00:30:07+01:00" />
+<meta itemprop="wordCount" content="373">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="10 years old"/>
+<meta name="twitter:description" content="10 years passed since the first release of radare, and 8 since radare2. It was pretty primitive at the time, and lot of things has happened since that.
+SPOILER: Radare2&rsquo;s Congress Announcement
+The tool was mainly used and written by me (@pancake) from the very first days. I was missing many interesting features in the opensource reverse engineering so I decided to collect and integrate all the interesting things that could fit on top of an abstracted IO layer, from disassemblers to debuggers or filesystems."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>10 years old</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 5, 2016
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>10 years passed since the first release of radare, and <a href="https://github.com/radare/radare2/commit/c5e588e">8 since radare2</a>. It was pretty primitive at the time, and lot of things has happened since that.</p>
+<p><strong>SPOILER: <a href="http://rada.re/con">Radare2&rsquo;s Congress Announcement</a></strong></p>
+<p>The tool was mainly used and written by me (<a href="https://twitter.com/trufae">@pancake</a>) from the very first days. I was missing many interesting features in the opensource reverse engineering so I decided to collect and integrate all the interesting things that could fit on top of an abstracted IO layer, from disassemblers to debuggers or filesystems.</p>
+<p>Personally I have been doing talks, trainings and writting documentation, though even it hadn&rsquo;t got much contributors or enough community interest, but it was ok. It was just a personal project I was having fun with.</p>
+<p>During the last 4 years, the project got some international attention thanks to new contributors (xvilka, jvoisin, crowell, ret2libs, alvarofe, maijin, and many others!). Actually there are about 400 users on <a href="irc://irc.freenode.net/radare">IRC</a> + <a href="https://telegram.me/joinchat/ACR-FgWyg1bbu9YUzT_5pg">Telegram</a> chats. The amount of contributors <a href="https://github.com/radare/radare2/graphs/contributors">grows</a> on every new release.</p>
+<p>The current state of the project makes me switch from author/developer role to leader/maintainer. This change implies much more things that it seems at first sight.</p>
+<p>To start with, testing <a href="https://github.com/radare/radare2-regressions">regressions</a>, managing <a href="https://github.com/radare/radare2/issues">bugs</a> and <a href="https://github.com/radare/radare2/milestones">milestones</a> becomes much more important than before.</p>
+<p>Being able to organize a Summers Of Code (<a href="http://rada.re/rsoc/2016/">RSoC</a> and <a href="http://radare.re/gsoc/2016">GSoC</a>) and instructing contributors to follow the project&rsquo;s indentation rules and doing several reviews on every single pull request makes the community much more stronger and the final product can be trusted much more.</p>
+<p>There&rsquo;s still a lot of work in the infrastructure side to enhance: enabling https, <em>dockerifying</em> the entire service setup, automating the Android and iOS builds, polishing the windows installer, automating packages building, etc.</p>
+<p>The size of the community right now is big enough to be able to organise congress around the tool. There&rsquo;s people around the world using r2 for their own use or at company, automating malware analysis, solving crackmes, reverse engineering firmwares, carving memory, &hellip;</p>
+<p>In order to celebrate the 10<!-- raw HTML omitted -->th<!-- raw HTML omitted --> aniversary of the project I&rsquo;m happy to anounce the first ever edition of the r2con! It will be the 8<!-- raw HTML omitted -->th<!-- raw HTML omitted -->, 9<!-- raw HTML omitted -->th<!-- raw HTML omitted --> and 10<!-- raw HTML omitted -->th<!-- raw HTML omitted --> of September, in Barcelona!</p>
+<p>You may find more information about the talks in the <a href="http://rada.re/con">official webpage</a>: See you there!</p>
+<p>&ndash;pancake</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2f10-years-old%2f - 10%20years%20old by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

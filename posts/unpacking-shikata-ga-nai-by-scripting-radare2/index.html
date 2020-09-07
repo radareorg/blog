@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Unpacking shikata-ga-nai by scripting radare2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Unpacking shikata-ga-nai by scripting radare2" />
+<meta property="og:description" content="During latest hacklu&rsquo;s radare workshop, one part was dedicated to how to generically unpack shikata-ga-nai. This blogpost is a simple transposition of the slides into a blogpost.
+Disclaimer: almost everything here is stolenbased on ideas from NighterMan.
+First, was is Shitkata-ga-nai? It&rsquo;s a polymorphic shellcode encoder implemented into metasploit:
+msf &gt; info encoder/x86/shikata_ga_nai &gt; out.txt Name: Polymorphic XOR Additive Feedback Encoder Module: encoder/x86/shikata_ga_nai Platform: All Arch: x86 Rank: Excellent Provided by: spoonm &lt;spoonm@no$email." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/unpacking-shikata-ga-nai-by-scripting-radare2/" />
+<meta property="article:published_time" content="2015-12-08T01:00:00+02:00" />
+<meta property="article:modified_time" content="2015-12-08T01:00:00+02:00" />
+
+
+<meta itemprop="name" content="Unpacking shikata-ga-nai by scripting radare2">
+<meta itemprop="description" content="During latest hacklu&rsquo;s radare workshop, one part was dedicated to how to generically unpack shikata-ga-nai. This blogpost is a simple transposition of the slides into a blogpost.
+Disclaimer: almost everything here is stolenbased on ideas from NighterMan.
+First, was is Shitkata-ga-nai? It&rsquo;s a polymorphic shellcode encoder implemented into metasploit:
+msf &gt; info encoder/x86/shikata_ga_nai &gt; out.txt Name: Polymorphic XOR Additive Feedback Encoder Module: encoder/x86/shikata_ga_nai Platform: All Arch: x86 Rank: Excellent Provided by: spoonm &lt;spoonm@no$email.">
+<meta itemprop="datePublished" content="2015-12-08T01:00:00+02:00" />
+<meta itemprop="dateModified" content="2015-12-08T01:00:00+02:00" />
+<meta itemprop="wordCount" content="841">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Unpacking shikata-ga-nai by scripting radare2"/>
+<meta name="twitter:description" content="During latest hacklu&rsquo;s radare workshop, one part was dedicated to how to generically unpack shikata-ga-nai. This blogpost is a simple transposition of the slides into a blogpost.
+Disclaimer: almost everything here is stolenbased on ideas from NighterMan.
+First, was is Shitkata-ga-nai? It&rsquo;s a polymorphic shellcode encoder implemented into metasploit:
+msf &gt; info encoder/x86/shikata_ga_nai &gt; out.txt Name: Polymorphic XOR Additive Feedback Encoder Module: encoder/x86/shikata_ga_nai Platform: All Arch: x86 Rank: Excellent Provided by: spoonm &lt;spoonm@no$email."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Unpacking shikata-ga-nai by scripting radare2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        December 8, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>During latest <a href="http://hack.lu">hacklu</a>&rsquo;s radare workshop, one part was
+dedicated to <em>how to generically unpack shikata-ga-nai</em>. This blogpost is a
+simple transposition of the slides into a blogpost.</p>
+<p>Disclaimer: almost everything here is <!-- raw HTML omitted -->stolen<!-- raw HTML omitted --> based on ideas from
+<a href="https://twitter.com/nighterman">NighterMan</a>.</p>
+<p>First, was is Shitkata-ga-nai?
+It&rsquo;s a polymorphic shellcode encoder implemented into <a href="https://www.metasploit.com/">metasploit</a>:</p>
+<pre><code>msf &gt; info encoder/x86/shikata_ga_nai &gt; out.txt
+
+       Name: Polymorphic XOR Additive Feedback Encoder
+     Module: encoder/x86/shikata_ga_nai
+   Platform: All
+       Arch: x86
+       Rank: Excellent
+
+Provided by:
+  spoonm &lt;spoonm@no$email.com&gt;
+
+Description:
+  This encoder implements a polymorphic XOR additive feedback encoder. 
+  The decoder stub is generated based on dynamic instruction 
+  substitution and dynamic block ordering. Registers are also selected 
+  dynamically.
+</code></pre><p>Looks scary. To unpack it, you have several solutions:</p>
+<ol>
+<li>Run it on your machine and see what happens</li>
+<li>Step-step-step-step-step-step in GDB</li>
+<li>Trace the execution in a virtual machine</li>
+<li>Use radare2 with <em>ESIL</em>.</li>
+</ol>
+<p>ESIL (Evaluable String Intermediary Language) is radare2&rsquo;s own <em>Intermediary Language</em> (IL),
+<a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">RPN</a>-ish, used for
+emulation, <a href="https://github.com/radare/radeco">decompilation</a>, analysis, …</p>
+<p>Now that we know that we can emulate the sample, the next step is to guess
+where is the end of the packer, to dump the shellcode. Unfortunately, the
+encoder is polymorphic, its blocks are permuted and registers are dynamically
+selected.</p>
+<p>If you take a look at its <a href="https://github.com/rapid7/metasploit-framework/blob/master/modules/encoders/x86/shikata_ga_nai.rb">source-code</a>, you can see that the last instruction will always be <code>loop</code>, so we can
+emulate the sample until the last <code>loop</code> instruction, and then dump from here
+to get the shellcode in clear.</p>
+<p>Thanks to <code>r2pipe</code>, you can script radare2 with almost every popular language:</p>
+<ul>
+<li><code>pip install r2pipe</code> for Python</li>
+<li><code>gem install r2pipe</code> for ruby</li>
+<li><code>npm install r2pipe</code> for nodejs</li>
+<li>…</li>
+</ul>
+<p>But there is an issue: ESIL doesn&rsquo;t support <a href="https://en.wikipedia.org/wiki/Floating-point_unit">FPU</a>
+instructions (yet), and <code>fnstenv</code> is <a href="http://gynvael.coldwind.pl/n/eip_from_fpu_x86">used to get EIP</a>
+(you should really read this article by the way).
+Fortunately, this is the only use of FPU instruction by this encoder, so it&rsquo;s
+trivial to emulated them by cheating.</p>
+<p>We should make sure that radare2 is detecting every possible FPU opcode used as
+FPU ones:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> r2pipe
+<span style="color:#f92672">import</span> sys
+
+opcodes <span style="color:#f92672">=</span> [
+<span style="color:#e6db74">&#39;d9d0&#39;</span>, <span style="color:#e6db74">&#39;d9e1&#39;</span>, <span style="color:#e6db74">&#39;d9f6&#39;</span>, <span style="color:#e6db74">&#39;d9f7&#39;</span>, <span style="color:#e6db74">&#39;d9e5&#39;</span>, <span style="color:#e6db74">&#39;d9e8&#39;</span>, <span style="color:#e6db74">&#39;d9e9&#39;</span>, <span style="color:#e6db74">&#39;d9ea&#39;</span>, <span style="color:#e6db74">&#39;d9eb&#39;</span>, <span style="color:#e6db74">&#39;d9ec&#39;</span>,
+<span style="color:#e6db74">&#39;d9ed&#39;</span>, <span style="color:#e6db74">&#39;d9c0&#39;</span>, <span style="color:#e6db74">&#39;d9c1&#39;</span>, <span style="color:#e6db74">&#39;d9c2&#39;</span>, <span style="color:#e6db74">&#39;d9c3&#39;</span>, <span style="color:#e6db74">&#39;d9c4&#39;</span>, <span style="color:#e6db74">&#39;d9c5&#39;</span>, <span style="color:#e6db74">&#39;d9c6&#39;</span>, <span style="color:#e6db74">&#39;d9c7&#39;</span>, <span style="color:#e6db74">&#39;d9c8&#39;</span>,
+<span style="color:#e6db74">&#39;d9c9&#39;</span>, <span style="color:#e6db74">&#39;d9ca&#39;</span>, <span style="color:#e6db74">&#39;d9cb&#39;</span>, <span style="color:#e6db74">&#39;d9cc&#39;</span>, <span style="color:#e6db74">&#39;d9cd&#39;</span>, <span style="color:#e6db74">&#39;d9ce&#39;</span>, <span style="color:#e6db74">&#39;dac0&#39;</span>, <span style="color:#e6db74">&#39;dac1&#39;</span>, <span style="color:#e6db74">&#39;dac2&#39;</span>, <span style="color:#e6db74">&#39;dac3&#39;</span>,
+<span style="color:#e6db74">&#39;dac4&#39;</span>, <span style="color:#e6db74">&#39;dac5&#39;</span>, <span style="color:#e6db74">&#39;dac6&#39;</span>, <span style="color:#e6db74">&#39;dac7&#39;</span>, <span style="color:#e6db74">&#39;dac8&#39;</span>, <span style="color:#e6db74">&#39;dac9&#39;</span>, <span style="color:#e6db74">&#39;daca&#39;</span>, <span style="color:#e6db74">&#39;dacb&#39;</span>, <span style="color:#e6db74">&#39;dacc&#39;</span>, <span style="color:#e6db74">&#39;dacd&#39;</span>,
+<span style="color:#e6db74">&#39;dace&#39;</span>, <span style="color:#e6db74">&#39;dacf&#39;</span>, <span style="color:#e6db74">&#39;dad0&#39;</span>, <span style="color:#e6db74">&#39;dad1&#39;</span>, <span style="color:#e6db74">&#39;dad2&#39;</span>, <span style="color:#e6db74">&#39;dad3&#39;</span>, <span style="color:#e6db74">&#39;dad4&#39;</span>, <span style="color:#e6db74">&#39;dad5&#39;</span>, <span style="color:#e6db74">&#39;dad6&#39;</span>, <span style="color:#e6db74">&#39;dad7&#39;</span>,
+<span style="color:#e6db74">&#39;dad8&#39;</span>, <span style="color:#e6db74">&#39;dad9&#39;</span>, <span style="color:#e6db74">&#39;dada&#39;</span>, <span style="color:#e6db74">&#39;dadb&#39;</span>, <span style="color:#e6db74">&#39;dadc&#39;</span>, <span style="color:#e6db74">&#39;dadd&#39;</span>, <span style="color:#e6db74">&#39;dade&#39;</span>, <span style="color:#e6db74">&#39;dbc0&#39;</span>, <span style="color:#e6db74">&#39;dbc1&#39;</span>, <span style="color:#e6db74">&#39;dbc2&#39;</span>,
+<span style="color:#e6db74">&#39;dbc3&#39;</span>, <span style="color:#e6db74">&#39;dbc4&#39;</span>, <span style="color:#e6db74">&#39;dbc5&#39;</span>, <span style="color:#e6db74">&#39;dbc6&#39;</span>, <span style="color:#e6db74">&#39;dbc7&#39;</span>, <span style="color:#e6db74">&#39;dbc8&#39;</span>, <span style="color:#e6db74">&#39;dbc9&#39;</span>, <span style="color:#e6db74">&#39;dbca&#39;</span>, <span style="color:#e6db74">&#39;dbcb&#39;</span>, <span style="color:#e6db74">&#39;dbcc&#39;</span>,
+<span style="color:#e6db74">&#39;dbcd&#39;</span>, <span style="color:#e6db74">&#39;dbce&#39;</span>, <span style="color:#e6db74">&#39;dbcf&#39;</span>, <span style="color:#e6db74">&#39;dbd0&#39;</span>, <span style="color:#e6db74">&#39;dbd1&#39;</span>, <span style="color:#e6db74">&#39;dbd2&#39;</span>, <span style="color:#e6db74">&#39;dbd3&#39;</span>, <span style="color:#e6db74">&#39;dbd4&#39;</span>, <span style="color:#e6db74">&#39;dbd5&#39;</span>, <span style="color:#e6db74">&#39;dbd6&#39;</span>,
+<span style="color:#e6db74">&#39;dbd7&#39;</span>, <span style="color:#e6db74">&#39;dbd8&#39;</span>, <span style="color:#e6db74">&#39;dbd9&#39;</span>, <span style="color:#e6db74">&#39;dbda&#39;</span>, <span style="color:#e6db74">&#39;dbdb&#39;</span>, <span style="color:#e6db74">&#39;dbdc&#39;</span>, <span style="color:#e6db74">&#39;dbdd&#39;</span>, <span style="color:#e6db74">&#39;dbde&#39;</span>, <span style="color:#e6db74">&#39;ddc0&#39;</span>, <span style="color:#e6db74">&#39;ddc1&#39;</span>,
+<span style="color:#e6db74">&#39;ddc2&#39;</span>, <span style="color:#e6db74">&#39;ddc3&#39;</span>, <span style="color:#e6db74">&#39;ddc4&#39;</span>, <span style="color:#e6db74">&#39;ddc5&#39;</span>, <span style="color:#e6db74">&#39;ddc6&#39;</span>
+]
+
+r <span style="color:#f92672">=</span> r2pipe<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;-&#39;</span>)
+
+
+<span style="color:#66d9ef">for</span> op <span style="color:#f92672">in</span> opcodes:
+    family <span style="color:#f92672">=</span> r<span style="color:#f92672">.</span>cmdj(<span style="color:#e6db74">&#39;abj </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> op)[<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#39;family&#39;</span>]
+    <span style="color:#66d9ef">if</span> family <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;fpu&#39;</span>:
+        <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#39;NOT FPU: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> op
+        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
+<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#39;End of the loop, every opcode was detected as FPU.&#39;</span>
+</code></pre></div><p>If you launch this script with the latest version of radare2 installed on your
+machine, you&rsquo;ll see that radare2 detects every opcode as FPU ; so far so good.
+Feel free to add some dummy opcodes to see the detection fail by the way ;)</p>
+<p>So now it&rsquo;s time to actually unpack shikata-ga-nai, for real. The plan is to:</p>
+<ol>
+<li>Initialize the ESIL vm</li>
+<li>If the instruction <code>invalid</code>:</li>
+<li>We&rsquo;re at the end of the shellcode!</li>
+<li>Dump from the last encountered <code>loop</code> instruction to the end</li>
+<li>Exit</li>
+<li>Else, if the instruction is a <code>fpu</code> one:</li>
+<li>If it&rsquo;s <code>fnstenv</code>, write the previously stored <code>eip</code> at <code>esp</code>.</li>
+<li>Else, store <code>eip</code></li>
+<li>Goto 1</li>
+<li>Else, if the instruction is <code>loop</code>, store its location</li>
+<li>Emulate the current instruction</li>
+<li>Goto 1</li>
+</ol>
+<p>This is the implementation in Python:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> sys
+<span style="color:#f92672">import</span> r2pipe
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initESIL</span>():
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;e io.cache=true&#39;</span>)  <span style="color:#75715e"># we&#39;re not really going to write anything anywhere</span>
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;e asm.bits=32&#39;</span>)  <span style="color:#75715e"># the shellcode is 32b</span>
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;e asm.arch=x86&#39;</span>)
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;aei&#39;</span>)  <span style="color:#75715e"># initialize the ESIL VM</span>
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;aeim 0xffffd000 0x2000 stack&#39;</span>)
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;.ar*&#39;</span>)  <span style="color:#75715e"># set all registers to zero</span>
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;aer esp=0xffffd000&#39;</span>)
+    r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;aer ebp=0xffffd000&#39;</span>)
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dump</span> (start):
+    end <span style="color:#f92672">=</span> r<span style="color:#f92672">.</span>cmdj(<span style="color:#e6db74">&#39;oj&#39;</span>)[<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#39;size&#39;</span>]  <span style="color:#75715e"># size of the opened object</span>
+
+    <span style="color:#66d9ef">print</span>(r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;pD </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> @ </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (end<span style="color:#f92672">-</span>start, start)))  <span style="color:#75715e"># disassembly</span>
+
+    raw <span style="color:#f92672">=</span> r<span style="color:#f92672">.</span>cmdj(<span style="color:#e6db74">&#39;p8j </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> @ </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (end<span style="color:#f92672">-</span>start, start))  <span style="color:#75715e"># dump</span>
+    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;out&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> f:
+        f<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(map(chr, raw)))
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">decode</span>(r):
+    lastfpu <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    lastloop <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100000</span>):
+        current_op <span style="color:#f92672">=</span> r<span style="color:#f92672">.</span>cmdj(<span style="color:#e6db74">&#39;pdj 1 @ eip&#39;</span>)[<span style="color:#ae81ff">0</span>]
+
+        <span style="color:#75715e"># End of shellcode or invalid opcode</span>
+        <span style="color:#66d9ef">if</span> current_op[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;invalid&#39;</span>:
+            dump(lastloop)
+            <span style="color:#66d9ef">return</span>
+
+        <span style="color:#75715e"># ESIL doesn&#39;t implement FPU (yet),</span>
+        <span style="color:#75715e"># but we don&#39;t care, since they are only used</span>
+        <span style="color:#75715e"># to get EIP with the FNSTENV technique</span>
+        <span style="color:#75715e"># (http://gynvael.coldwind.pl/n/eip_from_fpu_x86).</span>
+        <span style="color:#75715e">#</span>
+        <span style="color:#75715e"># So we take note of the offset of the latest FPU instruction,</span>
+        <span style="color:#75715e"># on put it in `esp` when `fnstenv` is encounted.</span>
+        <span style="color:#66d9ef">if</span> current_op[<span style="color:#e6db74">&#39;family&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;fpu&#39;</span>:
+            <span style="color:#66d9ef">if</span> current_op[<span style="color:#e6db74">&#39;opcode&#39;</span>]<span style="color:#f92672">.</span>startswith(<span style="color:#e6db74">&#39;fnstenv&#39;</span>):
+                r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;wv </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> @ esp&#39;</span> <span style="color:#f92672">%</span> lastfpu)
+            <span style="color:#66d9ef">else</span>:
+                lastfpu <span style="color:#f92672">=</span> current_op[<span style="color:#e6db74">&#39;offset&#39;</span>]
+
+        <span style="color:#75715e"># Check for end of loop opcodes</span>
+        <span style="color:#66d9ef">if</span> current_op[<span style="color:#e6db74">&#39;opcode&#39;</span>]<span style="color:#f92672">.</span>startswith(<span style="color:#e6db74">&#39;loop&#39;</span>) <span style="color:#f92672">and</span> r<span style="color:#f92672">.</span>cmdj(<span style="color:#e6db74">&#39;arj&#39;</span>)[<span style="color:#e6db74">&#39;ecx&#39;</span>] <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span>:
+            lastloop <span style="color:#f92672">=</span> current_op[<span style="color:#e6db74">&#39;offset&#39;</span>] <span style="color:#f92672">+</span> current_op[<span style="color:#e6db74">&#39;size&#39;</span>];
+
+        r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;aes&#39;</span>)
+
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;[-] We emulated </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> instructions, giving up&#39;</span> <span style="color:#f92672">%</span> i)
+
+
+<span style="color:#66d9ef">if</span> len(sys<span style="color:#f92672">.</span>argv) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">2</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;[*] Usage: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> sample&#39;</span> <span style="color:#f92672">%</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">0</span>])
+    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
+
+r <span style="color:#f92672">=</span> r2pipe<span style="color:#f92672">.</span>open(sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>])
+r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;e asm.comments=false&#39;</span>);
+r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;e asm.lines=false&#39;</span>);
+r<span style="color:#f92672">.</span>cmd(<span style="color:#e6db74">&#39;e asm.flags=false&#39;</span>);
+initESIL()
+decode(r)
+</code></pre></div><p>By the way, if you like this kind of writeup, feel free to take a look at
+<a href="https://dustri.org/b/">jvoisin</a>&rsquo;s blog for more.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2funpacking-shikata-ga-nai-by-scripting-radare2%2f - Unpacking%20shikata-ga-nai%20by%20scripting%20radare2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

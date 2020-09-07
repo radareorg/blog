@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Parsing a fileformat with radare2</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Parsing a fileformat with radare2" />
+<meta property="og:description" content="Thanks to Skia, one of our RSoC participants, radare2 is now able to show structures, like headers, in a meaningful way.
+Usage Lets see an example together (or watch the video):
+$ r2 -nn /bin/true The -nn option tells radare2 to load predefined binary structures.
+[0x00000000]&gt; pf. pf.elf_header [16]z[2]E[2]Exqqqxwwwwww ident (elf_type)type (elf_machine)machine version entry phoff shoff flags ehsize phentsize phnum shentsize shnum shstrndx pf.elf_phdr qqqqqqqq type offset vaddr paddr filesz memsz flags align pf." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/parsing-a-fileformat-with-radare2/" />
+<meta property="article:published_time" content="2015-01-11T01:55:32+01:00" />
+<meta property="article:modified_time" content="2015-01-11T01:55:32+01:00" />
+
+
+<meta itemprop="name" content="Parsing a fileformat with radare2">
+<meta itemprop="description" content="Thanks to Skia, one of our RSoC participants, radare2 is now able to show structures, like headers, in a meaningful way.
+Usage Lets see an example together (or watch the video):
+$ r2 -nn /bin/true The -nn option tells radare2 to load predefined binary structures.
+[0x00000000]&gt; pf. pf.elf_header [16]z[2]E[2]Exqqqxwwwwww ident (elf_type)type (elf_machine)machine version entry phoff shoff flags ehsize phentsize phnum shentsize shnum shstrndx pf.elf_phdr qqqqqqqq type offset vaddr paddr filesz memsz flags align pf.">
+<meta itemprop="datePublished" content="2015-01-11T01:55:32+01:00" />
+<meta itemprop="dateModified" content="2015-01-11T01:55:32+01:00" />
+<meta itemprop="wordCount" content="735">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Parsing a fileformat with radare2"/>
+<meta name="twitter:description" content="Thanks to Skia, one of our RSoC participants, radare2 is now able to show structures, like headers, in a meaningful way.
+Usage Lets see an example together (or watch the video):
+$ r2 -nn /bin/true The -nn option tells radare2 to load predefined binary structures.
+[0x00000000]&gt; pf. pf.elf_header [16]z[2]E[2]Exqqqxwwwwww ident (elf_type)type (elf_machine)machine version entry phoff shoff flags ehsize phentsize phnum shentsize shnum shstrndx pf.elf_phdr qqqqqqqq type offset vaddr paddr filesz memsz flags align pf."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Parsing a fileformat with radare2</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        January 11, 2015
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Thanks to <a href="http://libskia.so/">Skia</a>, one of our <a href="http://rada.re/rsoc/">RSoC</a> participants, radare2 is now able to show structures, like headers, in a meaningful way.</p>
+<h3 id="usage">Usage</h3>
+<p>Lets see an example together (or watch the <a href="https://asciinema.org/a/12053">video</a>):</p>
+<pre><code>$ r2 -nn /bin/true
+</code></pre><p>The <code>-nn</code> option tells radare2 to load predefined binary structures.</p>
+<pre><code>[0x00000000]&gt; pf.
+pf.elf_header [16]z[2]E[2]Exqqqxwwwwww ident (elf_type)type (elf_machine)machine version entry phoff shoff flags ehsize phentsize phnum shentsize shnum shstrndx
+pf.elf_phdr qqqqqqqq type offset vaddr paddr filesz memsz flags align
+pf.elf_shdr xxqqqqxxqq name type flags addr offset size link info addralign entsize
+</code></pre><p>The <code>pf.</code> command list all relevant structures for the current file. Time to see the header:</p>
+<pre><code>[0x00000000]&gt; pf.elf_header @ elf_header
+               ident : 0x00000000 = .ELF...
+                type : 0x00000010 =  type (enum) = 0x2 ; ET_EXEC
+             machine : 0x00000012 =  machine (enum) = 0x3e ; EM_X86_64
+             version : 0x00000014 = 0x00000001
+               entry : 0x00000018 = (qword) 0x00000000004013e2
+               phoff : 0x00000020 = (qword) 0x0000000000000040
+               shoff : 0x00000028 = (qword) 0x0000000000006320
+               flags : 0x00000030 = 0x00000000
+              ehsize : 0x00000034 = 0x0040
+           phentsize : 0x00000036 = 0x0038
+               phnum : 0x00000038 = 0x0009
+           shentsize : 0x0000003a = 0x0040
+               shnum : 0x0000003c = 0x001c
+            shstrndx : 0x0000003e = 0x001b
+[0x00000000]&gt; 
+</code></pre><p>Woohoo, it&rsquo;s working! Currently, radare2 has native support for ELF, PE, MACH0, &hellip; Feel free to implement more ;)</p>
+<h3 id="implementation-of-a-new-format">Implementation of a new format</h3>
+<p>This is what a ELF header looks like:</p>
+<pre><code>#define EI_NIDENT 16
+
+typedef struct {
+        unsigned char   e_ident[EI_NIDENT];
+        Elf32_Half      e_type;
+        Elf32_Half      e_machine;
+        Elf32_Word      e_version;
+        Elf32_Addr      e_entry;
+        Elf32_Off       e_phoff;
+        Elf32_Off       e_shoff;
+        Elf32_Word      e_flags;
+        Elf32_Half      e_ehsize;
+        Elf32_Half      e_phentsize;
+        Elf32_Half      e_phnum;
+        Elf32_Half      e_shentsize;
+        Elf32_Half      e_shnum;
+        Elf32_Half      e_shtrndx;
+} Elf32_Ehdr;
+</code></pre><ol>
+<li>Look at the structure defined in .h or any valuable documentation about a file format</li>
+<li>Convert each component type in pf symbol equivalent, for example first is <code>unsigned char e_ident[16]</code>:</li>
+</ol>
+<ul>
+<li><code>unsigned char</code> is the type that makes up C strings. Here we&rsquo;ve got an array of 16 elements.</li>
+<li><code>e_ident</code> should contains the <em>Magic Number</em>: A numerical constant or text value used to identify a file format. In ELF, this magic number is a magic text (<code>ELF</code>), so we better have to display/parse it like a string (<code>z</code>).</li>
+</ul>
+<pre><code>[16]z e_ident
+</code></pre><p>Set this new type in pf just with <code>pf.elf_header [16]z e_ident</code></p>
+<p>To try that new type and parse an elf :</p>
+<ol>
+<li>Open an elf file: <code>r2 /bin/ls</code></li>
+<li>Do not forget to set the type: <code>pf.elf_header [16]z e_ident</code></li>
+<li>Run stored format at offset 0 of the elf file: <code>pf.elf_header @ 0</code>.</li>
+</ol>
+<p>You can also check the <a href="http://asciinema.org/a/12045">video</a></p>
+<hr>
+<p>The next element is an <code>Elf32_Half</code>, in the same .h we can see that <code>Elf32_Half</code> is a uint16_t or <code>unsigned short int</code>, this type is <strong>w</strong> (as in <code>word</code>) in pf format.</p>
+<p>If we merge both previous elements we have: <code>[16]zw e_ident e_type</code></p>
+<hr>
+<h3 id="nested-structures">Nested structures</h3>
+<p>Once you have created a format, you can include it in an other one to make nested structures. Imagine you create a pixel format like this: <code>pf.pixel bbb red green blue</code></p>
+<p>You can now include this pixel in a row structure containing 32 pixel for a 32p width picture with <code>pf.row [32]? (pixel)example_name</code></p>
+<p>The same way you can define a header format, and a global image format containing first the header, and then all the row you need: <code>pf.image ?[42]? (header)my_header (row)my_rows</code></p>
+<hr>
+<p>Still with nested structure, we can also make format to display linked list or other complex data structures. You define a format containing a pointer to itself: <code>pf.elem i*? data (elem)next</code>. Running that format will print it until finding a null pointer.</p>
+<pre><code>[0x00000000]&gt; pf.elem i*? data (elem)next
+[0x00000000]&gt; pf.elem
+      data : 0x00000000 = 42
+      next : (*0x10) struct&lt;elem&gt;
+      ---- :
+      data : 0x00000010 = 4000
+      next : (*0x20) struct&lt;elem&gt;
+      ---- :
+      data : 0x00000020 = 66
+      next : (*0x0) NULL
+[0x00000000]&gt; 
+</code></pre><h3 id="writing-with-pf">Writing with <code>pf</code></h3>
+<p>We can also use pf to write/replace content in a parsed struct. For example we can replace the parsed magic number using <code>=</code>:</p>
+<pre><code>[0x00000000]&gt; pf.elf_header.e_ident=.ELO...
+w .ELO... @ 0x00000000
+</code></pre><p>r2 displays the command to type to overwrite the elf magic : <code>w .ELO... @ 0x00000000</code></p>
+<p>We can also directly prepend the pf command with . to write without need of copy/paste the write command.</p>
+<pre><code>. pf.elf_header.e_ident=.ELO...
+</code></pre><p>There is also a <a href="http://asciinema.org/a/12138">video</a>.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>Now you should be able to parse every file format you want with radare2! If you want to integrate your templates within the codebase, make sure to check the <a href="https://github.com/radare/radare2/wiki/Parse-a-file-format">wiki</a> about how to do this.</p>
+<p>We&rsquo;re currently working on improving the structures support, so stay tuned for more awesomenes!</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fparsing-a-fileformat-with-radare2%2f - Parsing%20a%20fileformat%20with%20radare2 by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>Scripting r2 in Vala</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="Scripting r2 in Vala" />
+<meta property="og:description" content="Under some situations you need to automatize or extend the features of radare. There are so many scripting languages out there: python, ruby, perl, lua between others.
+All of them are supported by the radare package and you can use them from inside r2 using r_lang plugins and the &lsquo;#!&rsquo; command or externally with the r2-swig.
+The main issue on scripting languages is performance. The code is interpreted and all the api bindings are wrapped, so linked list accesses and function calls are highly penalized." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/scripting-r2-in-vala/" />
+<meta property="article:published_time" content="2014-09-18T14:17:12+02:00" />
+<meta property="article:modified_time" content="2014-09-18T14:17:12+02:00" />
+
+
+<meta itemprop="name" content="Scripting r2 in Vala">
+<meta itemprop="description" content="Under some situations you need to automatize or extend the features of radare. There are so many scripting languages out there: python, ruby, perl, lua between others.
+All of them are supported by the radare package and you can use them from inside r2 using r_lang plugins and the &lsquo;#!&rsquo; command or externally with the r2-swig.
+The main issue on scripting languages is performance. The code is interpreted and all the api bindings are wrapped, so linked list accesses and function calls are highly penalized.">
+<meta itemprop="datePublished" content="2014-09-18T14:17:12+02:00" />
+<meta itemprop="dateModified" content="2014-09-18T14:17:12+02:00" />
+<meta itemprop="wordCount" content="304">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Scripting r2 in Vala"/>
+<meta name="twitter:description" content="Under some situations you need to automatize or extend the features of radare. There are so many scripting languages out there: python, ruby, perl, lua between others.
+All of them are supported by the radare package and you can use them from inside r2 using r_lang plugins and the &lsquo;#!&rsquo; command or externally with the r2-swig.
+The main issue on scripting languages is performance. The code is interpreted and all the api bindings are wrapped, so linked list accesses and function calls are highly penalized."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Scripting r2 in Vala</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        September 18, 2014
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <p>Under some situations you need to automatize or extend the features of radare. There are so many scripting languages out there: python, ruby, perl, lua between others.</p>
+<p>All of them are supported by the radare package and you can use them from inside r2 using r_lang plugins and the &lsquo;#!&rsquo; command or externally with the r2-swig.</p>
+<p>The main issue on scripting languages is performance. The code is interpreted and all the api bindings are wrapped, so linked list accesses and function calls are highly penalized.</p>
+<p>Here&rsquo;s where Vala joins the party.</p>
+<p>Vala compiles into C and generates native code with no wrappers, but providing a higher-level interface than C, so it is harder to segfault.</p>
+<p>Let&rsquo;s see how to run scripts for r_lang in the r2 prompt:</p>
+<pre><code>[0x8048520]&gt; #!
+ vala: VALA language extension
+</code></pre><p>The &lsquo;#!&rsquo; (hashbang) command is used to invoke the r_lang REPL prompt or run the code of the given file.</p>
+<p>The command has reported that it our build of r2 has built-in support for running Vala code from the core. So let&rsquo;s try it using the read-eval-print-loop mode.</p>
+<pre><code>[0x8048520]&gt; #!vala
+vala&gt; print (&quot;%p\n&quot;, core)
+0x804b2c0
+</code></pre><p>This is what it&rsquo;s happening after each newline in the prompt:</p>
+<ul>
+<li>wraps line with: &lsquo;using Radare; public static void entry(RCore core) {}</li>
+<li>compiles temporary .vala file into a shared library against r_core library</li>
+<li>loads the library and resolves the symbol named &lsquo;entry&rsquo;</li>
+<li>calls the entry point with the RCore instance as argument</li>
+<li>unloads the library and removes temporary files</li>
+</ul>
+<p>You can also write the vala code in a separated file named &lsquo;foo.vala&rsquo;:</p>
+<pre><code>[0x80498d2]&gt; cat foo.vala 
+using Radare;
+
+public static void entry(RCore core) {
+        core.cmd0 (&quot;pd 2&quot;);
+        core.cons.flush ();
+}
+</code></pre><p>Execute this file with &lsquo;#!vala foo[.vala]':</p>
+<pre><code>[0x80498d2]&gt; #!vala foo
+  0x080498d2        5e  pop esi
+  0x080498d3      89e1  mov ecx, esp
+</code></pre><p>For more documentation on bindings see the <a href="http://radare.org/vdoc">vapi</a> documentation.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fscripting-r2-in-vala%2f - Scripting%20r2%20in%20Vala by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/">GSoC 2018: Control Flow Structuring for Radeco-lib<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

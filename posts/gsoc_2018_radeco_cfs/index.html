@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="The radare team">
+<meta name="description" content="The blog of radare2">
+<meta name="generator" content="Hugo 0.74.3" />
+<title>GSoC 2018: Control Flow Structuring for Radeco-lib</title>
+<link rel="shortcut icon" href="https://radareorg.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://radareorg.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://radareorg.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Official Radare Blog" />
+
+
+<meta property="og:title" content="GSoC 2018: Control Flow Structuring for Radeco-lib" />
+<meta property="og:description" content="GSoC 2018: Control Flow Structuring for Radeco-lib Introduction This summer, I implemented the control flow structuring algorithm described in No More Gotos. The algorithm takes a program represented as a control flow graph and converts it into a semantically equivalent program but with all control flow represented with C-like control flow statements (e.g. if-statements, while-loops, etc.) and zero goto statements.
+Example bool c0 = test0(); if (!c0) { run1(); } if (c0 &amp;&amp; test2()) { run4(); } else { run3(); } run5(); Algorithm Overview This section is essentially a (very brief) summary of No More Gotos." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_cfs/" />
+<meta property="article:published_time" content="2018-08-12T21:42:12-04:00" />
+<meta property="article:modified_time" content="2018-08-12T21:42:12-04:00" />
+
+
+<meta itemprop="name" content="GSoC 2018: Control Flow Structuring for Radeco-lib">
+<meta itemprop="description" content="GSoC 2018: Control Flow Structuring for Radeco-lib Introduction This summer, I implemented the control flow structuring algorithm described in No More Gotos. The algorithm takes a program represented as a control flow graph and converts it into a semantically equivalent program but with all control flow represented with C-like control flow statements (e.g. if-statements, while-loops, etc.) and zero goto statements.
+Example bool c0 = test0(); if (!c0) { run1(); } if (c0 &amp;&amp; test2()) { run4(); } else { run3(); } run5(); Algorithm Overview This section is essentially a (very brief) summary of No More Gotos.">
+<meta itemprop="datePublished" content="2018-08-12T21:42:12-04:00" />
+<meta itemprop="dateModified" content="2018-08-12T21:42:12-04:00" />
+<meta itemprop="wordCount" content="733">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GSoC 2018: Control Flow Structuring for Radeco-lib"/>
+<meta name="twitter:description" content="GSoC 2018: Control Flow Structuring for Radeco-lib Introduction This summer, I implemented the control flow structuring algorithm described in No More Gotos. The algorithm takes a program represented as a control flow graph and converts it into a semantically equivalent program but with all control flow represented with C-like control flow statements (e.g. if-statements, while-loops, etc.) and zero goto statements.
+Example bool c0 = test0(); if (!c0) { run1(); } if (c0 &amp;&amp; test2()) { run4(); } else { run3(); } run5(); Algorithm Overview This section is essentially a (very brief) summary of No More Gotos."/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://radareorg.github.io/blog'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://radareorg.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>GSoC 2018: Control Flow Structuring for Radeco-lib</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 12, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        <h1 id="gsoc-2018-control-flow-structuring-for-radeco-lib">GSoC 2018: Control Flow Structuring for Radeco-lib</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This summer, I implemented the control flow structuring algorithm described in <a href="https://doi.org/10.14722/ndss.2015.23185"><em>No More Gotos</em></a>. The algorithm takes a program represented as a control flow graph and converts it into a semantically equivalent program but with all control flow represented with C-like control flow statements (e.g. <code>if</code>-statements, <code>while</code>-loops, etc.) and <strong>zero <code>goto</code> statements</strong>.</p>
+<h3 id="example">Example</h3>
+<p><img src="/blog/images/example_cfg.png" alt="example cfg"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">bool</span> c0 <span style="color:#f92672">=</span> test0();
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>c0) {
+    run1();
+}
+<span style="color:#66d9ef">if</span> (c0 <span style="color:#f92672">&amp;&amp;</span> test2()) {
+    run4();
+} <span style="color:#66d9ef">else</span> {
+    run3();
+}
+run5();
+</code></pre></div><h2 id="algorithm-overview">Algorithm Overview</h2>
+<p>This section is essentially a (very brief) summary of <em>No More Gotos</em>.
+We traverse every node in the graph in post-order. If the current node is the target of a backedge, we&rsquo;re at the head of a loop, so we funnel all entries/exits to a single loop header/successor, structure the loop body, and structure the whole loop. Otherwise, if the set of nodes dominated by the current node has exactly one or zero successors, we structure that region. Otherwise, we just continue the graph traversal.
+To structure an acyclic region, we compute the reaching condition for each node, move the whole region to a new graph, perform refinements on that graph, and finally make an AST node containing all the nodes in topological order.
+To structure a loop, we repeatedly apply a set of rewrite rules to the loop body&rsquo;s AST until no more apply.
+To funnel abnormal loop entries/exits, we first associate a number to each node that has an incoming abnormal edge. We then introduce a structuring variable and redirect each node&rsquo;s incoming abnormal edges to a new node that assigns the value we associated with that node to the structuring variable. We connect these new nodes to a condition cascade that checks the value of the structuring variable and directs control flow to the appropriate destination.</p>
+<h2 id="implementation-overview">Implementation Overview</h2>
+<p>All of the code for this algorithm lives in <code>backend::ctrl_flow_struct</code>. The correctness-critical parts live in the main module and the refinements live in the submodule <code>refinement</code>. <code>condition</code> contains the implementation of conditions; in particular it contains the code to simplify conditions which is necessary for <code>refinement</code> to be able to do anything useful. All of the code is generic over the particular concrete AST implementation; all operations on the underlying AST (such as introducing new assignment statements) are done through the trait <code>ast_context::AstContextMut</code>.
+The code that interfaces between this algorithm and the rest of the decompiler lives in the modules <code>backend::lang_c::c_cfg::ctrl_flow_struct</code> and <code>backend::ctrl_flow_struct::export</code>.</p>
+<h2 id="further-improvements">Further improvements</h2>
+<ul>
+<li>There could be options to switch off various refinements.</li>
+<li>Loop membership/successor refinement could be tweakable by the user (and could be moved to the <code>refinement</code> module).</li>
+<li>Conditions <em>should</em> probably be interned (like types in rustc). That way, comparing two conditions for equality can be done by a single pointer comparison instead of walking the whole expression graph.</li>
+<li>The algorithm will never produce a <code>continue</code> statements or a labeled <code>break</code> or <code>continue</code> statement. There are probably cases where using these would make the output simpler.</li>
+<li>The semantic model for conditions in condition nodes in control flow graphs (as described in the paper) appears to be &ldquo;a pure predicate on the program state evaluated when control flow enters the node&rdquo;. However, this is obviously violated when we effectively &ldquo;sink&rdquo; conditions to each node during acyclic region structuring. Condition-based refinement appears to partly resolve this by &ldquo;rehoisting&rdquo; repeated conditions into bigger <code>if</code>-statements, but that doesn&rsquo;t happen for all conditions. The paper briefly touches on this problem (section IV.D on pg. 9), but the authors never conclusively show that these semantics are preserved.
+<ul>
+<li>This could be fixed by having the algorithm convert every condition node into an assignment of its value to a boolean variable and using only that variable in the reaching conditions. There would also need to be a pass that inlines that variable when appropriate.</li>
+<li>Also, there exist cases where conditions in the output AST are evaluated &ldquo;eagerly&rdquo; (i.e. before they &ldquo;should&rdquo; be evaluated according to the control flow graph). <a href="https://hackmd.io/x_lOEIIyR9etkCecbpLFeg#">example</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="some-other-things-i-also-did">Some Other Things I Also Did</h1>
+<ul>
+<li>(before GSoC) <a href="https://github.com/radareorg/radeco-lib/pull/126">Implemented a parser for textual IR</a></li>
+<li><a href="https://github.com/HMPerson1/radeco-csmith-tester">Made a test driver for <code>radeco-lib</code> that we never got around to using</a></li>
+<li><a href="https://github.com/radareorg/radeco-lib/pull/140">Added a pass that determines how a function uses each register and also a pass that turns <code>(x+4)-4</code> into <code>x+0</code> and then into <code>x</code> all in the same pull request for some reason</a></li>
+<li><a href="https://github.com/radareorg/radeco-lib/pull/194">Brutally annihilated the dependency on capstone</a></li>
+</ul>
+<h1 id="links">Links</h1>
+<ul>
+<li><a href="https://summerofcode.withgoogle.com/projects/#4679353015730176">GSoC project page</a></li>
+<li><a href="https://github.com/radareorg/radeco-lib/pulls?q=is%3Apr+author%3AHMPerson1+created%3A2018-05-01..2018-08-14">Pull Requests</a></li>
+<li><a href="https://github.com/radareorg/radeco-lib/commits?author=HMPerson1&amp;since=2018-05-01&amp;until=2018-08-14">Commits</a></li>
+</ul>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/radareorg">
+    <img class="avatar" src="https://radareorg.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">The radare team</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fradareorg.github.io%2fblog%2fposts%2fgsoc_2018_radeco_cfs%2f - GSoC%202018%3a%20Control%20Flow%20Structuring%20for%20Radeco-lib by @radareorg"><span class="icon-twitter"> https://twitter.com/radareorg</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/sleigh_disassembler_backend/">GSoC 2020: SLEIGH Disassembler Backend<aside class="dates">Sep 6 2020</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-console-interface-improvement/">RSoC 2019 Final: Console Interface Improvements<aside class="dates">Oct 1 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/rsoc-2019-selection/">Radare2 Summer of Code 2019 Selection Results<aside class="dates">Apr 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-survey/">Radare2 Community Survey Results<aside class="dates">Feb 2 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/radare2-bioinformatics/">Radare2 and bioinformatics: a good match?<aside class="dates">Aug 31 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cutter_debug/">GSoC 2018 Final: Debugging and Emulation Support for Cutter<aside class="dates">Aug 20 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/cli_improvements/">GSoC 2018 Final: Console Interface Improvementes<aside class="dates">Aug 19 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/gsoc_2018_radeco_pseudo_c_code_generation/">Gsoc 2018 Radeco Pseudo C Code Generation<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/type_inference/">GSoC&#39;18 Final: Type inference<aside class="dates">Aug 12 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="https://radareorg.github.io/blog/posts/background_tasks/">Background Tasks in radare2<aside class="dates">Jul 3 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+    <p class="small">
+    
+        The radare team
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://radareorg.github.io/blog/js/main.js"></script>
+<script src="https://radareorg.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>
