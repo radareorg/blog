@@ -36,9 +36,9 @@ At this point we will get the r2 prompt opening the file without trying to under
 On every match we will get a flag pointing to the begining of the ELF files. We can then dump them all to disk with that oneliner:
 
 	[0x00000000]> b 1M
-    [0x00000000]> wt @@ hit0*
+    [0x00000000]> wtff dump @@ hit0*
 
-Note that 'wt' will require an argument (filename) if you are not using the latest version from git. This simplifies the process of naming every dumped portion.
+Note that 'wtff' will require an argument (filename). This simplifies the process of naming every dumped portion.
 
 We set the blocksize to 1MB because we don't expect to have bigger executables, but you may change this depending on your target.
 
