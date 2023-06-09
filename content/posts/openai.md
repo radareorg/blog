@@ -63,3 +63,30 @@ The other $5000 will be allocated to the software engineer that implements that 
 * **2 months** for general learning and experimentation with simple examples.
 * **2 months** to document and refine efficient "prompt engineering" techniques that realistically help reverse engineers perform daily tasks.
 * **2 months** to devise higher complexity tasks such as generate new supported architectures.
+
+
+## Set of questions or problems you hope your project will answer or address
+
+1. Is it possible to generate a r2 target architecture decoder/disassembler/analyzer/emulator based on the other architectures present in the codebase?
+2. Is it possible to assist users with firmware analysis of a microcontroller given that datasheets and other pieces of information such as CMSIS-SVD definitions have been trained on OpenAI's GPT-4 LLM?
+   1. More specifically, can SVD (microcontroller peripheral mappings) be generated and applied successfully to assist firmware analysis
+3. How do YARA signatures perform compared with crafted prompts against OpenAI's GPT-4?
+4. Can OpenAI's code interpreter assist r2 developers and users by providing answers to general binary layout questions such as ELF sections, debug symbols, demangling, etc...
+5. Explore the possibility to translate between ESIL (Radare2) and Sleight (Ghidra) architecture and static emulation languages. This is uncharted territory that can highly benefit from LLMs, extracting commonalities between the two approaches.
+
+Those are just a small subset of questions that barely scratch the surface on how OpenAI can inform and help Radare2.
+
+
+## Description of methodologies and approaches used in the project
+
+For the aforementioned question 1, we would train a model that has specific data about the code structure of different already-implemented architectures.
+
+On question 2, we could use https://github.com/modm-io microcontroller datasheet extraction principles to inform the LLM about the general structure and particularities of several different architectures of microcontrollers.
+
+When exploring YARA signatures, we would start with the naive approach which would be loading the corpus of malware (and other) signatures and have GPT-4 infer some general structure of arbitrary (and/or specially crafted) input binaries.
+
+Last but not least, we'd investigate how to extend Github Copilot-like code assistant for Radare2's codebase but using OpenAI APIs instead.
+
+## Expected results of the project
+
+During the first 2-4 months we expect the usefulness of our results to be relatively limited due to its experimental nature. However, as we refine our training and prompts, we could reach a point where we could significantly improve the "coverage" of supported architectures for Radare2 and accelerate its development pace.
